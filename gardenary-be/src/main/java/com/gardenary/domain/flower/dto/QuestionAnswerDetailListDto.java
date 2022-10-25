@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class QuestionAnswerDetailListDto {
+    private int id;
 }
