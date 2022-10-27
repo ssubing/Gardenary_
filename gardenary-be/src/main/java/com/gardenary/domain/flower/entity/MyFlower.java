@@ -1,5 +1,6 @@
 package com.gardenary.domain.flower.entity;
 
+import com.gardenary.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,9 +29,9 @@ public class MyFlower {
     @JoinColumn(name = "flower_id", nullable = false)
     private Flower flower;
 
-//    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "created_at", updatable = false, columnDefinition = "DATETIME")
     @CreatedDate
