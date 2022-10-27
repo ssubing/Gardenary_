@@ -19,7 +19,7 @@ public class Exp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT")
+    @Column(name = "id", columnDefinition = "INT UNSIGNED")
     private int id;
 
 //    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
@@ -30,7 +30,7 @@ public class Exp {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "diary_id", columnDefinition = "INT")
+    @Column(name = "diary_id", columnDefinition = "INT UNSIGNED")
     private int diaryId;
 
     @Column(name = "type", columnDefinition = "BOOLEAN")

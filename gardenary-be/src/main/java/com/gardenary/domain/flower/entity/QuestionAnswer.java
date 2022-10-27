@@ -21,7 +21,7 @@ public class QuestionAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT")
+    @Column(name = "id", columnDefinition = "INT UNSIGNED")
     private int id;
 
     @ManyToOne(targetEntity = Question.class, fetch = FetchType.LAZY)
