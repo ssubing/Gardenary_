@@ -1,5 +1,6 @@
 package com.gardenary.domain.exp.entity;
 
+import com.gardenary.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,18 +20,18 @@ public class Exp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT")
+    @Column(name = "id", columnDefinition = "INT UNSIGNED")
     private int id;
 
-//    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "created_at", columnDefinition = "DATETIME")
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "diary_id", columnDefinition = "INT")
+    @Column(name = "diary_id", columnDefinition = "INT UNSIGNED")
     private int diaryId;
 
     @Column(name = "type", columnDefinition = "BOOLEAN")
