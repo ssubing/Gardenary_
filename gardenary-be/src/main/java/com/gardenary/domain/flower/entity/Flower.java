@@ -17,7 +17,7 @@ public class Flower {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT")
+    @Column(name = "id", columnDefinition = "INT UNSIGNED")
     private int id;
 
     @Column(name = "name", columnDefinition = "VARCHAR(50)")

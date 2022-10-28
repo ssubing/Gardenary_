@@ -17,7 +17,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT")
+    @Column(name = "id", columnDefinition = "INT UNSIGNED")
     private int id;
 
     @Column(name = "content", columnDefinition = "VARCHAR(255)")
