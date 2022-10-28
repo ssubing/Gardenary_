@@ -1,21 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class JoyStickMovement : MonoBehaviour
 {
+
     public static JoyStickMovement Instance // singleton
     {
         get
         {
-            if( instance == null)
+            if (instance == null)
             {
                 instance = FindObjectOfType<JoyStickMovement>();
-                if(instance == null)
+                if (instance == null)
                 {
                     var instanceContainer = new GameObject("JoyStickMovement");
                     instance = instanceContainer.AddComponent<JoyStickMovement>();
+
                 }
             }
             return instance;
@@ -34,7 +34,7 @@ public class JoyStickMovement : MonoBehaviour
     {
         stickRadius = bGStick.gameObject.GetComponent<RectTransform>().sizeDelta.y / 2;
     }
-       
+
     // 화면 터치
     public void PointDown()
     {
@@ -44,7 +44,7 @@ public class JoyStickMovement : MonoBehaviour
         // SetTrigger
     }
 
-    public void Drag ( BaseEventData baseEventData )
+    public void Drag(BaseEventData baseEventData)
     {
         PointerEventData pointerEventData = baseEventData as PointerEventData;
         Vector3 DragPosition = pointerEventData.position;
@@ -52,16 +52,17 @@ public class JoyStickMovement : MonoBehaviour
 
         float stickDistance = Vector3.Distance(DragPosition, stickFirstPosition);
 
-        if(stickDistance < stickRadius)
+        if (stickDistance < stickRadius)
         {
             smallStick.transform.position = stickFirstPosition + joyVec * stickDistance;
-        } else
+        }
+        else
         {
             smallStick.transform.position = stickFirstPosition + joyVec * stickRadius;
         }
     }
 
-    public void Drop ()
+    public void Drop()
     {
         joyVec = Vector3.zero;
         // SetTrigger

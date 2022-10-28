@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public static PlayerMovement Instance
+    GameObject nearObject;
+    
+    public static PlayerMovement Instance   // singleton
     {
         get
         {
@@ -44,5 +45,35 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector3(JoyStickMovement.Instance.joyVec.x * moveSpeed, rb.velocity.y, JoyStickMovement.Instance.joyVec.y * moveSpeed);
 
         //Debug.Log(JoyStickMovement.Instance.joyVec.x + ", " + JoyStickMovement.Instance.joyVec.y + ", " + JoyStickMovement.Instance.joyVec.z);
+    }
+
+    void Update()
+    {
+        // Scene 전환
+        if (nearObject != null)
+        {
+            if (nearObject.tag == "Farm")
+            {
+                SceneManager.LoadScene("Farm");
+            }
+            else if (nearObject.tag == "Garden")
+            {
+                SceneManager.LoadScene("Garden");
+            }
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        // Scene 전환을 위한 오브젝트 감지
+        if (other.tag == "Farm" || other.tag == "Garden")
+        {
+            nearObject = other.gameObject;
+        }
+
+        /*if (nearObject != null)
+        {
+            Debug.Log(nearObject.tag);
+        }*/
     }
 }
