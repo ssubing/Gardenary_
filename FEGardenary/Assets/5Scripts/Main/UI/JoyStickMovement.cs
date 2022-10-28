@@ -56,7 +56,6 @@ public class JoyStickMovement : MonoBehaviour
         bGStick.transform.position = Input.mousePosition;
         smallStick.transform.position = Input.mousePosition;
         stickFirstPosition = Input.mousePosition;
-        // SetTrigger
     }
 
     public void Drag(BaseEventData baseEventData)
@@ -80,6 +79,5 @@ public class JoyStickMovement : MonoBehaviour
     public void Drop()
     {
         joyVec = Vector3.zero;
-        // SetTrigger
     }
 }
