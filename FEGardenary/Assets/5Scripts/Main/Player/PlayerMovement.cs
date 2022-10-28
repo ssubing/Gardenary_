@@ -4,7 +4,10 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     GameObject nearObject;
+    private GameObject targetObject;
+
     static public PlayerMovement player;
+
     // Scene 전환 이후에도 Player가 남아있도록
     private void Awake()
     {
@@ -72,6 +75,36 @@ public class PlayerMovement : MonoBehaviour
                 SceneManager.LoadScene("Garden");
             }
         }
+
+        // 책상으로 카메라 줌인
+        if (Input.GetMouseButtonDown(0))
+        {
+            //Debug.Log("?");
+            targetObject = GetClickedObject();
+
+            if (targetObject != null)
+            {
+                //Debug.Log(targetObject.name);
+            }
+        }
+    }
+
+    // 클릭한 오브젝트
+    GameObject GetClickedObject()
+    {
+
+        RaycastHit hit; // 충돌이 감지된 영역
+        GameObject target = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    // 마우스 포인트 근처 좌표 생성
+
+        // 마우스 근처에 오브젝트가 있는지 확인
+        if (Physics.Raycast(ray.origin, ray.direction * 10, out hit))
+        {
+            target = hit.collider.gameObject;   // 해당 오브젝트 저장
+        }
+
+        return target;
     }
 
     void OnTriggerStay(Collider other)

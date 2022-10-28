@@ -58,6 +58,7 @@ public class JoyStickMovement : MonoBehaviour
         stickFirstPosition = Input.mousePosition;
     }
 
+    // 조이스틱으로 이동
     public void Drag(BaseEventData baseEventData)
     {
         PointerEventData pointerEventData = baseEventData as PointerEventData;
@@ -76,6 +77,7 @@ public class JoyStickMovement : MonoBehaviour
         }
     }
 
+    // 화면 터치 제거
     public void Drop()
     {
         joyVec = Vector3.zero;
