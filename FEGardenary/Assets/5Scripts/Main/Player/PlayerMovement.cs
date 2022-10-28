@@ -4,7 +4,24 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     GameObject nearObject;
-    
+    static public PlayerMovement player;
+    // Scene 전환 이후에도 Player가 남아있도록
+    private void Awake()
+    {
+        if (player == null)
+        {
+            player = this;
+            DontDestroyOnLoad(gameObject);
+
+        }
+        else
+        {
+            Destroy(this.gameObject);
+
+        }
+
+    }
+
     public static PlayerMovement Instance   // singleton
     {
         get

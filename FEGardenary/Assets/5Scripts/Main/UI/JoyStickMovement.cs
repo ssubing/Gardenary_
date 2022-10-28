@@ -3,6 +3,21 @@ using UnityEngine.EventSystems;
 
 public class JoyStickMovement : MonoBehaviour
 {
+    static public JoyStickMovement joyStick;
+    // Scene 전환 이후에도 조이스틱으로 이동이 가능하도록
+    private void Awake()
+    {
+
+        if (joyStick == null)
+        {
+            joyStick = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     public static JoyStickMovement Instance // singleton
     {
