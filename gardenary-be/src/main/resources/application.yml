@@ -1,6 +1,31 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 spring:
   profiles:
     include: db
-  response:
-    success: success
-    fail: fail
+  redis:
+    host: localhost
+    port: 6379
+logging:
+  file:
+    name: logs/app.log
+  pattern:
+    console: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %clr([%M]){cyan}  %clr(%-5level) %clr(%logger{36}){magenta} - %msg%n"
+    file: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%M] %-5level %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      file-name-pattern: "logs/app.%d{yyyy-MM-dd}.%i.log"
+      max-file-size: 10MB
+  level:
+    root: WARN
+    org.hibernate.type.descriptor.sql: trace
+    com.gardenary: debug
+response:
+  success: success
+  fail: fail
