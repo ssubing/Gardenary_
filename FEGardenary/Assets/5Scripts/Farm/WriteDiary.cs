@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class WriteDiary : MonoBehaviour
 {
+    public bool state;
+    private GameObject ui;
     // Start is called before the first frame update
     void Start()
     {
-        
+        state = false;
+        ui = GameObject.Find("Panel");
+        ui.SetActive(false);
     }
 
     // Update is called once per frame
@@ -15,7 +19,25 @@ public class WriteDiary : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("ÇÏÇÖ");
+            Debug.Log("Å²´Ù");
+            //È­¸é Á¤Áß¾Ó¿¡ ¿À°Ô ÇÔ
+            // uiGroup.anchoredPosition = Vector3.zero;
+            Debug.Log(state);
+            if(state == false)
+            {
+                Debug.Log("state ¹Ù²î³ª?");
+                ui.SetActive(true);
+                state = true;
+                Debug.Log(state);
+            }
+        }
+    }
+    public void Close()
+    {
+        if(state == true)
+        {
+            ui.SetActive(false);
+            state = false;
         }
     }
 }
