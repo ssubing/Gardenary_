@@ -275,6 +275,7 @@ MonoBehaviour:
   treePeriod: {fileID: 0}
   questionUI: {fileID: 0}
   questionNumUI: {fileID: 0}
+  flowerInput: {fileID: 0}
 --- !u!1 &357902101
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,6 +428,7 @@ MonoBehaviour:
   treePeriod: {fileID: 0}
   questionUI: {fileID: 0}
   questionNumUI: {fileID: 357902103}
+  flowerInput: {fileID: 0}
 --- !u!1 &629567849
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,8 +774,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
+  m_sharedMaterial: {fileID: -7348446767895330763, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -979,7 +981,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -1351,8 +1353,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1871435903}
-        m_TargetAssemblyTypeName: WriteDiary, Assembly-CSharp
+      - m_Target: {fileID: 1228469250}
+        m_TargetAssemblyTypeName: Flower, Assembly-CSharp
         m_MethodName: Write
         m_Mode: 1
         m_Arguments:
@@ -1459,8 +1461,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC2DC\uAC04 \uC5EC\uD589\uC744 \uD55C\uB2E4\uBA74\n\uC5B8\uC81C\uB85C
-    \uB5A0\uB098\uACE0 \uC2F6\uC740\uAC00\uC694?"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
   m_sharedMaterial: {fileID: -7348446767895330763, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
@@ -1728,10 +1729,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1228469246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41ebd2e3a45924f40bc8d3aa53d195b3, type: 3}
+  m_Script: {fileID: 11500000, guid: d522d076e7fcd0f4081f013648ae0fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flowerInput: {fileID: 0}
+  flowerPeriod: {fileID: 0}
+  treePeriod: {fileID: 0}
+  questionUI: {fileID: 0}
+  questionNumUI: {fileID: 0}
+  flowerInput: {fileID: 735480835}
 --- !u!1 &1364123439
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,10 +1951,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter text...
+  m_text: "\uB0B4\uC6A9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
+  m_sharedMaterial: {fileID: -7348446767895330763, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2535,7 +2540,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41ebd2e3a45924f40bc8d3aa53d195b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flowerInput: {fileID: 0}
 --- !u!1 &1957498907
 GameObject:
   m_ObjectHideFlags: 0

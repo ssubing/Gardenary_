@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class WriteDiary : MonoBehaviour
 {
-    public InputField flowerInput;
-    //public string flowerText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,15 +25,4 @@ public class WriteDiary : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("Panel").gameObject.SetActive(false);
     }
 
-    public void Write()
-    {
-        if(flowerInput.text.Length != 0)
-        {
-            Debug.Log("작성했다");
-            Debug.Log(flowerInput.text);
-        }
-        //flowerText = flowerInput.text;
-        Debug.Log("무야호");
-        //Debug.Log(flowerText);
-    }
 }

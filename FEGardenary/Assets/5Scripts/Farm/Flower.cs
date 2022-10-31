@@ -11,6 +11,9 @@ public class Flower : MonoBehaviour
     //몇 번째 질문인지, 질문 내용 표시 UI
     public TextMeshProUGUI questionUI, questionNumUI;
 
+    //꽃의 현재 경험치
+    private int flowerExp;
+
     //꽃, 나무 작성 연속 기간의 숫자
     private int flowerNum, treeNum;
 
@@ -19,8 +22,10 @@ public class Flower : MonoBehaviour
     //꽃 질문이 무엇인지
     private string question;
 
-    private GameObject test;
+    //답변 작성
+    public TMP_InputField flowerInput;
 
+    private string flowerAnswer;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,5 +49,10 @@ public class Flower : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void Write()
+    {
+        flowerAnswer = flowerInput.text;
     }
 }
