@@ -8,4 +8,5 @@ import com.gardenary.domain.user.entity.User;
 public interface FlowerService {
     AnswerCompleteDto createAnswer (User user, QuestionAnswerDto questionAnswerDto);
     QuestionAnswerListDto getOneFlowerAnswerList (User user, int myFlowerId);
+    QuestionAnswerListDto getAllFlowerAnswerList (User user);
 }
