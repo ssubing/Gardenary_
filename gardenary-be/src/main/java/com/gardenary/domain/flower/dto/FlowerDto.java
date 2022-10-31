@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionAnswerDetailListDto {
+public class FlowerDto {
     private int id;
 }
