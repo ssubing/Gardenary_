@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MyFlowerDetailListDto {
+public class MyFlowerListDto {
     private int id;
 }
