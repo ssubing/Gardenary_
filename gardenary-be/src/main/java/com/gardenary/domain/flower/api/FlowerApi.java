@@ -46,4 +46,15 @@ public class FlowerApi {
         }
     }
 
+    @GetMapping("/flower/all")
+    public ResponseEntity<DtoResponse<QuestionAnswerListDto>> getAllFlowerAnswerList() {
+        User user = new User(UUID.randomUUID(), "카카오", Role.USER);
+        QuestionAnswerListDto result = flowerService.getAllFlowerAnswerList(user);
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
+        } else{
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
+        }
+    }
+
 }

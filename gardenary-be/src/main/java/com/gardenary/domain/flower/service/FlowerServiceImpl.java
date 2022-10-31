@@ -133,6 +133,15 @@ public class FlowerServiceImpl implements FlowerService{
                 .build();
     }
 
+    @Override
+    public QuestionAnswerListDto getAllFlowerAnswerList(User user) {
+        List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
+        List<QuestionAnswerDto> result = makeAnswerDtoList(questionAnswerList);
+        return QuestionAnswerListDto.builder()
+                .questionAnswerDtoList(result)
+                .build();
+    }
+
     private  List<QuestionAnswerDto> makeAnswerDtoList(List<QuestionAnswer> questionAnswerList){
         List<QuestionAnswerDto> result = new ArrayList<>();
 
