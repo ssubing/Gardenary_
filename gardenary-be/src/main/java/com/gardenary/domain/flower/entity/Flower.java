@@ -26,4 +26,10 @@ public class Flower {
     @Column(name = "content", columnDefinition = "VARCHAR(255)")
     private String content;
 
+    @Column(name = "color", columnDefinition = "VARCHAR(50)")
+    private String color;
+
+    @Column(name = "asset_id", columnDefinition = "VARCHAR(255")
+    private String assetId;
+
 }
