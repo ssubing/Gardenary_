@@ -34,7 +34,7 @@ public class QuestionAnswer {
 
     @Column(name = "created_at", updatable = false, columnDefinition = "DATETIME")
     @CreatedDate
-    private LocalDateTime createdAst;
+    private LocalDateTime createdAt;
 
     @Column(name = "content", columnDefinition = "VARCHAR(255)")
     private String content;
