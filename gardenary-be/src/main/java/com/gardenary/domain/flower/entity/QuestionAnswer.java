@@ -33,13 +33,6 @@ public class QuestionAnswer {
     @JoinColumn(name = "my_flower_id", nullable = false)
     private MyFlower myFlower;
 
-    @ManyToOne(targetEntity = MyFlower.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "flower_id", nullable = false)
-    private Flower flower;
-
-    @ManyToOne(targetEntity = MyFlower.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     @Column(name = "created_at", updatable = false, columnDefinition = "DATETIME")
     @CreatedDate
