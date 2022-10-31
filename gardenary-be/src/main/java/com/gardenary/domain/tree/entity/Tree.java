@@ -30,4 +30,7 @@ public class Tree {
 
     @Column(name = "content", columnDefinition = "VARCHAR(255)")
     private String content;
+
+    @Column(name = "asset_id", columnDefinition = "VARCHAR(255)")
+    private String assetId;
 }

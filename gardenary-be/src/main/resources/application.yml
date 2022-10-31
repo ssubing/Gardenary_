@@ -29,3 +29,5 @@ logging:
 response:
   success: success
   fail: fail
+const:
+  tree-size: 15

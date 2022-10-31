@@ -28,14 +28,6 @@ public class Diary {
     @Column(name = "id", columnDefinition = "INT UNSIGNED")
     private int id;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(targetEntity = Tree.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tree_id", nullable = false)
-    private Tree tree;
-
     @ManyToOne(targetEntity = MyTree.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "my_tree_id", nullable = false)
     private MyTree myTree;
