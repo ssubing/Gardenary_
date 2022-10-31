@@ -1,17 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WriteDiary : MonoBehaviour
 {
-    public bool state;
-    private GameObject ui;
+    public InputField flowerInput;
+    //public string flowerText;
     // Start is called before the first frame update
     void Start()
     {
-        state = false;
-        ui = GameObject.Find("Panel");
-        ui.SetActive(false);
+        //flowerText = flowerInput.GetComponent<InputField>().text;
     }
 
     // Update is called once per frame
@@ -19,25 +18,23 @@ public class WriteDiary : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("킨다");
-            //화면 정중앙에 오게 함
-            // uiGroup.anchoredPosition = Vector3.zero;
-            Debug.Log(state);
-            if(state == false)
-            {
-                Debug.Log("state 바뀌나?");
-                ui.SetActive(true);
-                state = true;
-                Debug.Log(state);
-            }
+            GameObject.Find("Canvas").transform.Find("Panel").gameObject.SetActive(true);
         }
     }
     public void Close()
     {
-        if(state == true)
+        GameObject.Find("Canvas").transform.Find("Panel").gameObject.SetActive(false);
+    }
+
+    public void Write()
+    {
+        if(flowerInput.text.Length != 0)
         {
-            ui.SetActive(false);
-            state = false;
+            Debug.Log("작성했다");
+            Debug.Log(flowerInput.text);
         }
+        //flowerText = flowerInput.text;
+        Debug.Log("무야호");
+        //Debug.Log(flowerText);
     }
 }
