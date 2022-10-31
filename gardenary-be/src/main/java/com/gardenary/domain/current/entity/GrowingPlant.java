@@ -1,6 +1,7 @@
 package com.gardenary.domain.current.entity;
 
 import com.gardenary.domain.flower.entity.MyFlower;
+import com.gardenary.domain.tree.entity.MyTree;
 import com.gardenary.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,9 +29,9 @@ public class GrowingPlant {
     @JoinColumn(name = "my_flower_id", nullable = false)
     private MyFlower myFlower;
 
-//    @ManyToOne(targetEntity = MyTree.class, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "my_tree_id", nullable = false)
-//    private MyTree myTree;
+    @ManyToOne(targetEntity = MyTree.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "my_tree_id", nullable = false)
+    private MyTree myTree;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
