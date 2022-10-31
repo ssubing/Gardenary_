@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class WriteDiary : MonoBehaviour
 {
+    //오늘 꽃 다이어리를 작성했는 지의 여부
+    private bool flowerFlag;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(GameObject.Find("Canvas"));
-        //flowerText = flowerInput.GetComponent<InputField>().text;
+        flowerFlag = true;
     }
 
     // Update is called once per frame
@@ -18,7 +19,16 @@ public class WriteDiary : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(true);
+            Debug.Log(flowerFlag);
+            if(flowerFlag == true)
+            {
+                Debug.Log("화장실 가고 싶다");
+                GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(true);
+            }
+            else
+            {
+                GameObject.Find("Canvas").transform.Find("AlreadyWrite").gameObject.SetActive(true);
+            }
         }
     }
     public void Close()
@@ -26,4 +36,8 @@ public class WriteDiary : MonoBehaviour
         GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(false);
     }
 
+    public void AlreadyClose()
+    {
+        GameObject.Find("Canvas").transform.Find("AlreadyWrite").gameObject.SetActive(false);
+    }
 }

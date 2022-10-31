@@ -57,6 +57,7 @@ public class Flower : MonoBehaviour
         
     }
 
+    //작성 버튼 클릭
     public void Write()
     {
         flowerAnswer = flowerInput.text;
