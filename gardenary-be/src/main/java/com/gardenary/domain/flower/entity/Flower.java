@@ -29,7 +29,7 @@ public class Flower {
     @Column(name = "color", columnDefinition = "VARCHAR(50)")
     private String color;
 
-    @Column(name = "asset_id", columnDefinition = "VARCHAR(255")
+    @Column(name = "asset_id", columnDefinition = "VARCHAR(255)")
     private String assetId;
 
 }
