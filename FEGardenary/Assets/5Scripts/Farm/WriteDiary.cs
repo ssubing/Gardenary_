@@ -9,6 +9,7 @@ public class WriteDiary : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(GameObject.Find("Canvas"));
         //flowerText = flowerInput.GetComponent<InputField>().text;
     }
 
@@ -17,12 +18,12 @@ public class WriteDiary : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject.Find("Canvas").transform.Find("Panel").gameObject.SetActive(true);
+            GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(true);
         }
     }
     public void Close()
     {
-        GameObject.Find("Canvas").transform.Find("Panel").gameObject.SetActive(false);
+        GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(false);
     }
 
 }
