@@ -36,7 +36,7 @@ public class MyTree {
     @JoinColumn(name = "tree_id", nullable = false)
     private Tree tree;
 
-    @Column(name = "create_at", updatable = false, columnDefinition = "DATETIME")
+    @Column(name = "created_at", updatable = false, columnDefinition = "DATETIME")
     @CreatedDate //생성시간 자동 입력
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 }

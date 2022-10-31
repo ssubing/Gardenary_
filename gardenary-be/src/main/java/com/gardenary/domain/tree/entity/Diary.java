@@ -40,9 +40,9 @@ public class Diary {
     @JoinColumn(name = "my_tree_id", nullable = false)
     private MyTree myTree;
 
-    @Column(name = "create_at", updatable = false, columnDefinition = "DATETIME")
+    @Column(name = "created_at", updatable = false, columnDefinition = "DATETIME")
     @CreatedDate
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "content", columnDefinition = "VARCHAR(1000)")
     private String content;

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -21,9 +22,9 @@ public class DiaryDto {
 
     private int myTreeId;
 
-    private String createAt;
+    private LocalDateTime createdAt;
 
     private String content;
 
-    private String diaryDate;
+    private LocalDateTime diaryDate;
 }

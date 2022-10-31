@@ -7,6 +7,4 @@ public interface TreeService {
     boolean createMyTree(User user);
 
     boolean updateCurTree(User user);
-
-    int checkTreeExp(User user);
 }
