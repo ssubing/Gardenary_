@@ -13,7 +13,7 @@ public interface ExpMapper extends EntityMapper<ExpDto, Exp> {
     ExpMapper mapper = Mappers.getMapper(ExpMapper.class);
 
     @Override
-    @Mapping(source = "user.id", target = "userId")
+    @Mapping(target = "userId", ignore = true)
     ExpDto toDto(final Exp entity);
 
     @Override

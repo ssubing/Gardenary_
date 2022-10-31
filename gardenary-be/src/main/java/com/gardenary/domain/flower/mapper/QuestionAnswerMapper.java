@@ -13,7 +13,7 @@ public interface QuestionAnswerMapper extends EntityMapper<QuestionAnswerDto, Qu
 
     @Override
     @Mapping(source = "myFlower.flower.id", target = "flowerId")
-    @Mapping(source = "myFlower.user.id", target = "userId")
+    @Mapping(target = "userId", ignore = true)
     @Mapping(source = "myFlower.id", target = "myFlowerId")
     @Mapping(source = "question.id", target = "questionId")
     @Mapping(target = "isOver", ignore = true)

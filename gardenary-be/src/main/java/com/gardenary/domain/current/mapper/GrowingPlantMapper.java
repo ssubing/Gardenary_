@@ -14,7 +14,7 @@ public interface GrowingPlantMapper extends EntityMapper<GrowingPlantDto, Growin
     @Override
     @Mapping(source = "myTree.id", target = "myTreeId")
     @Mapping(source = "myFlower.id", target = "myFlowerId")
-    @Mapping(source = "user.id", target = "userId")
+    @Mapping(target = "userId", ignore = true)
     GrowingPlantDto toDto(final GrowingPlant entity);
 
     @Override
