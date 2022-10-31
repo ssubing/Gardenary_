@@ -4,4 +4,5 @@ import com.gardenary.domain.flower.entity.MyFlower;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MyFlowerRepository extends JpaRepository<MyFlower, Integer> {
+    MyFlower findById (int id);
 }
