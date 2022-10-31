@@ -12133,6 +12133,9 @@ MonoBehaviour:
   offsetX: 0
   offsetY: 18
   offsetZ: -40
+  target: {fileID: 1578493879}
+  zoom: 100
+  zoomSpeed: 0.5
 --- !u!1 &1695898513
 GameObject:
   m_ObjectHideFlags: 0
