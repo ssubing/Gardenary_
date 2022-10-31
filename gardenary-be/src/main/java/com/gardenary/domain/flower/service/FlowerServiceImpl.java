@@ -5,6 +5,7 @@ import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.exp.entity.Exp;
 import com.gardenary.domain.exp.repository.ExpRepository;
 import com.gardenary.domain.flower.dto.AnswerCompleteDto;
+import com.gardenary.domain.flower.dto.QuestionAnswerListDto;
 import com.gardenary.domain.flower.dto.QuestionAnswerDto;
 import com.gardenary.domain.flower.entity.MyFlower;
 import com.gardenary.domain.flower.entity.QuestionAnswer;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,7 +41,7 @@ public class FlowerServiceImpl implements FlowerService{
     public AnswerCompleteDto createAnswer(User user,QuestionAnswerDto questionAnswerDto) {
         
         AnswerCompleteDto result = new AnswerCompleteDto();
-        //시간 판별
+        //시간 판별,추후에 프론트에서 작성시작 시간을 받으면 코드 처리 하는 것으로 수정 가능성있음.
         LocalDateTime time = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         LocalDateTime startTime;
         LocalDateTime endTime;
@@ -109,8 +111,45 @@ public class FlowerServiceImpl implements FlowerService{
         //경험치 증가(Redis) totalExp 수정 필요
 
         int totalExp = 100;
-        //return할 값 만들기
+        //return 값 만들기
         result.updateTotalExp(totalExp);
         return result;
     }
+
+    @Override
+    public QuestionAnswerListDto getOneFlowerAnswerList(User user, int myFlowerId) {
+        //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
+        MyFlower myFlower = myFlowerRepository.findById(myFlowerId);
+        if(myFlower == null){
+            throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
+        }
+        //엔티티 리스트
+        List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlowerAndMyFlower_UserOrderByCreatedAtDesc(myFlower, user);
+
+        //리턴한 Dto 리스트로 만들기
+        List<QuestionAnswerDto> result = makeAnswerDtoList(questionAnswerList);
+        return QuestionAnswerListDto.builder()
+                .questionAnswerDtoList(result)
+                .build();
+    }
+
+    private  List<QuestionAnswerDto> makeAnswerDtoList(List<QuestionAnswer> questionAnswerList){
+        List<QuestionAnswerDto> result = new ArrayList<>();
+
+        for (QuestionAnswer questionAnswer : questionAnswerList){
+            QuestionAnswerDto questionAnswerDto = QuestionAnswerDto.builder()
+                    .id(questionAnswer.getId())
+                    .flowerId(questionAnswer.getFlower().getId())
+                    .createdAt(questionAnswer.getCreatedAt())
+                    .myFlowerId(questionAnswer.getMyFlower().getId())
+                    .questionId(questionAnswer.getQuestion().getId())
+                    .userId(questionAnswer.getUser().getId())
+                    .content(questionAnswer.getContent())
+                    .build();
+            result.add(questionAnswerDto);
+        }
+        return result;
+    }
+
+
 }
