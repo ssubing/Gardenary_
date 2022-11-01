@@ -1,4 +1,4 @@
-package com.gardenary.global.common.properties;
+package com.gardenary.global.properties;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Getter
 @RequiredArgsConstructor
 @ConstructorBinding
-@ConfigurationProperties(prefix = "response")
-public class ResponseProperties {
-    private final String success;
-    private final String fail;
+@ConfigurationProperties(prefix = "spring.redis")
+public class RedisProperties {
+    private final String host;
+    private final int port;
 }
