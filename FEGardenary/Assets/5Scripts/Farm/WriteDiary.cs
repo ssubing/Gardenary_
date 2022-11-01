@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class WriteDiary : MonoBehaviour
 {
-    //꽃 경험치, 나무 경험치, 오늘 꽃 작성 여부, 질문 내용, 몇 번째 질문
+    //꽃 경험치, 나무 경험치, 오늘 꽃 작성 여부, 질문 내용, 몇 번째 질문, 꽃 연속 날짜, 나무 연속 날짜
     public int flowerExp;
     public int treeExp;
     private bool flowerFlag;
@@ -26,6 +26,7 @@ public class WriteDiary : MonoBehaviour
         questionContent = "오늘 하루 가장 기억에 남는 일은 무엇인가요?";
         questionNum = 14;
         flowerNum = 5;
+        treeNum = 7;
 
         //경험치에 따라 다른 꽃을 보여줘야 한다
         if (flowerExp <= 20)

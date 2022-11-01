@@ -1,17 +1,19 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Flower : MonoBehaviour
 {
-    //꽃, 나무 작성 연속 기간 표시 UI
+    //꽃, 나무 다이어리 작성의 연속된 기간 표시 UI
     public TextMeshProUGUI flowerPeriod, treePeriod;
-    //몇 번째 질문인지, 질문 내용 표시 UI
+
+    //꽃이 몇 번째 질문인지, 질문 내용 표시 UI
     public TextMeshProUGUI questionUI, questionNumUI;
 
-    //꽃의 현재 경험치
-    private int flowerExp;
+    //꽃, 나무의 현재 경험치
+    private int flowerExp, treeExp;
 
-    //꽃, 나무 작성 연속 기간의 숫자
+    //꽃, 나무 다이어리 작성의 연속된 기간
     private int flowerNum, treeNum;
 
     //꽃 질문이 몇번째인지
@@ -19,15 +21,19 @@ public class Flower : MonoBehaviour
     //꽃 질문이 무엇인지
     private string question;
 
-    //답변 작성
+    //꽃 다이어리 작성
     public TMP_InputField flowerInput;
     private string flowerAnswer;
+
+    //나무 다이어리 작성
+    public TMP_InputField treeInput;
+    private string treeText;
 
     //완성된 꽃이 무엇인지
     private string flowerName;
 
-    //작성 후 경험치
-    private int allExp;
+    //꽃 다이어리 작성 후 경험치
+    private int FlowerAllExp, TreeAllExp;
 
     //아이템 획득 여부
     private bool itemFlag;
@@ -46,7 +52,7 @@ public class Flower : MonoBehaviour
         flowerNum = writeDiary.flowerNum;
 
         //꽃 연속 며칠 작성?
-        flowerPeriod = GameObject.Find("Header").transform.Find("Date").GetComponentInChildren<TextMeshProUGUI>();
+        flowerPeriod = GameObject.Find("FlowerHeader").transform.Find("FlowerDate").GetComponentInChildren<TextMeshProUGUI>();
         flowerPeriod.text = "연속 " + flowerNum + "일";
 
         //몇 번째 질문?
@@ -56,6 +62,14 @@ public class Flower : MonoBehaviour
         //질문 내용
         questionUI = GameObject.Find("QuestionBox").transform.Find("Question").GetComponentInChildren<TextMeshProUGUI>();
         questionUI.text = question;
+
+        //나무의 경험치와 연속적으로 작성한 기간에 대한 값을 다른 스크립트에서 가져오기
+        treeExp = writeDiary.treeExp;
+        treeNum = writeDiary.treeNum;
+
+        //나무 연속 며칠 작성?
+        treePeriod = GameObject.Find("TreeHeader").transform.Find("TreeDate").GetComponentInChildren<TextMeshProUGUI>();
+        treePeriod.text = "연속 " + treeNum + "일";
     }
 
     // Update is called once per frame
@@ -63,10 +77,11 @@ public class Flower : MonoBehaviour
     {
 
     }
-
-    //작성 버튼 클릭
-    public void Write()
+    
+    //꽃 다이어리 작성 버튼 클릭
+    public void FlowerWrite()
     {
+        //Transform test = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
         //작성한 답변
         flowerAnswer = flowerInput.text;
         //작성한 내용이 없을 때
@@ -83,7 +98,7 @@ public class Flower : MonoBehaviour
         {
             //꽃 다이어리 작성 API 호출
             //작성 후 총 경험치와 아이템 획득 여부를 받음
-            allExp = 100;
+            FlowerAllExp = 100;
             itemFlag = true;
 
             //작성 완료 UI 표시
@@ -91,14 +106,63 @@ public class Flower : MonoBehaviour
             GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
             //작성 완료 문구 출력
             GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";
+
+            //아이템 획득과 캐릭터 획득 체크
+            Transform test = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
+            test.GetComponent<Button>().onClick.AddListener(() => GetItem(itemFlag));
+            test.GetComponent<Button>().onClick.AddListener(() => GetCharacter(FlowerAllExp));
+        }
+    }
+
+    //나무 다이어리 작성 버튼 클릭
+    public void TreeWrite()
+    {
+        //작성한 내용
+        treeText = treeInput.text;
+        //작성한 내용이 없을 때
+        if (treeText.Length == 0)
+        {
+            //작성 완료 UI 표시
+            GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
+            GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
+            //글자를 작성해달라는 문구 출력
+            GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "글자를 작성해주세요! :(";
+        }
+        //있을 때
+        else
+        {
+            //나무 다이어리 작성 API 호출
+            //작성 후 총 경험치와 아이템 획득 여부를 받음
+            TreeAllExp = 100;
+            itemFlag = true;
+
+            //작성 완료 UI 표시
+            GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
+            GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
+            //작성 완료 문구 출력
+            GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";
+
+            //아이템 획득과 캐릭터 획득 체크
+            Transform test = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
+            test.GetComponent<Button>().onClick.AddListener(() => GetItem(itemFlag));
+            test.GetComponent<Button>().onClick.AddListener(() => GetCharacter(TreeAllExp));
         }
     }
 
     //아이템 획득
-    public void GetItem()
+    public void GetItem(bool itemFlag)
     {
-        //아이템 획득 API 호출 -> 아이템 에셋 아이디, 이름
-        GameObject.Find("FarmUI").transform.Find("GetItem").gameObject.SetActive(true);
+        if (itemFlag == true)
+        {
+            //아이템 획득 API 호출 -> 아이템 에셋 아이디, 이름
+            GameObject.Find("FarmUI").transform.Find("GetItem").gameObject.SetActive(true);
+        }
+    }
+
+
+    //캐릭터 획득
+    public void GetCharacter(int allExp)
+    {
         //완성했을 경우 캐릭터 API 호출
         if (allExp == 100)
         {
