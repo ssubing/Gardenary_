@@ -113,26 +113,4 @@ public class Flower : MonoBehaviour
         }
     }
 
-    public void Close()
-    {
-        //작성했을 경우 텃밭으로 돌아가기
-        if (flowerAnswer.Length != 0)
-        {
-            //작성창과 완료창 모두 끄기
-            GameObject.Find("Canvas").transform.Find("WriteComplete").gameObject.SetActive(false);
-            GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(false);
-        }
-        //작성하지 않았을 경우 작성 화면으로 돌아가기
-        else
-        {
-            //완료창만 끄기
-            GameObject.Find("Canvas").transform.Find("WriteComplete").gameObject.SetActive(false);
-        }
-    }
-    public void Complete()
-    {
-        //작성창과 완료창 모두 끄기
-        GameObject.Find("Canvas").transform.Find("WriteComplete").gameObject.SetActive(false);
-        GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(false);
-    }
 }

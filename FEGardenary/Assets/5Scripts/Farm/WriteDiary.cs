@@ -22,7 +22,7 @@ public class WriteDiary : MonoBehaviour
         //텃밭 조회 API 실행
         flowerExp = 10;
         treeExp = 20;
-        flowerFlag = false;
+        flowerFlag = true;
         questionContent = "오늘 하루 가장 기억에 남는 일은 무엇인가요?";
         questionNum = 14;
         flowerNum = 5;
@@ -95,24 +95,6 @@ public class WriteDiary : MonoBehaviour
                 GameObject.Find("TreeUI").transform.Find("TreeWrite").gameObject.SetActive(true);
             }
         }
-    }
-
-    //꽃 다이어리 작성 UI에서 취소 버튼을 눌렀을 경우
-    public void FlowerClose()
-    {
-        GameObject.Find("FlowerUI").transform.Find("FlowerWrite").gameObject.SetActive(false);
-    }
-
-    //나무 다이어리 작성 UI에서 취소 버튼을 눌렀을 경우
-    public void TreeClose()
-    {
-        GameObject.Find("TreeUI").transform.Find("TreeWrite").gameObject.SetActive(false);
-    }
-
-    //이미 작성했다는 UI의 확인 버튼을 눌렀을 경우
-    public void AlreadyClose()
-    {
-        GameObject.Find("FarmUI ").transform.Find("AlreadyWrite").gameObject.SetActive(false);
     }
 
     //클릭한 오브젝트가 어떤 것
