@@ -1,6 +1,9 @@
 package com.gardenary.domain.flower.api;
 
 import com.gardenary.domain.flower.dto.*;
+import com.gardenary.domain.flower.response.AnswerCompleteResponseDto;
+import com.gardenary.domain.flower.response.MyFlowerOnlyIdResponseDto;
+import com.gardenary.domain.flower.response.QuestionAnswerListResponseDto;
 import com.gardenary.domain.flower.service.FlowerService;
 import com.gardenary.domain.user.entity.Role;
 import com.gardenary.domain.user.entity.User;
@@ -26,7 +29,7 @@ public class FlowerApi {
     @PostMapping("/answer")
     public ResponseEntity<DtoResponse> createAnswer(@RequestBody QuestionAnswerDto questionAnswerDto) {
         User user = new User(UUID.randomUUID(),"카카오", Role.USER);
-        AnswerCompleteDto result = flowerService.createAnswer(user, questionAnswerDto);
+        AnswerCompleteResponseDto result = flowerService.createAnswer(user, questionAnswerDto);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
@@ -34,9 +37,9 @@ public class FlowerApi {
         }
     }
     @GetMapping("/flower/answer/{myFlowerId}")
-    public ResponseEntity<DtoResponse<QuestionAnswerListDto>> getOneFlowerAnswerList(@PathVariable int myFlowerId) {
+    public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getOneFlowerAnswerList(@PathVariable int myFlowerId) {
         User user = new User(UUID.randomUUID(), "카카오", Role.USER);
-        QuestionAnswerListDto result = flowerService.getOneFlowerAnswerList(user, myFlowerId);
+        QuestionAnswerListResponseDto result = flowerService.getOneFlowerAnswerList(user, myFlowerId);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
@@ -45,9 +48,9 @@ public class FlowerApi {
     }
 
     @GetMapping("/flower/all")
-    public ResponseEntity<DtoResponse<QuestionAnswerListDto>> getAllFlowerAnswerList() {
+    public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getAllFlowerAnswerList() {
         User user = new User(UUID.randomUUID(), "카카오", Role.USER);
-        QuestionAnswerListDto result = flowerService.getAllFlowerAnswerList(user);
+        QuestionAnswerListResponseDto result = flowerService.getAllFlowerAnswerList(user);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
@@ -58,7 +61,7 @@ public class FlowerApi {
     @PostMapping("/flower")
     public ResponseEntity<DtoResponse> createNewFlower() {
         User user = new User(UUID.randomUUID(), "카카오", Role.USER);
-        MyFlowerOnlyIdDto result = flowerService.createNewFlower(user);
+        MyFlowerOnlyIdResponseDto result = flowerService.createNewFlower(user);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{

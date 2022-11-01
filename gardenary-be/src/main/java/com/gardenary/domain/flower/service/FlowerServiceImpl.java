@@ -12,6 +12,10 @@ import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
 import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
+import com.gardenary.domain.flower.response.AnswerCompleteResponseDto;
+import com.gardenary.domain.flower.response.MyFlowerOnlyIdResponseDto;
+import com.gardenary.domain.flower.response.QuestionAnswerResponseDto;
+import com.gardenary.domain.flower.response.QuestionAnswerListResponseDto;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
@@ -40,9 +44,9 @@ public class FlowerServiceImpl implements FlowerService{
     private final FlowerRepository flowerRepository;
     @Override
     @Transactional
-    public AnswerCompleteDto createAnswer(User user,QuestionAnswerDto questionAnswerDto) {
+    public AnswerCompleteResponseDto createAnswer(User user, QuestionAnswerDto questionAnswerDto) {
         
-        AnswerCompleteDto result = new AnswerCompleteDto();
+        AnswerCompleteResponseDto result = new AnswerCompleteResponseDto();
         //시간 판별,추후에 프론트에서 작성시작 시간을 받으면 코드 처리 하는 것으로 수정 가능성있음.
         LocalDateTime time = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         LocalDateTime startTime;
@@ -82,6 +86,8 @@ public class FlowerServiceImpl implements FlowerService{
         } else{
             result.updateIsItem(false);
         }
+        //총 답변 갯수 수정
+        growingPlant.modifyAnswerCnt(growingPlant.getAnswerCnt() + 1);
         //유저 id로 현재 꽃, 꽃 아이디 찾기
         MyFlower currentFlower = growingPlant.getMyFlower();
         if(currentFlower.getId() == 0){
@@ -90,7 +96,7 @@ public class FlowerServiceImpl implements FlowerService{
         //캐시에서 현재 질문아이디 가져오기(캐시 설정 후 수정 필요)
         int questionId = 0;
 
-        //Dto에 유저 정보, 질문 정보, 꽃 정보 시간
+        //Dto에 유저 정보, 질문 정보, 꽃 정보 시간, 질문 번호
         QuestionAnswerDto saveQuestionAnswerDto = QuestionAnswerDto.builder()
                 .flowerId(currentFlower.getFlower().getId())
                 .createdAt(time)
@@ -98,9 +104,10 @@ public class FlowerServiceImpl implements FlowerService{
                 .questionId(questionId)
                 .userId(user.getId())
                 .content(questionAnswerDto.getContent())
+                .questionNum(growingPlant.getAnswerCnt())
                 .build();
         //내용 저장
-        questionAnswerRepository.save(QuestionAnswerMapper.mapper.toEntity(questionAnswerDto));
+        questionAnswerRepository.save(QuestionAnswerMapper.mapper.toEntity(saveQuestionAnswerDto));
         //경험치 기록 추가
         Exp exp = Exp.builder()
                 .expAmount(10)
@@ -119,7 +126,7 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     @Override
-    public QuestionAnswerListDto getOneFlowerAnswerList(User user, int myFlowerId) {
+    public QuestionAnswerListResponseDto getOneFlowerAnswerList(User user, int myFlowerId) {
         //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
         MyFlower myFlower = myFlowerRepository.findById(myFlowerId);
         if(myFlower == null){
@@ -129,42 +136,39 @@ public class FlowerServiceImpl implements FlowerService{
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlowerAndMyFlower_UserOrderByCreatedAtDesc(myFlower, user);
 
         //리턴한 Dto 리스트로 만들기
-        List<QuestionAnswerDto> result = makeAnswerDtoList(questionAnswerList);
-        return QuestionAnswerListDto.builder()
-                .questionAnswerDtoList(result)
+        List<QuestionAnswerResponseDto> result = makeAnswerDtoList(questionAnswerList);
+        return QuestionAnswerListResponseDto.builder()
+                .questionAnswerResponseDtoList(result)
                 .build();
     }
 
     @Override
-    public QuestionAnswerListDto getAllFlowerAnswerList(User user) {
+    public QuestionAnswerListResponseDto getAllFlowerAnswerList(User user) {
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
-        List<QuestionAnswerDto> result = makeAnswerDtoList(questionAnswerList);
-        return QuestionAnswerListDto.builder()
-                .questionAnswerDtoList(result)
+        List<QuestionAnswerResponseDto> result = makeAnswerDtoList(questionAnswerList);
+        return QuestionAnswerListResponseDto.builder()
+                .questionAnswerResponseDtoList(result)
                 .build();
     }
 
 
-    private  List<QuestionAnswerDto> makeAnswerDtoList(List<QuestionAnswer> questionAnswerList){
-        List<QuestionAnswerDto> result = new ArrayList<>();
+    private  List<QuestionAnswerResponseDto> makeAnswerDtoList(List<QuestionAnswer> questionAnswerList){
+        List<QuestionAnswerResponseDto> result = new ArrayList<>();
 
         for (QuestionAnswer questionAnswer : questionAnswerList){
-            QuestionAnswerDto questionAnswerDto = QuestionAnswerDto.builder()
-                    .id(questionAnswer.getId())
-                    .flowerId(questionAnswer.getMyFlower().getFlower().getId())
+            QuestionAnswerResponseDto questionAnswerResponseDto = QuestionAnswerResponseDto.builder()
                     .createdAt(questionAnswer.getCreatedAt())
-                    .myFlowerId(questionAnswer.getMyFlower().getId())
-                    .questionId(questionAnswer.getQuestion().getId())
-                    .userId(questionAnswer.getMyFlower().getUser().getId())
+                    .question(questionAnswer.getQuestion().getContent())
                     .content(questionAnswer.getContent())
+                    .questionNum(questionAnswer.getQuestionNum())
                     .build();
-            result.add(questionAnswerDto);
+            result.add(questionAnswerResponseDto);
         }
         return result;
     }
 
     @Override
-    public MyFlowerOnlyIdDto createNewFlower(User user) {
+    public MyFlowerOnlyIdResponseDto createNewFlower(User user) {
         //꽃의 총 경험치를 가져오기 (수정 예정)
         int totalExp = 0;
         if(totalExp == 0 || (totalExp % 100) != 0) {
@@ -185,7 +189,7 @@ public class FlowerServiceImpl implements FlowerService{
         GrowingPlant current = growingPlantRepository.findByUser(user);
         current.modifyMyFlower(myFlower);
         growingPlantRepository.save(current);
-        return MyFlowerOnlyIdDto.builder()
+        return MyFlowerOnlyIdResponseDto.builder()
                 .id(current.getMyFlower().getId())
                 .build();
     }
