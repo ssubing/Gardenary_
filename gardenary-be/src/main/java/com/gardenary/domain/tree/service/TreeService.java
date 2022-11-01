@@ -2,6 +2,7 @@ package com.gardenary.domain.tree.service;
 
 import com.gardenary.domain.tree.dto.DiaryDto;
 import com.gardenary.domain.tree.dto.MyTreeDto;
+import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
 import com.gardenary.domain.user.entity.User;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public interface TreeService {
 
     DiaryDto getDiary(LocalDateTime date, User user);
 
-    List<DiaryDto> getDiaryList(int myTreeId, User user);
+    DiaryListResponseDto getDiaryList(int myTreeId, User user);
 
     List<MyTreeDto> getMyTreeList(User user);
 }

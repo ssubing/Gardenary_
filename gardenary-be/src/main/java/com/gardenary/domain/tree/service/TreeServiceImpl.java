@@ -4,6 +4,8 @@ import com.gardenary.domain.current.entity.GrowingPlant;
 import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.tree.dto.DiaryDto;
 import com.gardenary.domain.tree.dto.MyTreeDto;
+import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
+import com.gardenary.domain.tree.dto.response.DiaryResponseDto;
 import com.gardenary.domain.tree.entity.Diary;
 import com.gardenary.domain.tree.entity.MyTree;
 import com.gardenary.domain.tree.mapper.DiaryMapper;
@@ -17,6 +19,7 @@ import com.gardenary.global.error.model.GrowingPlantErrorCode;
 import com.gardenary.global.error.model.TreeErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -59,19 +62,39 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public List<DiaryDto> getDiaryList(int myTreeId, User user) {
-        if(user == null) {
-            return null;
-        }
+    public DiaryListResponseDto getDiaryList(int myTreeId, User user) {
+//        if(user == null) {
+//            return null;
+//        }
         MyTree myTree = myTreeRepository.findById(myTreeId)
                 .orElseThrow(() -> new TreeApiException(TreeErrorCode.MY_TREE_NOT_FOUND));
-        List<Diary> diaryList = diaryRepository.findAllByMyTree(myTree);
+        List<Diary> diaryList = diaryRepository.findAllByMyTree(myTree, Sort.by(Sort.Direction.ASC, "DiaryDate"));
 
-        List<DiaryDto> result = new ArrayList<>();
-        for(Diary diary : diaryList) {
-            result.add(DiaryMapper.mapper.toDto(diary));
+        List<DiaryResponseDto> result = new ArrayList<>();
+
+        int size = diaryList.size();
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
+        for(int i=0; i<size; i++) {
+            Diary diary = diaryList.get(i);
+            result.add(DiaryResponseDto.builder()
+                    .diaryDate(diary.getDiaryDate())
+                    .content(diary.getContent()).build());
+            if(i==0) {
+                startDate = diary.getDiaryDate();
+            }
+            else if(i==size-1) {
+                endDate = diary.getDiaryDate();
+            }
+
         }
-        return result;
+        return DiaryListResponseDto.builder()
+                .diaryList(result)
+                .assetId(myTree.getTree().getAssetId())
+                .name(myTree.getTree().getName())
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
     }
 
     @Override
