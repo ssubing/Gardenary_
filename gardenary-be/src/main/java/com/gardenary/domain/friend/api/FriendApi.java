@@ -1,9 +1,9 @@
 package com.gardenary.domain.friend.api;
 
 import com.gardenary.domain.friend.service.FriendService;
-import com.gardenary.global.common.properties.ResponseProperties;
 import com.gardenary.global.common.response.MessageResponse;
 import com.gardenary.global.config.security.UserDetail;
+import com.gardenary.global.properties.ResponseProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
