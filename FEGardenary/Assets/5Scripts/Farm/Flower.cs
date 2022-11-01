@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 
 public class Flower : MonoBehaviour
 {
@@ -29,70 +26,97 @@ public class Flower : MonoBehaviour
     //완성된 꽃이 무엇인지
     private string flowerName;
 
+    //작성 후 경험치
+    private int allExp;
+
+    //아이템 획득 여부
+    private bool itemFlag;
+
+    //캐릭터 획득 여부
+    private int characterFlag;
+
     // Start is called before the first frame update
     void Start()
     {
+        //꽃 경험치, 질문 내용, 몇 번째 질문, 연속 며칠 되었는지에 대한 변수를 다른 스크립트에서 가져오기
+        WriteDiary writeDiary = GameObject.Find("FlowerGroup").GetComponent<WriteDiary>();
+        flowerExp = writeDiary.flowerExp;
+        question = writeDiary.questionContent;
+        questionNum = writeDiary.questionNum;
+        flowerNum = writeDiary.flowerNum;
+
         //꽃 연속 며칠 작성?
         flowerPeriod = GameObject.Find("Header").transform.Find("Date").GetComponentInChildren<TextMeshProUGUI>();
-        flowerNum = 15;
         flowerPeriod.text = "연속 " + flowerNum + "일";
 
         //몇 번째 질문?
         questionNumUI = GameObject.Find("QuestionBox").transform.Find("QuestionNumber").GetComponentInChildren<TextMeshProUGUI>();
-        questionNum = 10;
         questionNumUI.text = "# " + questionNum + "번째 질문";
 
         //질문 내용
         questionUI = GameObject.Find("QuestionBox").transform.Find("Question").GetComponentInChildren<TextMeshProUGUI>();
-        question = "오늘 하루 가장 기억에 남는 일은 무엇인가요?";
         questionUI.text = question;
-
-        //경험치
-        flowerExp = 90;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     //작성 버튼 클릭
     public void Write()
     {
+        //작성한 답변
         flowerAnswer = flowerInput.text;
-        //작성했고 아직 성장중일 때
-        Debug.Log(flowerExp);
-        flowerExp += 10;
-        if (flowerExp < 100 && flowerAnswer.Length != 0)
+        //작성한 내용이 없을 때
+        if (flowerAnswer.Length == 0)
         {
-            GameObject.Find("Canvas").transform.Find("WriteComplete").gameObject.SetActive(true);
+            //작성 완료 UI 표시
+            GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
             GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
-            GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";
-        }
-        //아무 것도 작성하지 않았을 경우
-        else if(flowerAnswer.Length == 0)
-        {
-            flowerExp -= 10;
-            GameObject.Find("Canvas").transform.Find("WriteComplete").gameObject.SetActive(true);
-            GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
+            //글자를 작성해달라는 문구 출력
             GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "글자를 작성해주세요! :(";
         }
-        else
+        //작성한 내용이 있을 때
+        else if (flowerAnswer.Length != 0)
         {
-            GameObject.Find("Canvas").transform.Find("WriteComplete").gameObject.SetActive(true);
-            GameObject.Find("WriteComplete").transform.Find("CompletePopup").gameObject.SetActive(true);
-            //꽃 이름
-            flowerName = "해바라기";
-            GameObject.Find("CompleteTextWrap").transform.Find("CompleteText").GetComponentInChildren<TextMeshProUGUI>().text
-                = flowerName + "이(가) 활짝 피었어요!";
+            //꽃 다이어리 작성 API 호출
+            //작성 후 총 경험치와 아이템 획득 여부를 받음
+            allExp = 100;
+            itemFlag = true;
+
+            //작성 완료 UI 표시
+            GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
+            GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
+            //작성 완료 문구 출력
+            GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";
+        }
+    }
+
+    //아이템 획득
+    public void GetItem()
+    {
+        //아이템 획득 API 호출 -> 아이템 에셋 아이디, 이름
+        GameObject.Find("FarmUI").transform.Find("GetItem").gameObject.SetActive(true);
+        //완성했을 경우 캐릭터 API 호출
+        if (allExp == 100)
+        {
+            //캐릭터 아이디가 몇이냐
+            characterFlag = 1;
+            //반환된 캐릭터 아이디 값이 0일 때만 새로운 캐릭터를 얻지 않은 것
+            if (characterFlag != 0)
+            {
+                //새로운 캐릭터를 얻었다는 UI 표시
+                GameObject.Find("FarmUI").transform.Find("GetCharacter").gameObject.SetActive(true);
+            }
         }
     }
 
     public void Close()
     {
         //작성했을 경우 텃밭으로 돌아가기
-        if(flowerAnswer.Length != 0)
+        if (flowerAnswer.Length != 0)
         {
             //작성창과 완료창 모두 끄기
             GameObject.Find("Canvas").transform.Find("WriteComplete").gameObject.SetActive(false);
