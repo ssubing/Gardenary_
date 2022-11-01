@@ -24,7 +24,7 @@ public class CurrentApi {
     private final CurrentService currentService;
     private final ResponseProperties responseProperties;
 
-    @GetMapping()
+    @GetMapping("")
     public ResponseEntity<DtoResponse> getCurrentInfo() {
         User user = new User(UUID.randomUUID(), "카카오", Role.USER);
         GrowingPlantResponseDto result = currentService.getCurrentInfo(user);
