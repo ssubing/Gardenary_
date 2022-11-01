@@ -12,6 +12,10 @@ import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
 import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
+import com.gardenary.domain.flower.response.AnswerCompleteDto;
+import com.gardenary.domain.flower.response.MyFlowerOnlyIdDto;
+import com.gardenary.domain.flower.response.QuestionAnswerResponseDto;
+import com.gardenary.domain.flower.response.QuestionAnswerResponseListDto;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
@@ -40,7 +44,7 @@ public class FlowerServiceImpl implements FlowerService{
     private final FlowerRepository flowerRepository;
     @Override
     @Transactional
-    public AnswerCompleteDto createAnswer(User user,QuestionAnswerDto questionAnswerDto) {
+    public AnswerCompleteDto createAnswer(User user, QuestionAnswerDto questionAnswerDto) {
         
         AnswerCompleteDto result = new AnswerCompleteDto();
         //시간 판별,추후에 프론트에서 작성시작 시간을 받으면 코드 처리 하는 것으로 수정 가능성있음.
@@ -122,7 +126,7 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     @Override
-    public QuestionAnswerListDto getOneFlowerAnswerList(User user, int myFlowerId) {
+    public QuestionAnswerResponseListDto getOneFlowerAnswerList(User user, int myFlowerId) {
         //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
         MyFlower myFlower = myFlowerRepository.findById(myFlowerId);
         if(myFlower == null){
@@ -132,37 +136,33 @@ public class FlowerServiceImpl implements FlowerService{
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlowerAndMyFlower_UserOrderByCreatedAtDesc(myFlower, user);
 
         //리턴한 Dto 리스트로 만들기
-        List<QuestionAnswerDto> result = makeAnswerDtoList(questionAnswerList);
-        return QuestionAnswerListDto.builder()
-                .questionAnswerDtoList(result)
+        List<QuestionAnswerResponseDto> result = makeAnswerDtoList(questionAnswerList);
+        return QuestionAnswerResponseListDto.builder()
+                .questionAnswerResponseDtoList(result)
                 .build();
     }
 
     @Override
-    public QuestionAnswerListDto getAllFlowerAnswerList(User user) {
+    public QuestionAnswerResponseListDto getAllFlowerAnswerList(User user) {
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
-        List<QuestionAnswerDto> result = makeAnswerDtoList(questionAnswerList);
-        return QuestionAnswerListDto.builder()
-                .questionAnswerDtoList(result)
+        List<QuestionAnswerResponseDto> result = makeAnswerDtoList(questionAnswerList);
+        return QuestionAnswerResponseListDto.builder()
+                .questionAnswerResponseDtoList(result)
                 .build();
     }
 
 
-    private  List<QuestionAnswerDto> makeAnswerDtoList(List<QuestionAnswer> questionAnswerList){
-        List<QuestionAnswerDto> result = new ArrayList<>();
+    private  List<QuestionAnswerResponseDto> makeAnswerDtoList(List<QuestionAnswer> questionAnswerList){
+        List<QuestionAnswerResponseDto> result = new ArrayList<>();
 
         for (QuestionAnswer questionAnswer : questionAnswerList){
-            QuestionAnswerDto questionAnswerDto = QuestionAnswerDto.builder()
-                    .id(questionAnswer.getId())
-                    .flowerId(questionAnswer.getMyFlower().getFlower().getId())
+            QuestionAnswerResponseDto questionAnswerResponseDto = QuestionAnswerResponseDto.builder()
                     .createdAt(questionAnswer.getCreatedAt())
-                    .myFlowerId(questionAnswer.getMyFlower().getId())
-                    .questionId(questionAnswer.getQuestion().getId())
-                    .userId(questionAnswer.getMyFlower().getUser().getId())
+                    .question(questionAnswer.getQuestion().getContent())
                     .content(questionAnswer.getContent())
                     .questionNum(questionAnswer.getQuestionNum())
                     .build();
-            result.add(questionAnswerDto);
+            result.add(questionAnswerResponseDto);
         }
         return result;
     }
