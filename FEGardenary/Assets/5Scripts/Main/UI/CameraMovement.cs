@@ -18,6 +18,23 @@ public class CameraMovement : MonoBehaviour
 
     Vector3 cameraPosition;
 
+    static public CameraMovement camera;
+
+    private void Awake()
+    {
+        if (camera == null)
+        {
+            camera = this;
+            DontDestroyOnLoad(gameObject);
+
+        }
+        else
+        {
+            Destroy(this.gameObject);
+
+        }
+
+    }
 
     void LateUpdate()
     {
