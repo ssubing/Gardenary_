@@ -57,4 +57,8 @@ public class GrowingPlant {
         this.diaryDays = diaryDays;
     }
 
+    public void modifyAnswerCnt(int answerCnt) {
+        this.answerCnt = answerCnt;
+    }
+
 }
