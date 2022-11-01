@@ -18,4 +18,5 @@ public class GrowingPlantDto {
     private UUID userId;
     private int answerDays;
     private int diaryDays;
+    private int answerCnt;
 }

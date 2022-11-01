@@ -40,4 +40,7 @@ public class QuestionAnswer {
 
     @Column(name = "content", columnDefinition = "VARCHAR(255)")
     private String content;
+
+    @Column(name = "question_num", columnDefinition = "INT")
+    private int questionNum;
 }
