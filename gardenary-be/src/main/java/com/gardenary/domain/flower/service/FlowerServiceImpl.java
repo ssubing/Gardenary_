@@ -104,7 +104,7 @@ public class FlowerServiceImpl implements FlowerService{
                 .questionId(questionId)
                 .userId(user.getId())
                 .content(questionAnswerDto.getContent())
-                .questionNum(growingPlant.getAnswerCnt() + 1)
+                .questionNum(growingPlant.getAnswerCnt())
                 .build();
         //내용 저장
         questionAnswerRepository.save(QuestionAnswerMapper.mapper.toEntity(saveQuestionAnswerDto));
