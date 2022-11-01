@@ -16,4 +16,6 @@ public class TreeDto {
     private String name;
 
     private String content;
+
+    private String assetId;
 }
