@@ -13,5 +13,5 @@ public interface DiaryRepository extends JpaRepository<Diary, Integer> {
     Optional<Diary> findById(int id);
     Optional<Diary> findByMyTree_UserAndDiaryDate(LocalDateTime date, User user);
 
-    Optional<List<Diary>> findAllByMyTree(MyTree myTree);
+    List<Diary> findAllByMyTree(MyTree myTree);
 }

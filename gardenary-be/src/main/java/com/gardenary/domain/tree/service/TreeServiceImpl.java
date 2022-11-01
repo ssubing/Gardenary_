@@ -65,8 +65,7 @@ public class TreeServiceImpl implements TreeService {
         }
         MyTree myTree = myTreeRepository.findById(myTreeId)
                 .orElseThrow(() -> new TreeApiException(TreeErrorCode.MY_TREE_NOT_FOUND));
-        List<Diary> diaryList = diaryRepository.findAllByMyTree(myTree)
-                .orElseThrow(() -> new TreeApiException(TreeErrorCode.DIARY_NOT_FOUND));
+        List<Diary> diaryList = diaryRepository.findAllByMyTree(myTree);
 
         List<DiaryDto> result = new ArrayList<>();
         for(Diary diary : diaryList) {
@@ -82,8 +81,7 @@ public class TreeServiceImpl implements TreeService {
             return null;
         }
 
-        List<MyTree> myTreeList = myTreeRepository.findAllByUser(user)
-                .orElseThrow(() -> new TreeApiException(TreeErrorCode.MY_TREE_NOT_FOUND));
+        List<MyTree> myTreeList = myTreeRepository.findAllByUser(user);
 
         List<MyTreeDto> result = new ArrayList<>();
         for(MyTree myTree : myTreeList) {

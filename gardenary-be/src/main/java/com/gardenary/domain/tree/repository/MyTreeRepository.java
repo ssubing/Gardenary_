@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface MyTreeRepository extends JpaRepository<MyTree, Integer> {
     Optional<MyTree> findById(int id);
 
-    Optional<List<MyTree>> findAllByUser(User user);
+    List<MyTree> findAllByUser(User user);
 }
