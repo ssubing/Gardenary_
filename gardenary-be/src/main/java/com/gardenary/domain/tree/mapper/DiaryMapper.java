@@ -15,13 +15,12 @@ public interface DiaryMapper extends EntityMapper<DiaryDto, Diary> {
 
     @Override
     @Mapping(target = "userId", ignore = true)
-    @Mapping(source = "tree.id", target = "treeId")
+    @Mapping(source = "myTree.tree.id", target = "treeId")
     @Mapping(source = "myTree.id", target = "myTreeId")
     DiaryDto toDto(final Diary entity);
 
     @Override
-    @Mapping(source = "treeId", target = "tree.id")
+    @Mapping(source = "treeId", target = "myTree.tree.id")
     @Mapping(source = "myTreeId", target = "myTree.id")
-    @Mapping(target = "user", ignore = true)
     Diary toEntity(final DiaryDto dto);
 }
