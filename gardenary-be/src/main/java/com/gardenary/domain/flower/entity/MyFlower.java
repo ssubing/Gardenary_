@@ -37,5 +37,11 @@ public class MyFlower {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @Column(name = "done_at", updatable = true, columnDefinition = "DATETIME")
+    private LocalDateTime doneAt;
+
+    public void modifyDoneAt(LocalDateTime doneAt){
+        this.doneAt = doneAt;
+    }
 
 }
