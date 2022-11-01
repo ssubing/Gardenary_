@@ -174,6 +174,14 @@ public class FlowerServiceImpl implements FlowerService{
         if(totalExp == 0 || (totalExp % 100) != 0) {
             throw new FlowerApiException(FlowerErrorCode.NOT_ENOUGH_EXP);
         }
+        //바꾸기 전의 현재 꽃에 doneAt 추가
+        GrowingPlant current = growingPlantRepository.findByUser(user);
+        MyFlower doneFlower = myFlowerRepository.findById(current.getMyFlower().getId());
+        if(doneFlower == null) {
+            throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
+        }
+        doneFlower.modifyDoneAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+        myFlowerRepository.save(doneFlower);
         List<Flower> flowerList = flowerRepository.findAll();
         int size = flowerList.size();
         Random random = new Random(System.nanoTime());
@@ -186,7 +194,6 @@ public class FlowerServiceImpl implements FlowerService{
                 .build();
         myFlowerRepository.save(myFlower);
         //Current 새로운 꽃으로 바꿔주기
-        GrowingPlant current = growingPlantRepository.findByUser(user);
         current.modifyMyFlower(myFlower);
         growingPlantRepository.save(current);
         return MyFlowerOnlyIdResponseDto.builder()
