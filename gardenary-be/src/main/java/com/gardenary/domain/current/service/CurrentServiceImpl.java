@@ -8,6 +8,8 @@ import com.gardenary.domain.flower.entity.QuestionAnswer;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
 import com.gardenary.domain.flower.repository.QuestionRepository;
 import com.gardenary.domain.user.entity.User;
+import com.gardenary.global.error.exception.GrowingPlantApiException;
+import com.gardenary.global.error.model.GrowingPlantErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,9 @@ public class CurrentServiceImpl implements CurrentService{
         //질문아이디 캐시에서 가져오고 해당 아이디로 질문 조회
         int questionId = 1;
         String question = questionRepository.findById(questionId).getContent();
+        if(question == null){
+            throw new GrowingPlantApiException(GrowingPlantErrorCode.QUESTION_NOT_FOUND);
+        }
         return GrowingPlantResponseDto.builder()
                 .flowerExp(flowerTotalExp)
                 .treeExp(treeTotalExp)
