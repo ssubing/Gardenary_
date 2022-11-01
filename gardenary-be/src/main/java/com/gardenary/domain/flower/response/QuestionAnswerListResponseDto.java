@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MyFlowerOnlyIdDto {
-    private int id;
+public class QuestionAnswerListResponseDto {
+    private List<QuestionAnswerResponseDto> questionAnswerResponseDtoList;
 }

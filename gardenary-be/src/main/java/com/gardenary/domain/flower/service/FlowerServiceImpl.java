@@ -12,10 +12,10 @@ import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
 import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
-import com.gardenary.domain.flower.response.AnswerCompleteDto;
-import com.gardenary.domain.flower.response.MyFlowerOnlyIdDto;
+import com.gardenary.domain.flower.response.AnswerCompleteResponseDto;
+import com.gardenary.domain.flower.response.MyFlowerOnlyIdResponseDto;
 import com.gardenary.domain.flower.response.QuestionAnswerResponseDto;
-import com.gardenary.domain.flower.response.QuestionAnswerResponseListDto;
+import com.gardenary.domain.flower.response.QuestionAnswerListResponseDto;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
@@ -44,9 +44,9 @@ public class FlowerServiceImpl implements FlowerService{
     private final FlowerRepository flowerRepository;
     @Override
     @Transactional
-    public AnswerCompleteDto createAnswer(User user, QuestionAnswerDto questionAnswerDto) {
+    public AnswerCompleteResponseDto createAnswer(User user, QuestionAnswerDto questionAnswerDto) {
         
-        AnswerCompleteDto result = new AnswerCompleteDto();
+        AnswerCompleteResponseDto result = new AnswerCompleteResponseDto();
         //시간 판별,추후에 프론트에서 작성시작 시간을 받으면 코드 처리 하는 것으로 수정 가능성있음.
         LocalDateTime time = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         LocalDateTime startTime;
@@ -126,7 +126,7 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     @Override
-    public QuestionAnswerResponseListDto getOneFlowerAnswerList(User user, int myFlowerId) {
+    public QuestionAnswerListResponseDto getOneFlowerAnswerList(User user, int myFlowerId) {
         //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
         MyFlower myFlower = myFlowerRepository.findById(myFlowerId);
         if(myFlower == null){
@@ -137,16 +137,16 @@ public class FlowerServiceImpl implements FlowerService{
 
         //리턴한 Dto 리스트로 만들기
         List<QuestionAnswerResponseDto> result = makeAnswerDtoList(questionAnswerList);
-        return QuestionAnswerResponseListDto.builder()
+        return QuestionAnswerListResponseDto.builder()
                 .questionAnswerResponseDtoList(result)
                 .build();
     }
 
     @Override
-    public QuestionAnswerResponseListDto getAllFlowerAnswerList(User user) {
+    public QuestionAnswerListResponseDto getAllFlowerAnswerList(User user) {
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
         List<QuestionAnswerResponseDto> result = makeAnswerDtoList(questionAnswerList);
-        return QuestionAnswerResponseListDto.builder()
+        return QuestionAnswerListResponseDto.builder()
                 .questionAnswerResponseDtoList(result)
                 .build();
     }
@@ -168,7 +168,7 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     @Override
-    public MyFlowerOnlyIdDto createNewFlower(User user) {
+    public MyFlowerOnlyIdResponseDto createNewFlower(User user) {
         //꽃의 총 경험치를 가져오기 (수정 예정)
         int totalExp = 0;
         if(totalExp == 0 || (totalExp % 100) != 0) {
@@ -189,7 +189,7 @@ public class FlowerServiceImpl implements FlowerService{
         GrowingPlant current = growingPlantRepository.findByUser(user);
         current.modifyMyFlower(myFlower);
         growingPlantRepository.save(current);
-        return MyFlowerOnlyIdDto.builder()
+        return MyFlowerOnlyIdResponseDto.builder()
                 .id(current.getMyFlower().getId())
                 .build();
     }
