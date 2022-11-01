@@ -43,6 +43,9 @@ public class GrowingPlant {
     @Column(name = "diary_days", columnDefinition = "INT")
     private int diaryDays;
 
+    public void modifyMyFlower(MyFlower myFlower) {
+        this.myFlower = myFlower;
+    }
     public void modifyAnswerDays(int answerDays) {
         this.answerDays = answerDays;
     }
