@@ -23,21 +23,21 @@ public class WriteDiary : MonoBehaviour
             if(flowerFlag == true)
             {
                 Debug.Log("화장실 가고 싶다");
-                GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(true);
+                GameObject.Find("FarmUI").transform.Find("FlowerWrite").gameObject.SetActive(true);
             }
             else
             {
-                GameObject.Find("Canvas").transform.Find("AlreadyWrite").gameObject.SetActive(true);
+                GameObject.Find("FarmUI").transform.Find("AlreadyWrite").gameObject.SetActive(true);
             }
         }
     }
     public void Close()
     {
-        GameObject.Find("Canvas").transform.Find("FlowerWrite").gameObject.SetActive(false);
+        GameObject.Find("FarmUI").transform.Find("FlowerWrite").gameObject.SetActive(false);
     }
 
     public void AlreadyClose()
     {
-        GameObject.Find("Canvas").transform.Find("AlreadyWrite").gameObject.SetActive(false);
+        GameObject.Find("FarmUI").transform.Find("AlreadyWrite").gameObject.SetActive(false);
     }
 }
