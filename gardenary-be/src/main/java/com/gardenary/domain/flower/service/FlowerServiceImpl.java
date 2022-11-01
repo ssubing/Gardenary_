@@ -4,12 +4,12 @@ import com.gardenary.domain.current.entity.GrowingPlant;
 import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.exp.entity.Exp;
 import com.gardenary.domain.exp.repository.ExpRepository;
-import com.gardenary.domain.flower.dto.AnswerCompleteDto;
-import com.gardenary.domain.flower.dto.QuestionAnswerListDto;
-import com.gardenary.domain.flower.dto.QuestionAnswerDto;
+import com.gardenary.domain.flower.dto.*;
+import com.gardenary.domain.flower.entity.Flower;
 import com.gardenary.domain.flower.entity.MyFlower;
 import com.gardenary.domain.flower.entity.QuestionAnswer;
 import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
+import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
 import com.gardenary.domain.user.entity.User;
@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class FlowerServiceImpl implements FlowerService{
     private final MyFlowerRepository myFlowerRepository;
     private final QuestionAnswerRepository questionAnswerRepository;
     private final ExpRepository expRepository;
+    private final FlowerRepository flowerRepository;
     @Override
     @Transactional
     public AnswerCompleteDto createAnswer(User user,QuestionAnswerDto questionAnswerDto) {
@@ -142,17 +144,18 @@ public class FlowerServiceImpl implements FlowerService{
                 .build();
     }
 
+
     private  List<QuestionAnswerDto> makeAnswerDtoList(List<QuestionAnswer> questionAnswerList){
         List<QuestionAnswerDto> result = new ArrayList<>();
 
         for (QuestionAnswer questionAnswer : questionAnswerList){
             QuestionAnswerDto questionAnswerDto = QuestionAnswerDto.builder()
                     .id(questionAnswer.getId())
-                    .flowerId(questionAnswer.getFlower().getId())
+                    .flowerId(questionAnswer.getMyFlower().getFlower().getId())
                     .createdAt(questionAnswer.getCreatedAt())
                     .myFlowerId(questionAnswer.getMyFlower().getId())
                     .questionId(questionAnswer.getQuestion().getId())
-                    .userId(questionAnswer.getUser().getId())
+                    .userId(questionAnswer.getMyFlower().getUser().getId())
                     .content(questionAnswer.getContent())
                     .build();
             result.add(questionAnswerDto);
@@ -160,5 +163,31 @@ public class FlowerServiceImpl implements FlowerService{
         return result;
     }
 
+    @Override
+    public MyFlowerOnlyIdDto createNewFlower(User user) {
+        //꽃의 총 경험치를 가져오기 (수정 예정)
+        int totalExp = 0;
+        if(totalExp == 0 || (totalExp % 100) != 0) {
+            throw new FlowerApiException(FlowerErrorCode.NOT_ENOUGH_EXP);
+        }
+        List<Flower> flowerList = flowerRepository.findAll();
+        int size = flowerList.size();
+        Random random = new Random(System.nanoTime());
+        int num = random.nextInt(size);
+        Flower newFlower = flowerList.get(num);
+        //새로운 꽃 MyFlower에 넣어주기
+        MyFlower myFlower = MyFlower.builder()
+                .flower(newFlower)
+                .user(user)
+                .build();
+        myFlowerRepository.save(myFlower);
+        //Current 새로운 꽃으로 바꿔주기
+        GrowingPlant current = growingPlantRepository.findByUser(user);
+        current.modifyMyFlower(myFlower);
+        growingPlantRepository.save(current);
+        return MyFlowerOnlyIdDto.builder()
+                .id(current.getMyFlower().getId())
+                .build();
+    }
 
 }
