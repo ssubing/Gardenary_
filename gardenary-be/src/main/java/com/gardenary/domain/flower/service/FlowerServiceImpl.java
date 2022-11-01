@@ -82,6 +82,8 @@ public class FlowerServiceImpl implements FlowerService{
         } else{
             result.updateIsItem(false);
         }
+        //총 답변 갯수 수정
+        growingPlant.modifyAnswerCnt(growingPlant.getAnswerCnt() + 1);
         //유저 id로 현재 꽃, 꽃 아이디 찾기
         MyFlower currentFlower = growingPlant.getMyFlower();
         if(currentFlower.getId() == 0){
@@ -90,7 +92,7 @@ public class FlowerServiceImpl implements FlowerService{
         //캐시에서 현재 질문아이디 가져오기(캐시 설정 후 수정 필요)
         int questionId = 0;
 
-        //Dto에 유저 정보, 질문 정보, 꽃 정보 시간
+        //Dto에 유저 정보, 질문 정보, 꽃 정보 시간, 질문 번호
         QuestionAnswerDto saveQuestionAnswerDto = QuestionAnswerDto.builder()
                 .flowerId(currentFlower.getFlower().getId())
                 .createdAt(time)
@@ -98,9 +100,10 @@ public class FlowerServiceImpl implements FlowerService{
                 .questionId(questionId)
                 .userId(user.getId())
                 .content(questionAnswerDto.getContent())
+                .questionNum(growingPlant.getAnswerCnt() + 1)
                 .build();
         //내용 저장
-        questionAnswerRepository.save(QuestionAnswerMapper.mapper.toEntity(questionAnswerDto));
+        questionAnswerRepository.save(QuestionAnswerMapper.mapper.toEntity(saveQuestionAnswerDto));
         //경험치 기록 추가
         Exp exp = Exp.builder()
                 .expAmount(10)
@@ -157,6 +160,7 @@ public class FlowerServiceImpl implements FlowerService{
                     .questionId(questionAnswer.getQuestion().getId())
                     .userId(questionAnswer.getMyFlower().getUser().getId())
                     .content(questionAnswer.getContent())
+                    .questionNum(questionAnswer.getQuestionNum())
                     .build();
             result.add(questionAnswerDto);
         }
