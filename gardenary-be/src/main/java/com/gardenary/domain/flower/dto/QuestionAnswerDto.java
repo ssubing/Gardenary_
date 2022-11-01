@@ -21,5 +21,6 @@ public class QuestionAnswerDto {
     private LocalDateTime createdAt;
     private String content;
     private boolean isOver;
+    private int questionNum;
 
 }
