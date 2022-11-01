@@ -1,8 +1,6 @@
 package com.gardenary.domain.flower.api;
 
-import com.gardenary.domain.flower.dto.AnswerCompleteDto;
-import com.gardenary.domain.flower.dto.QuestionAnswerListDto;
-import com.gardenary.domain.flower.dto.QuestionAnswerDto;
+import com.gardenary.domain.flower.dto.*;
 import com.gardenary.domain.flower.service.FlowerService;
 import com.gardenary.domain.user.entity.Role;
 import com.gardenary.domain.user.entity.User;
@@ -57,4 +55,14 @@ public class FlowerApi {
         }
     }
 
+    @PostMapping("/flower")
+    public ResponseEntity<DtoResponse> createNewFlower() {
+        User user = new User(UUID.randomUUID(), "카카오", Role.USER);
+        MyFlowerOnlyIdDto result = flowerService.createNewFlower(user);
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
+        } else{
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
+        }
+    }
 }
