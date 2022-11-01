@@ -2,11 +2,13 @@ package com.gardenary.domain.tree.api;
 
 import com.gardenary.domain.tree.dto.DiaryDto;
 import com.gardenary.domain.tree.dto.MyTreeDto;
+import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
 import com.gardenary.domain.tree.service.TreeService;
-import com.gardenary.global.common.properties.ResponseProperties;
+import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.common.response.DtoResponse;
 import com.gardenary.global.common.response.MessageResponse;
 import com.gardenary.global.config.security.UserDetail;
+import com.gardenary.global.properties.ResponseProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ public class TreeApi {
     @PostMapping("")
     public ResponseEntity<MessageResponse> createMyTree(
             @AuthenticationPrincipal UserDetail userDetail) {
+        boolean result = treeService.createMyTree(userDetail.getUser());
         return null;
     }
 
@@ -53,10 +56,11 @@ public class TreeApi {
     }
 
     @GetMapping("/diary/{myTreeId}")
-    public ResponseEntity<DtoResponse<List<DiaryDto>>> getDiaryList(
+    public ResponseEntity<DtoResponse<DiaryListResponseDto>> getDiaryList(
             @PathVariable("myTreeId") int myTreeId,
             @AuthenticationPrincipal UserDetail userDetail) {
-        List<DiaryDto> result = treeService.getDiaryList(myTreeId, userDetail.getUser());
+        User user = null;
+        DiaryListResponseDto result = treeService.getDiaryList(myTreeId, user);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
