@@ -1,10 +1,9 @@
 package com.gardenary.domain.tree.api;
 
-import com.gardenary.domain.tree.dto.DiaryDto;
-import com.gardenary.domain.tree.dto.MyTreeDto;
 import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
+import com.gardenary.domain.tree.dto.response.DiaryResponseDto;
+import com.gardenary.domain.tree.dto.response.TreeResponseDto;
 import com.gardenary.domain.tree.service.TreeService;
-import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.common.response.DtoResponse;
 import com.gardenary.global.common.response.MessageResponse;
 import com.gardenary.global.config.security.UserDetail;
@@ -35,9 +34,9 @@ public class TreeApi {
     }
 
     @GetMapping("")
-    public ResponseEntity<DtoResponse<List<MyTreeDto>>> getMyTreeList(
+    public ResponseEntity<DtoResponse<List<TreeResponseDto>>> getMyTreeList(
             @AuthenticationPrincipal UserDetail userDetail) {
-        List<MyTreeDto> result = treeService.getMyTreeList(userDetail.getUser());
+        List<TreeResponseDto> result = treeService.getMyTreeList(userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
@@ -45,10 +44,10 @@ public class TreeApi {
     }
 
     @GetMapping("/diary")
-    public ResponseEntity<DtoResponse<DiaryDto>> getDiary(
+    public ResponseEntity<DtoResponse<DiaryResponseDto>> getDiary(
             @RequestParam(name = "date") LocalDateTime date,
             @AuthenticationPrincipal UserDetail userDetail) {
-        DiaryDto result = treeService.getDiary(date, userDetail.getUser());
+        DiaryResponseDto result = treeService.getDiary(date, userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
@@ -59,8 +58,7 @@ public class TreeApi {
     public ResponseEntity<DtoResponse<DiaryListResponseDto>> getDiaryList(
             @PathVariable("myTreeId") int myTreeId,
             @AuthenticationPrincipal UserDetail userDetail) {
-        User user = null;
-        DiaryListResponseDto result = treeService.getDiaryList(myTreeId, user);
+        DiaryListResponseDto result = treeService.getDiaryList(myTreeId, userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
