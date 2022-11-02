@@ -1,8 +1,8 @@
 package com.gardenary.domain.tree.service;
 
-import com.gardenary.domain.tree.dto.DiaryDto;
-import com.gardenary.domain.tree.dto.MyTreeDto;
 import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
+import com.gardenary.domain.tree.dto.response.DiaryResponseDto;
+import com.gardenary.domain.tree.dto.response.TreeResponseDto;
 import com.gardenary.domain.user.entity.User;
 
 import java.time.LocalDateTime;
@@ -14,9 +14,9 @@ public interface TreeService {
 
     boolean updateCurTree(User user);
 
-    DiaryDto getDiary(LocalDateTime date, User user);
+    DiaryResponseDto getDiary(LocalDateTime date, User user);
 
     DiaryListResponseDto getDiaryList(int myTreeId, User user);
 
-    List<MyTreeDto> getMyTreeList(User user);
+    List<TreeResponseDto> getMyTreeList(User user);
 }

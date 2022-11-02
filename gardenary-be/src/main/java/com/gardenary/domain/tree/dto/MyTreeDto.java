@@ -21,4 +21,6 @@ public class MyTreeDto {
     private UUID userId;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime doneAt;
 }
