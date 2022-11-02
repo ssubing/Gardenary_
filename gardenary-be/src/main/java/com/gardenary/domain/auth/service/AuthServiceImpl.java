@@ -8,8 +8,12 @@ import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.config.security.JwtProvider;
 import com.gardenary.global.error.exception.UserApiException;
 import com.gardenary.global.error.model.ProfileErrorCode;
+import com.gardenary.global.util.CookieUtil;
+import com.gardenary.infra.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,8 @@ public class AuthServiceImpl implements AuthService {
     private final ProfileRepository profileRepository;
 
     private final JwtProvider jwtProvider;
+
+    private final RedisService redisService;
 
     @Override
     public AuthResponseDto signIn(User user) {
@@ -33,4 +39,14 @@ public class AuthServiceImpl implements AuthService {
 
         return new AuthResponseDto(accessToken, refreshToken, nickname);
     }
+
+    @Override
+    public void signOut(HttpServletRequest req) {
+        String refreshToken = CookieUtil.searchCookie(req, "refreshToken");
+        String accessToken = jwtProvider.resolveToken(req);
+
+        redisService.deleteKey(refreshToken);
+        redisService.setStringValueAndExpire(accessToken, "blacklist", jwtProvider.getAccessTokenExpireTime());
+    }
+
 }
