@@ -23,6 +23,12 @@ public class Flower {
     @Column(name = "name", columnDefinition = "VARCHAR(50)")
     private String name;
 
+    @Column(name = "meaning", columnDefinition = "VARCHAR(255)")
+    private String meaning;
+
+    @Column(name = "bloom", columnDefinition = "VARCHAR(255)")
+    private String bloom;
+
     @Column(name = "content", columnDefinition = "VARCHAR(255)")
     private String content;
 
