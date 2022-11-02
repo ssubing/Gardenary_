@@ -182,11 +182,7 @@ public class FlowerServiceImpl implements FlowerService{
         }
         doneFlower.modifyDoneAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         myFlowerRepository.save(doneFlower);
-        List<Flower> flowerList = flowerRepository.findAll();
-        int size = flowerList.size();
-        Random random = new Random(System.nanoTime());
-        int num = random.nextInt(size);
-        Flower newFlower = flowerList.get(num);
+        Flower newFlower = randomFlower();
         //새로운 꽃 MyFlower에 넣어주기
         MyFlower myFlower = MyFlower.builder()
                 .flower(newFlower)
@@ -199,6 +195,14 @@ public class FlowerServiceImpl implements FlowerService{
         return MyFlowerOnlyIdResponseDto.builder()
                 .id(current.getMyFlower().getId())
                 .build();
+    }
+
+    private Flower randomFlower() {
+        List<Flower> flowerList = flowerRepository.findAll();
+        int size = flowerList.size();
+        Random random = new Random(System.nanoTime());
+        int num = random.nextInt(size);
+        return flowerList.get(num);
     }
 
 }
