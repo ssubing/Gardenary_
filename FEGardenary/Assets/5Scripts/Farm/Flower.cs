@@ -36,16 +36,20 @@ public class Flower : MonoBehaviour
     private int FlowerAllExp, TreeAllExp;
 
     //아이템 획득 여부
-    private bool itemFlag;
+    private bool FlowerItemFlag, TreeItemFlag;
 
     //캐릭터 획득 여부
     private int characterFlag;
+
+    private WriteDiary writeDiary;
+
+    private Transform check;
 
     // Start is called before the first frame update
     void Start()
     {
         //꽃 경험치, 질문 내용, 몇 번째 질문, 연속 며칠 되었는지에 대한 변수를 다른 스크립트에서 가져오기
-        WriteDiary writeDiary = GameObject.Find("FlowerGroup").GetComponent<WriteDiary>();
+        writeDiary = GameObject.Find("FlowerGroup").GetComponent<WriteDiary>();
         flowerExp = writeDiary.flowerExp;
         question = writeDiary.questionContent;
         questionNum = writeDiary.questionNum;
@@ -62,7 +66,6 @@ public class Flower : MonoBehaviour
         //질문 내용
         questionUI = GameObject.Find("QuestionBox").transform.Find("Question").GetComponentInChildren<TextMeshProUGUI>();
         questionUI.text = question;
-
         //나무의 경험치와 연속적으로 작성한 기간에 대한 값을 다른 스크립트에서 가져오기
         treeExp = writeDiary.treeExp;
         treeNum = writeDiary.treeNum;
@@ -77,11 +80,10 @@ public class Flower : MonoBehaviour
     {
 
     }
-    
+
     //꽃 다이어리 작성 버튼 클릭
     public void FlowerWrite()
     {
-        //Transform test = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
         //작성한 답변
         flowerAnswer = flowerInput.text;
         //작성한 내용이 없을 때
@@ -99,18 +101,30 @@ public class Flower : MonoBehaviour
             //꽃 다이어리 작성 API 호출
             //작성 후 총 경험치와 아이템 획득 여부를 받음
             FlowerAllExp = 100;
-            itemFlag = true;
+            FlowerItemFlag = true;
 
-            //작성 완료 UI 표시
-            GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
-            GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
-            //작성 완료 문구 출력
-            GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";
+            if (FlowerAllExp == 100)
+            {
 
-            //아이템 획득과 캐릭터 획득 체크
-            Transform test = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
-            test.GetComponent<Button>().onClick.AddListener(() => GetItem(itemFlag));
-            test.GetComponent<Button>().onClick.AddListener(() => GetCharacter(FlowerAllExp));
+                //꽃 완성 UI 표시
+                GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
+                GameObject.Find("WriteComplete").transform.Find("CompletePopup").gameObject.SetActive(true);
+                //아이템 획득과 캐릭터 획득 체크
+                check = GameObject.Find("CompletePopup").transform.Find("CompleteButton");
+            }
+            else
+            {
+                //작성 완료 UI 표시
+                GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
+                GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
+                //작성 완료 문구 출력
+                GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";//아이템 획득과 캐릭터 획득 체크
+                //아이템 획득과 캐릭터 획득 체크
+                check = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
+            }
+            
+            check.GetComponent<Button>().onClick.AddListener(() => GetItem(FlowerItemFlag));
+            check.GetComponent<Button>().onClick.AddListener(() => GetCharacter(FlowerAllExp));
         }
     }
 
@@ -134,18 +148,32 @@ public class Flower : MonoBehaviour
             //나무 다이어리 작성 API 호출
             //작성 후 총 경험치와 아이템 획득 여부를 받음
             TreeAllExp = 100;
-            itemFlag = true;
+            TreeItemFlag = true;
 
-            //작성 완료 UI 표시
-            GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
-            GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
-            //작성 완료 문구 출력
-            GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";
-
+            if (TreeAllExp == 100)
+            {
+                //나무 완성 UI 표시
+                GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
+                GameObject.Find("WriteComplete").transform.Find("CompletePopup").gameObject.SetActive(true);
+                //아이템 획득과 캐릭터 획득 체크
+                check = GameObject.Find("CompletePopup").transform.Find("CompleteButton");
+            }
+            else if (TreeAllExp < 100)
+            {
+                //작성 완료 UI 표시
+                GameObject.Find("FarmUI").transform.Find("WriteComplete").gameObject.SetActive(true);
+                GameObject.Find("WriteComplete").transform.Find("WritePopup").gameObject.SetActive(true);
+                //작성 완료 문구 출력
+                GameObject.Find("WritePopup").transform.Find("PopupText").GetComponentInChildren<TextMeshProUGUI>().text = "작성이 완료되었습니다! :)";
+                check = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
+            }
             //아이템 획득과 캐릭터 획득 체크
-            Transform test = GameObject.Find("WritePopup").transform.Find("PopupExitButton");
-            test.GetComponent<Button>().onClick.AddListener(() => GetItem(itemFlag));
-            test.GetComponent<Button>().onClick.AddListener(() => GetCharacter(TreeAllExp));
+            check.GetComponent<Button>().onClick.AddListener(() => GetItem(TreeItemFlag));
+            check.GetComponent<Button>().onClick.AddListener(() => GetCharacter(TreeAllExp));
+
+            //나무 다이어리 입력 초기화
+            treeInput.Select();
+            treeInput.text= "";
         }
     }
 

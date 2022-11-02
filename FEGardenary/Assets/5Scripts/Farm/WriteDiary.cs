@@ -14,7 +14,7 @@ public class WriteDiary : MonoBehaviour
     public int flowerNum;
     public int treeNum;
 
-    private GameObject targetObject;
+    public GameObject targetObject;
 
     // Start is called before the first frame update
     void Start()
@@ -82,7 +82,7 @@ public class WriteDiary : MonoBehaviour
                     GameObject.Find("FlowerUI").transform.Find("FlowerWrite").gameObject.SetActive(true);
                 }
                 //이미 작성했을 때
-                else
+                else if(flowerFlag == false || GameObject.Find("FarmUI").transform.Find("FlowerUI").gameObject.activeSelf == false)
                 {
                     //이미 작성했다는 UI를 보여줘!
                     GameObject.Find("FarmUI").transform.Find("AlreadyWrite").gameObject.SetActive(true);
@@ -93,6 +93,10 @@ public class WriteDiary : MonoBehaviour
                 targetObject.name == "Tree3" || targetObject.name == "Tree4")
             {
                 //나무 다이어리 작성 UI를 보여줘!
+                if(GameObject.Find("FarmUI").transform.Find("TreeUI").gameObject.activeSelf == false)
+                {
+                    GameObject.Find("FarmUI").transform.Find("TreeUI").gameObject.SetActive(true);
+                }
                 GameObject.Find("TreeUI").transform.Find("TreeWrite").gameObject.SetActive(true);
             }
         }

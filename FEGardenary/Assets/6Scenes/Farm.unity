@@ -824,6 +824,7 @@ GameObject:
   - component: {fileID: 246275007}
   - component: {fileID: 246275010}
   - component: {fileID: 246275009}
+  - component: {fileID: 246275011}
   - component: {fileID: 246275008}
   m_Layer: 5
   m_Name: TreeUI
@@ -914,6 +915,24 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &246275011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246275006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d522d076e7fcd0f4081f013648ae0fdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flowerPeriod: {fileID: 0}
+  treePeriod: {fileID: 0}
+  questionUI: {fileID: 0}
+  questionNumUI: {fileID: 0}
+  flowerInput: {fileID: 0}
+  treeInput: {fileID: 1290389955}
 --- !u!1 &265049040
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,9 +1158,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flowerPeriod: {fileID: 287668462}
+  treePeriod: {fileID: 0}
   questionUI: {fileID: 0}
   questionNumUI: {fileID: 0}
   flowerInput: {fileID: 0}
+  treeInput: {fileID: 0}
 --- !u!1 &323795538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,7 +1259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &350126225
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1449,9 +1470,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flowerPeriod: {fileID: 0}
+  treePeriod: {fileID: 0}
   questionUI: {fileID: 0}
   questionNumUI: {fileID: 357902103}
   flowerInput: {fileID: 0}
+  treeInput: {fileID: 0}
 --- !u!1 &369507405
 GameObject:
   m_ObjectHideFlags: 0
@@ -1948,9 +1971,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flowerPeriod: {fileID: 0}
+  treePeriod: {fileID: 0}
   questionUI: {fileID: 0}
   questionNumUI: {fileID: 0}
   flowerInput: {fileID: 735480835}
+  treeInput: {fileID: 0}
 --- !u!1 &427105362
 GameObject:
   m_ObjectHideFlags: 0
@@ -2248,6 +2273,7 @@ MonoBehaviour:
   questionNum: 0
   flowerNum: 0
   treeNum: 0
+  targetObject: {fileID: 0}
 --- !u!1 &562931943
 GameObject:
   m_ObjectHideFlags: 0
@@ -3303,22 +3329,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1027795205}
+      - m_Target: {fileID: 934245511}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1169654598}
-        m_TargetAssemblyTypeName: Flower, Assembly-CSharp
-        m_MethodName: GetItem
-        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3864,7 +3878,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC791\uC131\uC774 \uC644\uB8CC\uB418\uC5C8\uC2B5\uB2C8\uB2E4! :)"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
   m_sharedMaterial: {fileID: -7348446767895330763, guid: 9b4db8c1aab8ab241977b5e0d1c82158, type: 2}
@@ -4238,9 +4252,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1169654598}
+      - m_Target: {fileID: 410668783}
         m_TargetAssemblyTypeName: Flower, Assembly-CSharp
-        m_MethodName: Write
+        m_MethodName: FlowerWrite
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4570,7 +4584,6 @@ GameObject:
   - component: {fileID: 1169654596}
   - component: {fileID: 1169654595}
   - component: {fileID: 1169654594}
-  - component: {fileID: 1169654598}
   - component: {fileID: 1169654599}
   m_Layer: 5
   m_Name: FarmUI
@@ -4666,22 +4679,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1169654598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1169654593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d522d076e7fcd0f4081f013648ae0fdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flowerPeriod: {fileID: 0}
-  questionUI: {fileID: 0}
-  questionNumUI: {fileID: 0}
-  flowerInput: {fileID: 735480835}
 --- !u!114 &1169654599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4977,7 +4974,6 @@ GameObject:
   - component: {fileID: 1228469247}
   - component: {fileID: 1228469249}
   - component: {fileID: 1228469248}
-  - component: {fileID: 1228469250}
   m_Layer: 5
   m_Name: FlowerWrite
   m_TagString: Untagged
@@ -5047,22 +5043,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1228469246}
   m_CullTransparentMesh: 1
---- !u!114 &1228469250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1228469246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d522d076e7fcd0f4081f013648ae0fdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flowerPeriod: {fileID: 0}
-  questionUI: {fileID: 0}
-  questionNumUI: {fileID: 0}
-  flowerInput: {fileID: 735480835}
 --- !u!1 &1290389952
 GameObject:
   m_ObjectHideFlags: 0
@@ -5404,9 +5384,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flowerPeriod: {fileID: 1329758934}
+  treePeriod: {fileID: 0}
   questionUI: {fileID: 0}
   questionNumUI: {fileID: 0}
   flowerInput: {fileID: 0}
+  treeInput: {fileID: 0}
 --- !u!114 &1329758934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5916,9 +5898,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1169654599}
-        m_TargetAssemblyTypeName: Tree, Assembly-CSharp
-        m_MethodName: Write
+      - m_Target: {fileID: 246275011}
+        m_TargetAssemblyTypeName: Flower, Assembly-CSharp
+        m_MethodName: TreeWrite
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7349,6 +7331,7 @@ MonoBehaviour:
   questionNum: 0
   flowerNum: 0
   treeNum: 0
+  targetObject: {fileID: 0}
 --- !u!1 &1890428612
 GameObject:
   m_ObjectHideFlags: 0
