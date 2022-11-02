@@ -82,9 +82,9 @@ public class FlowerServiceImpl implements FlowerService{
             growingPlant.modifyAnswerDays(1);
         }
         if(growingPlant.getAnswerDays()%3 == 0) {
-            result.updateIsItem(true);
+            result.modifyIsItem(true);
         } else{
-            result.updateIsItem(false);
+            result.modifyIsItem(false);
         }
         //총 답변 갯수 수정
         growingPlant.modifyAnswerCnt(growingPlant.getAnswerCnt() + 1);
@@ -121,7 +121,7 @@ public class FlowerServiceImpl implements FlowerService{
 
         int totalExp = 100;
         //return 값 만들기
-        result.updateTotalExp(totalExp);
+        result.modifyTotalExp(totalExp);
         return result;
     }
 
