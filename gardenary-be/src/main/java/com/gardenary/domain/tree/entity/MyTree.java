@@ -39,4 +39,7 @@ public class MyTree {
     @Column(name = "created_at", updatable = false, columnDefinition = "DATETIME")
     @CreatedDate //생성시간 자동 입력
     private LocalDateTime createdAt;
+
+    @Column(name = "done_at", columnDefinition = "DATETIME")
+    private LocalDateTime doneAt;
 }
