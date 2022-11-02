@@ -8,7 +8,7 @@ server:
       force: true
 spring:
   profiles:
-    include: db
+    include: db, encrypt
   redis:
     host: localhost
     port: 6379
