@@ -8,10 +8,12 @@ import com.gardenary.domain.flower.service.FlowerService;
 import com.gardenary.domain.user.entity.Role;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.common.response.DtoResponse;
+import com.gardenary.global.config.security.UserDetail;
 import com.gardenary.global.properties.ResponseProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -27,9 +29,8 @@ public class FlowerApi {
 
     //추후 user쪽 추가, 경험치 return으로 변겅
     @PostMapping("/answer")
-    public ResponseEntity<DtoResponse> createAnswer(@RequestBody QuestionAnswerDto questionAnswerDto) {
-        User user = new User(UUID.randomUUID(),"카카오", Role.USER);
-        AnswerCompleteResponseDto result = flowerService.createAnswer(user, questionAnswerDto);
+    public ResponseEntity<DtoResponse> createAnswer(@RequestBody QuestionAnswerDto questionAnswerDto, @AuthenticationPrincipal UserDetail userDetail) {
+        AnswerCompleteResponseDto result = flowerService.createAnswer(userDetail.getUser(), questionAnswerDto);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
@@ -37,9 +38,8 @@ public class FlowerApi {
         }
     }
     @GetMapping("/flower/answer/{myFlowerId}")
-    public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getOneFlowerAnswerList(@PathVariable int myFlowerId) {
-        User user = new User(UUID.randomUUID(), "카카오", Role.USER);
-        QuestionAnswerListResponseDto result = flowerService.getOneFlowerAnswerList(user, myFlowerId);
+    public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getOneFlowerAnswerList(@PathVariable int myFlowerId, @AuthenticationPrincipal UserDetail userDetail) {;
+        QuestionAnswerListResponseDto result = flowerService.getOneFlowerAnswerList(userDetail.getUser(), myFlowerId);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
@@ -48,9 +48,8 @@ public class FlowerApi {
     }
 
     @GetMapping("/flower/all")
-    public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getAllFlowerAnswerList() {
-        User user = new User(UUID.randomUUID(), "카카오", Role.USER);
-        QuestionAnswerListResponseDto result = flowerService.getAllFlowerAnswerList(user);
+    public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getAllFlowerAnswerList(@AuthenticationPrincipal UserDetail userDetail) {
+        QuestionAnswerListResponseDto result = flowerService.getAllFlowerAnswerList(userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
@@ -59,9 +58,8 @@ public class FlowerApi {
     }
 
     @PostMapping("/flower")
-    public ResponseEntity<DtoResponse> createNewFlower() {
-        User user = new User(UUID.randomUUID(), "카카오", Role.USER);
-        MyFlowerOnlyIdResponseDto result = flowerService.createNewFlower(user);
+    public ResponseEntity<DtoResponse> createNewFlower(@AuthenticationPrincipal UserDetail userDetail) {
+        MyFlowerOnlyIdResponseDto result = flowerService.createNewFlower(userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
