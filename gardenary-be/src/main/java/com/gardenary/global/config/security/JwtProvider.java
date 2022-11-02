@@ -56,7 +56,7 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
-        redisService.setStringValueAndExpire(refreshToken, kakaoId, jwtProperties.getRefreshTokenExpireTime());
+        redisService.setStringValueAndExpire(kakaoId, refreshToken, jwtProperties.getRefreshTokenExpireTime());
 
         return refreshToken;
     }
