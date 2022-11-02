@@ -27,10 +27,10 @@ public class Friend {
     private int id;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "follwing_id", nullable = false)
+    @JoinColumn(name = "following_id", nullable = false)
     private User following;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "follwer_id", nullable = false)
+    @JoinColumn(name = "follower_id", nullable = false)
     private User follower;
 }
