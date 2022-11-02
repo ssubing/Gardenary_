@@ -13,10 +13,10 @@ public class AnswerCompleteResponseDto {
     private int totalExp;
     private boolean isItem;
 
-    public void updateIsItem(boolean isItem) {
+    public void modifyIsItem(boolean isItem) {
         this.isItem = isItem;
     }
-    public void updateTotalExp(int totalExp) {
+    public void modifyTotalExp(int totalExp) {
         this.totalExp = totalExp;
     }
 }
