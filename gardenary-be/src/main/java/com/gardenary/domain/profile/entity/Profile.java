@@ -28,7 +28,7 @@ public class Profile {
     @Column(name = "id", columnDefinition = "INT UNSIGNED")
     private int id;
 
-    @ManyToOne(targetEntity = Avatar.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = MyAvatar.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "my_avatar_id", nullable = false)
     private MyAvatar myAvatar;
 
