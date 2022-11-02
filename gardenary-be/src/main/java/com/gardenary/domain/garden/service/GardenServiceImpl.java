@@ -16,8 +16,10 @@ import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.TreeApiException;
+import com.gardenary.global.error.exception.UserApiException;
 import com.gardenary.global.error.model.FlowerErrorCode;
 import com.gardenary.global.error.model.TreeErrorCode;
+import com.gardenary.global.error.model.UserErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,8 +40,8 @@ public class GardenServiceImpl implements GardenService{
     private final MyItemRepository myItemRepository;
     @Override
     public GardenListResponseDto getGardenInfo(String userId) {
-        //유저 찾기, 오류 체크까지(수정 예정)
-        User user = userRepository.findById(UUID.randomUUID()).orElseThrow();
+        //유저 찾기, 오류 체크까지
+        User user = userRepository.findById(UUID.randomUUID()).orElseThrow(() -> new UserApiException(UserErrorCode.USER_NOT_FOUND));
         //해당 유저의 정원 정보 리스트 조회, 3종류의 리스트 생성
         List<Garden> gardenList = gardenRepository.findAllByUser(user);
         List<GardenFlowerResponseDto> flowerDtoList = new ArrayList<>();
