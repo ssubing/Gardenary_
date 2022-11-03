@@ -1,10 +1,13 @@
-package com.gardenary.domain.user.service;
+package com.gardenary.domain.profile.service;
 
 import com.gardenary.domain.avatar.dto.response.AvatarResponseDto;
 import com.gardenary.domain.avatar.entity.Avatar;
 import com.gardenary.domain.avatar.entity.MyAvatar;
 import com.gardenary.domain.avatar.repository.AvatarRepository;
 import com.gardenary.domain.avatar.repository.MyAvatarRepository;
+import com.gardenary.domain.profile.dto.response.ProfileResponseDto;
+import com.gardenary.domain.profile.entity.Profile;
+import com.gardenary.domain.profile.repository.ProfileRepository;
 import com.gardenary.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +20,26 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class ProfileServiceImpl implements ProfileService{
+
+    private final ProfileRepository profileRepository;
+
+    @Override
+    public ProfileResponseDto getProfile(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        Profile profile = profileRepository.findByUser(user);
+        if (profile == null){
+            return null;
+        }
+
+        return ProfileResponseDto.builder()
+                .assetId(profile.getMyAvatar().getAvatar().getAssetId())
+                .nickname(profile.getNickname())
+                .build();
+    }
 
     private final MyAvatarRepository myAvatarRepository;
 
@@ -25,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<AvatarResponseDto> getMyPage(User user) {
+    public List<AvatarResponseDto> getAvatar(User user) {
         if (user == null) {
             return null;
         }
