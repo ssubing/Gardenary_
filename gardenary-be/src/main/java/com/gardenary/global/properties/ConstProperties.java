@@ -13,4 +13,9 @@ public class ConstProperties {
     private final int treeSize;
     private final int flowerSize;
     private final int questionSize;
+    private final int expTree;
+    private final int expFlower;
+    private final int expLevelup;
+    private final int nicknameSize;
+    private final int contentSize;
 }
