@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/friend")
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class FriendApi {
     }
 
     @GetMapping("/search")
-    public  ResponseEntity<DtoResponse<FriendResponseDto>> searchFriend(
+    public ResponseEntity<DtoResponse<FriendResponseDto>> searchFriend(
             @AuthenticationPrincipal UserDetail userDetail,
             @RequestParam(name = "nickname") String nickname) {
         FriendResponseDto result = friendService.findUser(userDetail.getUser(), nickname);
@@ -51,4 +53,25 @@ public class FriendApi {
         }
         return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
     }
+
+    @GetMapping("/following")
+    public ResponseEntity<DtoResponse<List<FriendResponseDto>>> getFollowingList(
+            @AuthenticationPrincipal UserDetail userDetail) {
+        List<FriendResponseDto> result = friendService.getFollowingList(userDetail.getUser());
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+    }
+
+    @GetMapping("/follower")
+    public ResponseEntity<DtoResponse<List<FriendResponseDto>>> getFollowerList(
+            @AuthenticationPrincipal UserDetail userDetail) {
+        List<FriendResponseDto> result = friendService.getFollowerList(userDetail.getUser());
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+    }
+
 }

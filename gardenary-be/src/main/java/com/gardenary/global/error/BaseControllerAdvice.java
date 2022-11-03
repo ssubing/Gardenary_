@@ -18,6 +18,28 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class BaseControllerAdvice {
 
+    @ExceptionHandler(FriendApiException.class)
+    public ResponseEntity<ErrorResponse> FriendApiException(FriendApiException e, HttpServletRequest req) {
+        log.error(req.getRequestURI());
+        log.error(e.getClass().getCanonicalName());
+        e.printStackTrace();
+        log.error(e.getMessage());
+
+        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
+                .body(ErrorResponse.of(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(AvatarApiException.class)
+    public ResponseEntity<ErrorResponse> AvatarApiException(AvatarApiException e, HttpServletRequest req) {
+        log.error(req.getRequestURI());
+        log.error(e.getClass().getCanonicalName());
+        e.printStackTrace();
+        log.error(e.getMessage());
+
+        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
+                .body(ErrorResponse.of(e.getErrorCode()));
+    }
+
     @ExceptionHandler(UserApiException.class)
     public ResponseEntity<ErrorResponse> userApiException(UserApiException e, HttpServletRequest req) {
         log.error(req.getRequestURI());
