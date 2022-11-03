@@ -1,5 +1,6 @@
 package com.gardenary.domain.profile.service;
 
+import com.gardenary.domain.avatar.dto.AvatarDto;
 import com.gardenary.domain.avatar.dto.response.AvatarResponseDto;
 import com.gardenary.domain.profile.dto.ProfileDto;
 import com.gardenary.domain.profile.dto.response.ProfileResponseDto;
@@ -14,5 +15,7 @@ public interface ProfileService {
     List<AvatarResponseDto> getAvatar(User user);
 
     Boolean modifyNickname(User user, ProfileDto profileDto);
+
+    Boolean modifyAvatar(User user, AvatarDto avatarDto);
 
 }
