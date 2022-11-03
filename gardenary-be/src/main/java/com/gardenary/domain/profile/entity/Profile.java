@@ -1,6 +1,5 @@
 package com.gardenary.domain.profile.entity;
 
-import com.gardenary.domain.avatar.entity.Avatar;
 import com.gardenary.domain.avatar.entity.MyAvatar;
 import com.gardenary.domain.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -38,4 +37,8 @@ public class Profile {
 
     @Column(name = "nickname", columnDefinition = "VARCHAR(55)")
     private String nickname;
+
+    public void modifyNickname(String nickname){
+        this.nickname = nickname;
+    }
 }
