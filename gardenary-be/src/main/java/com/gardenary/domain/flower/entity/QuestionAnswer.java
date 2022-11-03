@@ -38,7 +38,7 @@ public class QuestionAnswer {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "content", columnDefinition = "VARCHAR(255)")
+    @Column(name = "content", columnDefinition = "VARCHAR(1000)")
     private String content;
 
     @Column(name = "question_num", columnDefinition = "INT")
