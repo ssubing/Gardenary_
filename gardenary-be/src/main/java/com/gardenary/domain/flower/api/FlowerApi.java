@@ -37,7 +37,7 @@ public class FlowerApi {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
         }
     }
-    @GetMapping("/flower/answer/{myFlowerId}")
+    @GetMapping("/answer/{myFlowerId}")
     public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getOneFlowerAnswerList(@PathVariable int myFlowerId, @AuthenticationPrincipal UserDetail userDetail) {;
         QuestionAnswerListResponseDto result = flowerService.getOneFlowerAnswerList(userDetail.getUser(), myFlowerId);
         if(result == null) {
@@ -47,7 +47,7 @@ public class FlowerApi {
         }
     }
 
-    @GetMapping("/flower/all")
+    @GetMapping("/all")
     public ResponseEntity<DtoResponse<QuestionAnswerListResponseDto>> getAllFlowerAnswerList(@AuthenticationPrincipal UserDetail userDetail) {
         QuestionAnswerListResponseDto result = flowerService.getAllFlowerAnswerList(userDetail.getUser());
         if(result == null) {
@@ -57,7 +57,7 @@ public class FlowerApi {
         }
     }
 
-    @PostMapping("/flower")
+    @PostMapping("")
     public ResponseEntity<DtoResponse> createNewFlower(@AuthenticationPrincipal UserDetail userDetail) {
         MyFlowerOnlyIdResponseDto result = flowerService.createNewFlower(userDetail.getUser());
         if(result == null) {
