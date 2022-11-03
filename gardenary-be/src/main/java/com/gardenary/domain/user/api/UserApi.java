@@ -2,9 +2,12 @@ package com.gardenary.domain.user.api;
 
 import com.gardenary.domain.auth.dto.response.AuthResponseDto;
 import com.gardenary.domain.auth.service.AuthService;
+import com.gardenary.domain.avatar.dto.response.AvatarResponseDto;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.service.SocialService;
+import com.gardenary.domain.user.service.UserService;
 import com.gardenary.global.common.response.DtoResponse;
+import com.gardenary.global.config.security.UserDetail;
 import com.gardenary.global.properties.ResponseProperties;
 import com.gardenary.global.properties.SocialProperties;
 import com.gardenary.global.util.CookieUtil;
@@ -22,6 +25,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
@@ -42,6 +47,8 @@ public class UserApi {
     private final ResponseProperties responseProperties;
 
     private final SocialService socialService;
+
+    private final UserService userService;
 
     private final AuthService authService;
 
@@ -73,5 +80,16 @@ public class UserApi {
             log.error("NullPointerException");
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<DtoResponse<List<AvatarResponseDto>>> getMyPage(@AuthenticationPrincipal UserDetail userDetail){
+
+        List<AvatarResponseDto> result = userService.getMyPage(userDetail.getUser());
+
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
     }
 }
