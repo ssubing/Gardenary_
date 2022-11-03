@@ -68,7 +68,7 @@ public class GardenServiceImpl implements GardenService{
                 MyTree myTree = myTreeRepository.findById(garden.getObjectId()).orElseThrow(() -> new TreeApiException(TreeErrorCode.MY_TREE_NOT_FOUND));
                 GardenTreeResponseDto gardenTreeResponseDto = GardenTreeResponseDto.builder()
                         .start(myTree.getCreatedAt())
-//                        .end(myTree.getDoneAt())
+                        .end(myTree.getDoneAt())
                         .x(garden.getX())
                         .z(garden.getZ())
                         .myTreeId(myTree.getId())
