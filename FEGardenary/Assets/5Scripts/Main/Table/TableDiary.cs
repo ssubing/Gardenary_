@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using TMPro;
 
 public class TableDiary : MonoBehaviour
 {
@@ -16,17 +17,18 @@ public class TableDiary : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //url
         treeDiary = new TreeInfo();
         treeDiary.status = "OK";
         treeDiary.message = "success";
 
         GetTreeAll treeInfo1 = new GetTreeAll();
         treeInfo1.content = "오늘 점심은 부산식 간짜장밥";
-        treeInfo1.diaryDate = DateTimeOffset.Now.LocalDateTime;
+        //treeInfo1.diaryDate = DateTimeOffset.Now.LocalDateTime;
 
         GetTreeAll treeInfo2 = new GetTreeAll();
         treeInfo2.content = "커피는 왕 큰 커피";
-        treeInfo2.diaryDate = DateTimeOffset.Now.LocalDateTime;
+        //treeInfo2.diaryDate = DateTimeOffset.Now.LocalDateTime;
 
         List<GetTreeAll> test = new List<GetTreeAll>();
         test.Add(treeInfo1);
@@ -63,7 +65,6 @@ public class TableDiary : MonoBehaviour
                 {
                     //나무 다이어리의 제일 바깥 UI(Canvas)를 활성화
                     GameObject.Find("TableUI").transform.Find("AllTreeUI").gameObject.SetActive(true);
-                    Debug.Log(treeDiary.responseDto.Count);
                     //작성된 나무 다이어리 개수에 따라 표시
                     //아무 것도 작성하지 않았을 때
                     if(treeDiary.responseDto.Count == 0)
@@ -73,18 +74,61 @@ public class TableDiary : MonoBehaviour
                     //그 날 작성한 일기가 있을 때
                     else
                     {
+                        Debug.Log(treeDiary.responseDto.Count);
                         //개수만큼 UI를 만들어서 보여준다
                         for (int i = 0; i < treeDiary.responseDto.Count; i++)
                         {
                             Debug.Log(i);
+                            Debug.Log(treeDiary.responseDto[i].content);
                             //object를 하나 만들어준다
-                            GameObject test = new GameObject();
-                            //각각의 이름을 설정해주고 해당 object의 Layer를 UI로 설정해준다
-                            test.name = "TreeContent" + i;
-                            test.layer = 5;
-                            //이 object의 부모를 설정해준다
-                            test.transform.SetParent(GameObject.Find("AllTreeUI").transform.Find("AllTreeBackground"));
-                            test.AddComponent<Image>();
+                            GameObject treeDiaryContent = new GameObject("TreeContent" + i);
+                            //layer는 UI(5)로 설정
+                            treeDiaryContent.layer = 5;
+                            //부모 오브젝트 설정
+                            treeDiaryContent.transform.SetParent(GameObject.Find("AllTreeUI").transform.Find("AllTreeBackground"));
+
+                            //필요한 컴포넌트 추가
+                            treeDiaryContent.AddComponent<CanvasRenderer>();
+                            treeDiaryContent.AddComponent<RectTransform>();
+                            treeDiaryContent.AddComponent<Image>();
+                            //오브젝트의 위치 설정
+                            treeDiaryContent.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -600 * i);
+                            //오브젝트의 크기 설정
+                            treeDiaryContent.GetComponent<RectTransform>().sizeDelta = new Vector2(1200, 400);
+
+                            //테스트를 위해 임시로 색 설정
+                            treeDiaryContent.GetComponent<Image>().color = Color.red;
+
+                            //텍스트 추가
+                            GameObject treeText = new GameObject("treeText" + i);
+                            treeText.layer = 5;
+                            treeText.transform.SetParent(GameObject.Find("AllTreeBackground").transform.Find("TreeContent" + i));
+
+                            treeText.AddComponent<CanvasRenderer>();
+                            treeText.AddComponent<RectTransform>();
+                            treeText.AddComponent<TextMeshProUGUI>();
+
+                            //Destroy(treeText.GetComponent<MeshRenderer>());
+                            //글씨 크기와 폰트 설정
+                            treeText.GetComponent<TextMeshProUGUI>().fontSize = 60;
+                            treeText.GetComponent<TextMeshProUGUI>().font
+                                = GameObject.Find("AllTreeHeaderText").GetComponent<TextMeshProUGUI>().font;
+
+                            //내용 설정
+                            treeText.GetComponent<TextMeshProUGUI>().text = treeDiary.responseDto[i].content;
+
+                            //Debug.Log(GameObject.Find("Test").GetComponent<TextMeshProUGUI>().font);
+                            //TMP_FontAsset a = new TMP_FontAsset("DalseoDarling SDF");
+                            //treeText.GetComponent<TextMeshProUGUI>().TM = DalseoDarling SDF
+                            //오브젝트의 위치 설정
+                            //Debug.Log(treeText.GetComponentInChildren<TextMeshPro>().text);
+                            //treeText.GetComponentInChildren<TextMeshPro>().SetText("abcdergef");
+
+                            //treeText.GetComponentInChildren<TextMeshProUGUI>().fontSize = 60;
+                            //treeText.GetComponentInChildren<TextMeshProUGUI>().text = "허리 아파";
+                            treeText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+                            //treeText.GetComponent<TextMeshPro>().font = "DalseoDarling SDF";
+                                //treeText.GetComponent<TextMeshPro>().UpdateFontAsset("DalseoDarling SDF");
                         }
                     }
                 }
