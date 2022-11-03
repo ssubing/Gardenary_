@@ -11,4 +11,6 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties(prefix = "const")
 public class ConstProperties {
     private final int treeSize;
+    private final int flowerSize;
+    private final int questionSize;
 }
