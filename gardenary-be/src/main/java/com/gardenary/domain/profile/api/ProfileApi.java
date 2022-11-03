@@ -1,5 +1,6 @@
 package com.gardenary.domain.profile.api;
 
+import com.gardenary.domain.avatar.dto.AvatarDto;
 import com.gardenary.domain.avatar.dto.response.AvatarResponseDto;
 import com.gardenary.domain.profile.dto.ProfileDto;
 import com.gardenary.domain.profile.dto.response.ProfileResponseDto;
@@ -52,6 +53,17 @@ public class ProfileApi {
     public ResponseEntity<MessageResponse> modifyNickname(@AuthenticationPrincipal UserDetail userDetail, @RequestBody ProfileDto profileDto) {
 
         boolean result = profileService.modifyNickname(userDetail.getUser(), profileDto);
+
+        if (!result) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail()));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess()));
+    }
+
+    @PatchMapping("/avatar")
+    public ResponseEntity<MessageResponse> modifyAvatar(@AuthenticationPrincipal UserDetail userDetail, @RequestBody AvatarDto avatarDto) {
+
+        boolean result = profileService.modifyAvatar(userDetail.getUser(), avatarDto);
 
         if (!result) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail()));

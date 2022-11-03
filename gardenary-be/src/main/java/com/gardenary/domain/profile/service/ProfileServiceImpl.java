@@ -1,5 +1,6 @@
 package com.gardenary.domain.profile.service;
 
+import com.gardenary.domain.avatar.dto.AvatarDto;
 import com.gardenary.domain.avatar.dto.response.AvatarResponseDto;
 import com.gardenary.domain.avatar.entity.Avatar;
 import com.gardenary.domain.avatar.entity.MyAvatar;
@@ -10,8 +11,10 @@ import com.gardenary.domain.profile.dto.response.ProfileResponseDto;
 import com.gardenary.domain.profile.entity.Profile;
 import com.gardenary.domain.profile.repository.ProfileRepository;
 import com.gardenary.domain.user.entity.User;
+import com.gardenary.global.error.exception.AvatarApiException;
 import com.gardenary.global.error.exception.ProfileApiException;
 import com.gardenary.global.error.exception.UserApiException;
+import com.gardenary.global.error.model.AvatarErrorCode;
 import com.gardenary.global.error.model.ProfileErrorCode;
 import com.gardenary.global.error.model.UserErrorCode;
 import com.gardenary.global.properties.ConstProperties;
@@ -85,7 +88,7 @@ public class ProfileServiceImpl implements ProfileService {
             throw new UserApiException(UserErrorCode.USER_NOT_FOUND);
         }
 
-        if (profileDto.getNickname() == null) {
+        if (profileDto == null || profileDto.getNickname() == null) {
             throw new ProfileApiException(ProfileErrorCode.NICKNAME_NOT_FOUND);
         }
 
@@ -103,6 +106,39 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         profile.modifyNickname(profileDto.getNickname());
+        return true;
+    }
+
+    @Transactional
+    @Override
+    public Boolean modifyAvatar(User user, AvatarDto avatarDto) {
+        if (user == null) {
+            throw new UserApiException(UserErrorCode.USER_NOT_FOUND);
+        }
+
+        if (avatarDto == null || avatarDto.getAssetId() == null) {
+            return false;
+        }
+
+        Profile profile = profileRepository.findByUser(user);
+        if (profile == null) {
+            throw new ProfileApiException(ProfileErrorCode.PROFILE_NOT_FOUND);
+        }
+
+        Avatar avatar = avatarRepository.findByAssetId(avatarDto.getAssetId()).orElse(null);
+
+        if (avatar == null) {
+            throw new AvatarApiException(AvatarErrorCode.AVATAR_NOT_FOUND);
+        }
+
+        MyAvatar myAvatar = myAvatarRepository.findByUserAndAvatar(user, avatar).orElse(null);
+
+        if (myAvatar == null) {
+            throw new AvatarApiException(AvatarErrorCode.MYAVATAR_NOT_FOUND);
+        }
+
+        profile.modifyMyAvatar(myAvatar);
+
         return true;
     }
 }
