@@ -70,29 +70,34 @@ public class FlowerServiceImpl implements FlowerService{
             startTime = time.withHour(3).withMinute(0).withSecond(0).minusDays(1);
             endTime = startTime.plusDays(1).minusSeconds(1);
         }
-        //오늘 이미 작성했는지 확인하기(가장 최근 것 가져와서 했는지 가져와서 확인, 추후에 함수로 빼기)
-        List<QuestionAnswer> list = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
-        QuestionAnswer lastQA = list.get(0);
-        LocalDateTime lastTime = lastQA.getCreatedAt();
-        if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)){
-            return null;
-        }
         //현재 식물 가져오기
         GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
         if(growingPlant.getId() == 0) {
             throw new GrowingPlantApiException(GrowingPlantErrorCode.GROWING_PLANT_NOT_FOUND);
         }
-        //연속 작성 확인
-        if(lastTime.isAfter(startTime.minusDays(1)) && lastTime.isBefore(endTime.minusDays(1))){
-            growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
-        } else{
+        //오늘 이미 작성했는지 확인하기(가장 최근 것 가져와서 했는지 가져와서 확인, 추후에 함수로 빼기)
+        List<QuestionAnswer> list = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
+        if(list.size() != 0){
+            QuestionAnswer lastQA = list.get(0);
+            LocalDateTime lastTime = lastQA.getCreatedAt();
+            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
+                return null;
+            }
+            //연속 작성 확인
+            if(lastTime.isAfter(startTime.minusDays(1)) && lastTime.isBefore(endTime.minusDays(1))){
+                growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
+            } else{
+                growingPlant.modifyAnswerDays(1);
+            }
+            if(growingPlant.getAnswerDays()%3 == 0) {
+                result.modifyIsItem(true);
+            } else{
+                result.modifyIsItem(false);
+            }
+        }else{
             growingPlant.modifyAnswerDays(1);
         }
-        if(growingPlant.getAnswerDays()%3 == 0) {
-            result.modifyIsItem(true);
-        } else{
-            result.modifyIsItem(false);
-        }
+
         //총 답변 갯수 수정
         growingPlant.modifyAnswerCnt(growingPlant.getAnswerCnt() + 1);
         //유저 id로 현재 꽃, 꽃 아이디 찾기
@@ -214,7 +219,7 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     @Scheduled(cron = "0 0 3 * * *")
-    private void questionReset(){
+    protected void questionReset(){
         List<User> userList = userRepository.findAll();
         for (User user : userList) {
             Random random = new Random(System.nanoTime());
