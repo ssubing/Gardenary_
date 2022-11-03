@@ -14,7 +14,7 @@ public interface TreeService {
 
     boolean updateCurTree(User user);
 
-    DiaryResponseDto getDiary(LocalDateTime date, User user);
+    List<DiaryResponseDto> getDateDiaryList(LocalDateTime date, User user);
 
     DiaryListResponseDto getDiaryList(int myTreeId, User user);
 
