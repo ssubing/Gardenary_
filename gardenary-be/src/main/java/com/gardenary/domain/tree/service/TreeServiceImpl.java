@@ -71,7 +71,7 @@ public class TreeServiceImpl implements TreeService {
         }
         MyTree myTree = myTreeRepository.findById(myTreeId)
                 .orElseThrow(() -> new TreeApiException(TreeErrorCode.MY_TREE_NOT_FOUND));
-        List<Diary> diaryList = diaryRepository.findAllByMyTree(myTree, Sort.by(Sort.Direction.ASC, "DiaryDate"));
+        List<Diary> diaryList = diaryRepository.findAllByMyTree(myTree, Sort.by(Sort.Direction.ASC, "diaryDate"));
 
         List<DiaryResponseDto> result = new ArrayList<>();
 
