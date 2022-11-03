@@ -33,3 +33,8 @@ const:
   tree-size: 15
   flower-size: 60
   question-size: 100
+  exp-levelup: 100
+  exp-tree: 25
+  exp-flower: 50
+  nickname-size: 55
+  content-size: 1000
