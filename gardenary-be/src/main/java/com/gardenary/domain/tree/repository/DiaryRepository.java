@@ -12,6 +12,6 @@ import java.util.Optional;
 
 public interface DiaryRepository extends JpaRepository<Diary, Integer> {
     Optional<Diary> findById(int id);
-    Optional<Diary> findByMyTree_UserAndDiaryDate(LocalDateTime date, User user);
+    List<Diary> findAllByMyTree_UserAndDiaryDate(LocalDateTime date, User user);
     List<Diary> findAllByMyTree(MyTree myTree, Sort sort);
 }

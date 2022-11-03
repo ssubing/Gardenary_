@@ -16,6 +16,7 @@ import com.gardenary.global.error.exception.GrowingPlantApiException;
 import com.gardenary.global.error.exception.TreeApiException;
 import com.gardenary.global.error.model.GrowingPlantErrorCode;
 import com.gardenary.global.error.model.TreeErrorCode;
+import com.gardenary.global.properties.ConstProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -35,6 +36,7 @@ public class TreeServiceImpl implements TreeService {
     private final MyTreeRepository myTreeRepository;
     private final TreeRepository treeRepository;
     private final GrowingPlantRepository growingPlantRepository;
+    private final ConstProperties constProperties;
 
     @Override
     public boolean createMyTree(User user) {
@@ -52,16 +54,20 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public DiaryResponseDto getDiary(LocalDateTime date, User user) {
+    public List<DiaryResponseDto> getDateDiaryList(LocalDateTime date, User user) {
         if(user == null) {
             return null;
         }
-        Diary diary = diaryRepository.findByMyTree_UserAndDiaryDate(date, user)
-                .orElseThrow(() -> new TreeApiException(TreeErrorCode.DIARY_NOT_FOUND));
-        return DiaryResponseDto.builder()
-                .content(diary.getContent())
-                .diaryDate(diary.getDiaryDate())
-                .build();
+        date = date.withHour(0).withMinute(0).withSecond(0).withNano(0);
+        List<Diary> diaryList = diaryRepository.findAllByMyTree_UserAndDiaryDate(date, user);
+        List<DiaryResponseDto> result = new ArrayList<>();
+        for(Diary diary : diaryList) {
+            result.add(DiaryResponseDto.builder()
+                    .content(diary.getContent())
+                    .diaryDate(diary.getDiaryDate())
+                    .build());
+        }
+        return result;
     }
 
     @Override
@@ -116,5 +122,12 @@ public class TreeServiceImpl implements TreeService {
                     .build());
         }
         return result;
+    }
+
+    private Tree randomTree() {
+        int num = (int)(Math.random()*constProperties.getTreeSize() + 1);
+        Tree tree = treeRepository.findById(num)
+                .orElseThrow(() -> new TreeApiException(TreeErrorCode.TREE_NOT_FOUND));
+        return tree;
     }
 }

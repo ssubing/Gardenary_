@@ -44,10 +44,10 @@ public class TreeApi {
     }
 
     @GetMapping("/diary")
-    public ResponseEntity<DtoResponse<DiaryResponseDto>> getDiary(
+    public ResponseEntity<DtoResponse<List<DiaryResponseDto>>> getDiary(
             @RequestParam(name = "date") LocalDateTime date,
             @AuthenticationPrincipal UserDetail userDetail) {
-        DiaryResponseDto result = treeService.getDiary(date, userDetail.getUser());
+        List<DiaryResponseDto> result = treeService.getDateDiaryList(date, userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
