@@ -124,7 +124,7 @@ public class TreeServiceImpl implements TreeService {
         return result;
     }
 
-    private Tree randomTree() {
+    public Tree randomTree() {
         int num = (int)(Math.random()*constProperties.getTreeSize() + 1);
         Tree tree = treeRepository.findById(num)
                 .orElseThrow(() -> new TreeApiException(TreeErrorCode.TREE_NOT_FOUND));
