@@ -31,3 +31,5 @@ response:
   fail: fail
 const:
   tree-size: 15
+  flower-size: 60
+  question-size: 100

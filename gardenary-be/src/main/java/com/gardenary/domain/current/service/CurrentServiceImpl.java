@@ -3,13 +3,13 @@ package com.gardenary.domain.current.service;
 import com.gardenary.domain.current.Response.GrowingPlantResponseDto;
 import com.gardenary.domain.current.entity.GrowingPlant;
 import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
-import com.gardenary.domain.flower.entity.Question;
 import com.gardenary.domain.flower.entity.QuestionAnswer;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
 import com.gardenary.domain.flower.repository.QuestionRepository;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
 import com.gardenary.global.error.model.GrowingPlantErrorCode;
+import com.gardenary.infra.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,7 @@ public class CurrentServiceImpl implements CurrentService{
     private final GrowingPlantRepository growingPlantRepository;
     private final QuestionAnswerRepository questionAnswerRepository;
     private final QuestionRepository questionRepository;
+    private final RedisService redisService;
     @Override
     public GrowingPlantResponseDto getCurrentInfo(User user) {
         GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
@@ -48,11 +49,11 @@ public class CurrentServiceImpl implements CurrentService{
         if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)){
             flowerCheck = true;
         }
-        //꽃 경험치, 나무 경험치 캐시에서 가져오기 (수정 예정)
-        int flowerTotalExp = 0;
-        int treeTotalExp = 0;
+        //꽃 경험치, 나무 경험치 캐시에서 가져오기
+        int flowerTotalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"flowerExp"));
+        int treeTotalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
         //질문아이디 캐시에서 가져오고 해당 아이디로 질문 조회
-        int questionId = 1;
+        int questionId = Integer.parseInt(redisService.getStringValue(user.getKakaoId()));
         String question = questionRepository.findById(questionId).getContent();
         if(question == null){
             throw new GrowingPlantApiException(GrowingPlantErrorCode.QUESTION_NOT_FOUND);
