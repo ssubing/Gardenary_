@@ -17,12 +17,16 @@ import com.gardenary.domain.flower.response.MyFlowerOnlyIdResponseDto;
 import com.gardenary.domain.flower.response.QuestionAnswerResponseDto;
 import com.gardenary.domain.flower.response.QuestionAnswerListResponseDto;
 import com.gardenary.domain.user.entity.User;
+import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
 import com.gardenary.global.error.model.FlowerErrorCode;
 import com.gardenary.global.error.model.GrowingPlantErrorCode;
+import com.gardenary.global.properties.ConstProperties;
+import com.gardenary.infra.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,6 +46,9 @@ public class FlowerServiceImpl implements FlowerService{
     private final QuestionAnswerRepository questionAnswerRepository;
     private final ExpRepository expRepository;
     private final FlowerRepository flowerRepository;
+    private final RedisService redisService;
+    private final UserRepository userRepository;
+    private final ConstProperties constProperties;
     @Override
     @Transactional
     public AnswerCompleteResponseDto createAnswer(User user, QuestionAnswerDto questionAnswerDto) {
@@ -93,9 +100,9 @@ public class FlowerServiceImpl implements FlowerService{
         if(currentFlower.getId() == 0){
             throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
         }
-        //캐시에서 현재 질문아이디 가져오기(캐시 설정 후 수정 필요)
-        int questionId = 0;
-
+        //캐시에서 현재 질문아이디 가져오기
+        String ques = redisService.getStringValue(user.getKakaoId());
+        int questionId = Integer.parseInt(ques);
         //Dto에 유저 정보, 질문 정보, 꽃 정보 시간, 질문 번호
         QuestionAnswerDto saveQuestionAnswerDto = QuestionAnswerDto.builder()
                 .flowerId(currentFlower.getFlower().getId())
@@ -117,9 +124,10 @@ public class FlowerServiceImpl implements FlowerService{
                 .user(user)
                 .build();
         expRepository.save(exp);
-        //경험치 증가(Redis) totalExp 수정 필요
-
-        int totalExp = 100;
+        //경험치 증가(Redis)
+        String flowerExp = redisService.getStringValue(user.getKakaoId()+"flowerExp");
+        int totalExp = Integer.parseInt(flowerExp) + 10;
+        redisService.setValue(user.getKakaoId()+"flowerExp", totalExp+"");
         //return 값 만들기
         result.modifyTotalExp(totalExp);
         return result;
@@ -169,8 +177,9 @@ public class FlowerServiceImpl implements FlowerService{
 
     @Override
     public MyFlowerOnlyIdResponseDto createNewFlower(User user) {
-        //꽃의 총 경험치를 가져오기 (수정 예정)
-        int totalExp = 0;
+        //꽃의 총 경험치를 가져오기
+        String total = redisService.getStringValue(user.getKakaoId()+"flowerExp");
+        int totalExp = Integer.parseInt(total);
         if(totalExp == 0 || (totalExp % 100) != 0) {
             throw new FlowerApiException(FlowerErrorCode.NOT_ENOUGH_EXP);
         }
@@ -197,12 +206,21 @@ public class FlowerServiceImpl implements FlowerService{
                 .build();
     }
 
-    private Flower randomFlower() {
+    public Flower randomFlower() {
         List<Flower> flowerList = flowerRepository.findAll();
-        int size = flowerList.size();
         Random random = new Random(System.nanoTime());
-        int num = random.nextInt(size);
+        int num = random.nextInt(constProperties.getFlowerSize());
         return flowerList.get(num);
+    }
+
+    @Scheduled(cron = "0 0 3 * * *")
+    private void questionReset(){
+        List<User> userList = userRepository.findAll();
+        for (User user : userList) {
+            Random random = new Random(System.nanoTime());
+            int num = random.nextInt(constProperties.getQuestionSize());
+            redisService.setValue(user.getKakaoId(), num + "");
+        }
     }
 
 }
