@@ -38,7 +38,11 @@ public class Profile {
     @Column(name = "nickname", columnDefinition = "VARCHAR(55)")
     private String nickname;
 
-    public void modifyNickname(String nickname){
+    public void modifyNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void modifyMyAvatar(MyAvatar myAvatar) {
+        this.myAvatar = myAvatar;
     }
 }
