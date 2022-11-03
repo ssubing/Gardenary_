@@ -17,8 +17,12 @@ import com.gardenary.global.properties.EncryptProperties;
 import com.gardenary.global.util.Encrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -95,5 +99,81 @@ public class FriendServiceImpl implements FriendService {
                 .assetId(myAvatar.getAvatar().getAssetId())
                 .nickname(nickname)
                 .build();
+    }
+
+    @Override
+    public List<FriendResponseDto> getFollowingList(User user) {
+        if(user == null) {
+            return null;
+        }
+
+        List<Friend> friendList = friendRepository.findAllByFollowing(user);
+        List<FriendResponseDto> result = new ArrayList<>();
+        for(Friend friend : friendList) {
+            Profile profile = profileRepository.findByUser(friend.getFollowing());
+            if(profile == null) {
+                continue;
+            }
+
+            String encryptUserId = null;
+            try {
+                encryptUserId = Encrypt.encryptAES256(encryptProperties.getEncryptKey(), encryptProperties.getEncryptIv(), profile.getUser().getId().toString());
+            } catch (Exception e) {
+                continue;
+            }
+
+            result.add(FriendResponseDto.builder()
+                    .friendId(friend.getId())
+                    .assetId(profile.getMyAvatar().getAvatar().getAssetId())
+                    .enCryptUserId(encryptUserId)
+                    .nickname(profile.getNickname())
+                    .build());
+        }
+
+        result.sort(new Comparator<FriendResponseDto>() {
+            @Override
+            public int compare(FriendResponseDto o1, FriendResponseDto o2) {
+                return o1.getNickname().compareToIgnoreCase(o2.getNickname());
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public List<FriendResponseDto> getFollowerList(User user) {
+        if(user == null) {
+            return null;
+        }
+
+        List<Friend> friendList = friendRepository.findAllByFollower(user);
+        List<FriendResponseDto> result = new ArrayList<>();
+        for(Friend friend : friendList) {
+            Profile profile = profileRepository.findByUser(friend.getFollower());
+            if(profile == null) {
+                continue;
+            }
+
+            String encryptUserId = null;
+            try {
+                encryptUserId = Encrypt.encryptAES256(encryptProperties.getEncryptKey(), encryptProperties.getEncryptIv(), profile.getUser().getId().toString());
+            } catch (Exception e) {
+                continue;
+            }
+
+            result.add(FriendResponseDto.builder()
+                    .friendId(friend.getId())
+                    .assetId(profile.getMyAvatar().getAvatar().getAssetId())
+                    .enCryptUserId(encryptUserId)
+                    .nickname(profile.getNickname())
+                    .build());
+        }
+
+        result.sort(new Comparator<FriendResponseDto>() {
+            @Override
+            public int compare(FriendResponseDto o1, FriendResponseDto o2) {
+                return o1.getNickname().compareToIgnoreCase(o2.getNickname());
+            }
+        });
+        return result;
     }
 }
