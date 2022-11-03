@@ -72,7 +72,7 @@ public class FlowerServiceImpl implements FlowerService{
         }
         //현재 식물 가져오기
         GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
-        if(growingPlant.getId() == 0) {
+        if(growingPlant == null) {
             throw new GrowingPlantApiException(GrowingPlantErrorCode.GROWING_PLANT_NOT_FOUND);
         }
         //오늘 이미 작성했는지 확인하기(가장 최근 것 가져와서 했는지 가져와서 확인, 추후에 함수로 빼기)
@@ -81,7 +81,7 @@ public class FlowerServiceImpl implements FlowerService{
             QuestionAnswer lastQA = list.get(0);
             LocalDateTime lastTime = lastQA.getCreatedAt();
             if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
-                return null;
+                throw new FlowerApiException(FlowerErrorCode.TODAY_ALREADY_WRITE);
             }
             //연속 작성 확인
             if(lastTime.isAfter(startTime.minusDays(1)) && lastTime.isBefore(endTime.minusDays(1))){
@@ -102,7 +102,7 @@ public class FlowerServiceImpl implements FlowerService{
         growingPlant.modifyAnswerCnt(growingPlant.getAnswerCnt() + 1);
         //유저 id로 현재 꽃, 꽃 아이디 찾기
         MyFlower currentFlower = growingPlant.getMyFlower();
-        if(currentFlower.getId() == 0){
+        if(currentFlower == null){
             throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
         }
         //캐시에서 현재 질문아이디 가져오기
@@ -122,7 +122,7 @@ public class FlowerServiceImpl implements FlowerService{
         questionAnswerRepository.save(QuestionAnswerMapper.mapper.toEntity(saveQuestionAnswerDto));
         //경험치 기록 추가
         Exp exp = Exp.builder()
-                .expAmount(10)
+                .expAmount(constProperties.getExpFlower())
                 .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .diaryId(currentFlower.getId())
                 .type(true)
@@ -131,7 +131,7 @@ public class FlowerServiceImpl implements FlowerService{
         expRepository.save(exp);
         //경험치 증가(Redis)
         String flowerExp = redisService.getStringValue(user.getKakaoId()+"flowerExp");
-        int totalExp = Integer.parseInt(flowerExp) + 10;
+        int totalExp = Integer.parseInt(flowerExp) + constProperties.getExpFlower();
         redisService.setValue(user.getKakaoId()+"flowerExp", totalExp+"");
         //return 값 만들기
         result.modifyTotalExp(totalExp);
@@ -185,7 +185,7 @@ public class FlowerServiceImpl implements FlowerService{
         //꽃의 총 경험치를 가져오기
         String total = redisService.getStringValue(user.getKakaoId()+"flowerExp");
         int totalExp = Integer.parseInt(total);
-        if(totalExp == 0 || (totalExp % 100) != 0) {
+        if(totalExp == 0 || (totalExp % constProperties.getExpLevelup()) != 0) {
             throw new FlowerApiException(FlowerErrorCode.NOT_ENOUGH_EXP);
         }
         //바꾸기 전의 현재 꽃에 doneAt 추가
