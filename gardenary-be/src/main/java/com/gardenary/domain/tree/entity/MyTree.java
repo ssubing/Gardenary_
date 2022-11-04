@@ -42,4 +42,6 @@ public class MyTree {
 
     @Column(name = "done_at", columnDefinition = "DATETIME")
     private LocalDateTime doneAt;
+
+    public void modifyDoneAt(LocalDateTime doneAt) { this.doneAt = doneAt; }
 }
