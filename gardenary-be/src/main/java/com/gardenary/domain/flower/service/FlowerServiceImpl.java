@@ -141,10 +141,7 @@ public class FlowerServiceImpl implements FlowerService{
     @Override
     public QuestionAnswerListResponseDto getOneFlowerAnswerList(User user, int myFlowerId) {
         //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
-        MyFlower myFlower = myFlowerRepository.findById(myFlowerId);
-        if(myFlower == null){
-            throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
-        }
+        MyFlower myFlower = myFlowerRepository.findById(myFlowerId).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND));
         //엔티티 리스트
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlowerAndMyFlower_UserOrderByCreatedAtDesc(myFlower, user);
 
@@ -190,10 +187,7 @@ public class FlowerServiceImpl implements FlowerService{
         }
         //바꾸기 전의 현재 꽃에 doneAt 추가
         GrowingPlant current = growingPlantRepository.findByUser(user);
-        MyFlower doneFlower = myFlowerRepository.findById(current.getMyFlower().getId());
-        if(doneFlower == null) {
-            throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
-        }
+        MyFlower doneFlower = myFlowerRepository.findById(current.getMyFlower().getId()).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND));
         doneFlower.modifyDoneAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         myFlowerRepository.save(doneFlower);
         Flower newFlower = randomFlower();
