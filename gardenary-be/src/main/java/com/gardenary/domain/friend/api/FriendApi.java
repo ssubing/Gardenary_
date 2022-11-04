@@ -1,5 +1,6 @@
 package com.gardenary.domain.friend.api;
 
+import com.gardenary.domain.friend.dto.request.FriendRequestDto;
 import com.gardenary.domain.friend.dto.response.FriendResponseDto;
 import com.gardenary.domain.friend.service.FriendService;
 import com.gardenary.global.common.response.DtoResponse;
@@ -26,8 +27,8 @@ public class FriendApi {
     @PostMapping("")
     public ResponseEntity<MessageResponse> createFriend(
             @AuthenticationPrincipal UserDetail userDetail,
-            @RequestParam(name = "encryptUserId") String encryptUserId) {
-        boolean result = friendService.createFriend(userDetail.getUser(), encryptUserId);
+            @RequestBody FriendRequestDto friendRequestDto) {
+        boolean result = friendService.createFriend(userDetail.getUser(), friendRequestDto.getEnCryptUserId());
         String str = result ? responseProperties.getSuccess() : responseProperties.getFail();
 
         return ResponseEntity.status(HttpStatus.OK).body(MessageResponse.of(HttpStatus.OK, str));
@@ -61,7 +62,7 @@ public class FriendApi {
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
     }
 
     @GetMapping("/follower")
@@ -71,7 +72,7 @@ public class FriendApi {
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
     }
 
 }

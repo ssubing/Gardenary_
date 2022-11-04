@@ -49,6 +49,7 @@ public class GrowingPlant {
     public void modifyMyFlower(MyFlower myFlower) {
         this.myFlower = myFlower;
     }
+    public void modifyMyTree(MyTree myTree) { this.myTree = myTree; }
     public void modifyAnswerDays(int answerDays) {
         this.answerDays = answerDays;
     }

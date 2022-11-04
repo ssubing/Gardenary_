@@ -62,7 +62,7 @@ public class FriendServiceImpl implements FriendService {
         }
         Friend friend = friendRepository.findById(friendId)
                         .orElse(null);
-        if(friend == null || !friend.getFollower().equals(user)) {
+        if(friend == null || !friend.getFollower().getId().equals(user.getId())) {
             return false;
         }
         friendRepository.deleteById(friendId);
@@ -77,6 +77,9 @@ public class FriendServiceImpl implements FriendService {
         Profile profile = profileRepository.findByNickname(nickname)
                 .orElse(null);
         if(profile == null) {
+            return null;
+        }
+        if(profile.getUser().getId().equals(user.getId())) {
             return null;
         }
 
@@ -106,8 +109,7 @@ public class FriendServiceImpl implements FriendService {
         if(user == null) {
             return null;
         }
-
-        List<Friend> friendList = friendRepository.findAllByFollowing(user);
+        List<Friend> friendList = friendRepository.findAllByFollower(user);
         List<FriendResponseDto> result = new ArrayList<>();
         for(Friend friend : friendList) {
             Profile profile = profileRepository.findByUser(friend.getFollowing());
@@ -145,7 +147,7 @@ public class FriendServiceImpl implements FriendService {
             return null;
         }
 
-        List<Friend> friendList = friendRepository.findAllByFollower(user);
+        List<Friend> friendList = friendRepository.findAllByFollowing(user);
         List<FriendResponseDto> result = new ArrayList<>();
         for(Friend friend : friendList) {
             Profile profile = profileRepository.findByUser(friend.getFollower());
