@@ -12,10 +12,7 @@ import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
 import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
-import com.gardenary.domain.flower.response.AnswerCompleteResponseDto;
-import com.gardenary.domain.flower.response.MyFlowerOnlyIdResponseDto;
-import com.gardenary.domain.flower.response.QuestionAnswerResponseDto;
-import com.gardenary.domain.flower.response.QuestionAnswerListResponseDto;
+import com.gardenary.domain.flower.response.*;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.FlowerApiException;
@@ -32,9 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -202,6 +197,93 @@ public class FlowerServiceImpl implements FlowerService{
         growingPlantRepository.save(current);
         return MyFlowerOnlyIdResponseDto.builder()
                 .id(current.getMyFlower().getId())
+                .build();
+    }
+
+    @Override
+    public FlowerListResponseDto getFlowerList(User user) {
+        //전체 리스트를 하나 만들기(모든 색상 정보가 들어가고 flag가 false인 flowerList)
+        List<Flower> flowers = flowerRepository.findAllByOrderByName();
+        List<FlowerResponseDto> flowerList = new ArrayList<>();
+        Flower firstFlower = flowers.get(0);
+        List<FlowerColorResponseDto> list = new ArrayList<>();
+        list.add(FlowerColorResponseDto.builder()
+                .color(firstFlower.getColor())
+                .flag(false)
+                .build());
+        flowerList.add(FlowerResponseDto.builder()
+                .name(firstFlower.getName())
+                .isGet(false)
+                .meaning(firstFlower.getMeaning())
+                .bloom(firstFlower.getBloom())
+                .content(firstFlower.getContent())
+                .assetId(firstFlower.getAssetId())
+                .colorList(list)
+                .build());
+        for (int i = 1; i < flowers.size(); i++) {
+            Flower flower = flowers.get(i);
+            String name = flower.getName();
+            FlowerColorResponseDto flowerColorResponseDto = FlowerColorResponseDto.builder()
+                    .color(flower.getColor())
+                    .flag(false)
+                    .build();
+            FlowerResponseDto beforeFlowerResponse = flowerList.get(flowerList.size()-1);
+            if(name.equals(beforeFlowerResponse.getName())){
+                List<FlowerColorResponseDto> colorList = beforeFlowerResponse.getColorList();
+                colorList.add(flowerColorResponseDto);
+                beforeFlowerResponse.modifyColorList(colorList);
+            } else {
+                List<FlowerColorResponseDto> colorList = new ArrayList<>();
+                colorList.add(flowerColorResponseDto);
+                FlowerResponseDto flowerResponseDto = FlowerResponseDto.builder()
+                        .name(flower.getName())
+                        .isGet(false)
+                        .meaning(flower.getMeaning())
+                        .bloom(flower.getBloom())
+                        .content(flower.getContent())
+                        .assetId(flower.getAssetId())
+                        .colorList(colorList)
+                        .build();
+                flowerList.add(flowerResponseDto);
+            }
+        }
+        //유저가 가진 MyFlower 다 받아오기 (flowerId 순서대로)
+        List<MyFlower> myFlowerList = myFlowerRepository.findAllByUser(user);
+        //그중 현재 MyFlower는 제외하고 하나씩 flag true로 변경하기
+        Set<String> set = new HashSet<>();
+        for (MyFlower myFlower : myFlowerList) {
+            Flower flower = myFlower.getFlower();
+            String str = flower.getId();
+            set.add(str);
+        }
+        Iterator<String> iter = set.iterator();
+        for (int i = 0; i < set.size() ; i++) {
+            String flowerId = iter.next();
+            int flowerType = Integer.parseInt(flowerId.split("_")[0]);
+            int colorType = Integer.parseInt(flowerId.split("_")[1]);
+            flowerList.get(flowerType).modifyIsGet(true);
+            flowerList.get(flowerType).getColorList().get(colorType).modifyFlag(true);
+        }
+//        for(MyFlower myFlower : myFlowerList) {
+//            if(myFlower.getDoneAt() == null){
+//                continue;
+//            }
+//            Flower flower = myFlower.getFlower();
+//            for (FlowerResponseDto flowerResponseDto : flowerList) {
+//                if(flower.getName().equals(flowerResponseDto.getName())){
+//                    flowerResponseDto.modifyIsGet(true);
+//                    for (FlowerColorResponseDto flowerColorResponseDto : flowerResponseDto.getColorList()) {
+//                        if(flower.getColor().equals(flowerColorResponseDto.getColor())){
+//                            flowerColorResponseDto.modifyFlag(true);
+//                            break;
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+        return FlowerListResponseDto.builder()
+                .flowerList(flowerList)
                 .build();
     }
 
