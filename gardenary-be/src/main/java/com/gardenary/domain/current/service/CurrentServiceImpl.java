@@ -44,10 +44,12 @@ public class CurrentServiceImpl implements CurrentService{
         }
         //오늘 작성했는지 확인
         List<QuestionAnswer> list = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
-        QuestionAnswer lastQA = list.get(0);
-        LocalDateTime lastTime = lastQA.getCreatedAt();
-        if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)){
-            flowerCheck = true;
+        if(list.size() != 0){
+            QuestionAnswer lastQA = list.get(0);
+            LocalDateTime lastTime = lastQA.getCreatedAt();
+            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)){
+                flowerCheck = true;
+            }
         }
         //꽃 경험치, 나무 경험치 캐시에서 가져오기
         int flowerTotalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"flowerExp"));
