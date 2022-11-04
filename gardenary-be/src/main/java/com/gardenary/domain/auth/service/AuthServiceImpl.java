@@ -2,6 +2,7 @@ package com.gardenary.domain.auth.service;
 
 
 import com.gardenary.domain.auth.dto.response.AuthResponseDto;
+import com.gardenary.domain.auth.dto.response.RefreshResponseDto;
 import com.gardenary.domain.profile.entity.Profile;
 import com.gardenary.domain.profile.repository.ProfileRepository;
 import com.gardenary.domain.user.entity.User;
@@ -55,14 +56,14 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public AuthResponseDto refresh(String refreshToken) {
+    public RefreshResponseDto refresh(String refreshToken) {
         boolean validation = jwtProvider.validateRefreshToken(refreshToken);
         String kakaoId = redisService.getStringValue(refreshToken);
         if (validation && kakaoId != null) {
             userRepository.findByKakaoId(kakaoId).orElseThrow(
                     () -> new UserApiException(UserErrorCode.USER_NOT_FOUND)
             );
-            return AuthResponseDto.builder().accessToken(jwtProvider.generateAccessToken(kakaoId)).build();
+            return RefreshResponseDto.builder().accessToken(jwtProvider.generateAccessToken(kakaoId)).build();
         } else {
             return null;
         }

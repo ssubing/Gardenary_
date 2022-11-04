@@ -6,21 +6,15 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CookieUtil {
 
-    /**
-     * RefreshToken을 Http Only 옵션으로 쿠키에 세팅
-     */
     public static void setRefreshTokenCookie(HttpServletResponse res, String token) {
         Cookie cookie = new Cookie("refreshToken", token);
-        // 2 week
+        // 2주
         cookie.setMaxAge(14 * 24 * 60 * 60);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         res.addCookie(cookie);
     }
 
-    /**
-     * refreshToken이라는 쿠키 삭제
-     */
     public static void deleteRefreshTokenCookie(HttpServletResponse res) {
         Cookie myCookie = new Cookie("refreshToken", null);
         // 쿠키의 expiration 타임을 0으로 하여 삭제
