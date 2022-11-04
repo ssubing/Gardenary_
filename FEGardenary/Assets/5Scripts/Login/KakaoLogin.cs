@@ -1,36 +1,23 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class KakaoLogin : MonoBehaviour
 {
-    private const string HOST = "https://kauth.kakao.com";
-    private const string REST_API_KEY = "bcab0643aa89ef2c6aeea45bc2c46f00";
-    private const string REDIRECT_URI = "https://getpostman.com/oauth2/callback";
+    private AndroidJavaObject _androidJavaObject;
 
-    public void GenerateRequest()
+    public void Show()
     {
-        string URI = HOST + "/oauth/authorize?client_id=" + REST_API_KEY + "&redirect_uri=" + REDIRECT_URI + "&response_type=code";
-        //StartCoroutine(ProcessRequest(URI));
-        Application.OpenURL("http://unity3d.com/");
+        Debug.Log("click");
     }
 
-    private IEnumerator ProcessRequest(string uri)
+    void Start()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(uri))
-        {
-            yield return request.SendWebRequest();
+        _androidJavaObject = new AndroidJavaObject("com.DefaultCompany.FEGardenary.UKakao");
 
-            if (request.result == UnityWebRequest.Result.ConnectionError)
-            {
-                Debug.Log(request.error);
-            }
-            else
-            {
-   
-                Debug.Log(request.result);
-            }
-        }
+    }
+
+    public void Login()
+    {
+        _androidJavaObject.Call("KakaoLogin");
     }
 
 }
