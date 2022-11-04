@@ -1,7 +1,7 @@
 package com.gardenary.domain.auth.api;
 
 
-import com.gardenary.domain.auth.dto.response.AuthResponseDto;
+import com.gardenary.domain.auth.dto.response.RefreshResponseDto;
 import com.gardenary.domain.auth.service.AuthService;
 import com.gardenary.global.common.response.DtoResponse;
 import com.gardenary.global.common.response.MessageResponse;
@@ -29,16 +29,16 @@ public class AuthApi {
     private final ResponseProperties responseProperties;
 
     @PostMapping("/refresh")
-    public ResponseEntity<DtoResponse<AuthResponseDto>> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<DtoResponse<RefreshResponseDto>> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = CookieUtil.searchCookie(request, "refreshToken");
-        if(refreshToken != null && !refreshToken.equals("")) {
-            AuthResponseDto authResponseDto = authService.refresh(refreshToken);
+        if (refreshToken != null && !refreshToken.equals("")) {
+            RefreshResponseDto refreshResponseDto = authService.refresh(refreshToken);
 
-            if(authResponseDto == null) {
+            if (refreshResponseDto == null) {
                 CookieUtil.deleteRefreshTokenCookie(response);
                 return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
             } else {
-                return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), authResponseDto));
+                return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), refreshResponseDto));
             }
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
@@ -47,7 +47,7 @@ public class AuthApi {
 
 
     @DeleteMapping("")
-    public ResponseEntity<MessageResponse> signOut(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<MessageResponse> signOut(HttpServletRequest request, HttpServletResponse response) {
         authService.signOut(request);
         CookieUtil.deleteRefreshTokenCookie(response);
         return ResponseEntity.status(HttpStatus.OK).body(MessageResponse.of(HttpStatus.OK, responseProperties.getSuccess()));
