@@ -1,7 +1,10 @@
 package com.gardenary.domain.tree.api;
 
+import com.gardenary.domain.tree.dto.request.DiaryRequestDto;
+import com.gardenary.domain.tree.dto.request.LocalDateTimeDto;
 import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
 import com.gardenary.domain.tree.dto.response.DiaryResponseDto;
+import com.gardenary.domain.tree.dto.response.MakeDiaryResponseDto;
 import com.gardenary.domain.tree.dto.response.TreeResponseDto;
 import com.gardenary.domain.tree.service.TreeService;
 import com.gardenary.global.common.response.DtoResponse;
@@ -26,13 +29,6 @@ public class TreeApi {
     private final TreeService treeService;
     private final ResponseProperties responseProperties;
 
-    @PostMapping("")
-    public ResponseEntity<MessageResponse> createMyTree(
-            @AuthenticationPrincipal UserDetail userDetail) {
-        boolean result = treeService.createMyTree(userDetail.getUser());
-        return null;
-    }
-
     @GetMapping("")
     public ResponseEntity<DtoResponse<List<TreeResponseDto>>> getMyTreeList(
             @AuthenticationPrincipal UserDetail userDetail) {
@@ -43,11 +39,11 @@ public class TreeApi {
         return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
     }
 
-    @GetMapping("/diary")
+    @PostMapping("/diary/date")
     public ResponseEntity<DtoResponse<List<DiaryResponseDto>>> getDiary(
-            @RequestParam(name = "date") LocalDateTime date,
+            @RequestBody LocalDateTimeDto localDateTimeDto,
             @AuthenticationPrincipal UserDetail userDetail) {
-        List<DiaryResponseDto> result = treeService.getDateDiaryList(date, userDetail.getUser());
+        List<DiaryResponseDto> result = treeService.getDateDiaryList(localDateTimeDto.getDate(), userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
@@ -63,6 +59,26 @@ public class TreeApi {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
         }
         return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
+    }
+
+    @PostMapping("/diary")
+    public ResponseEntity<DtoResponse<MakeDiaryResponseDto>> createDiary(
+            @AuthenticationPrincipal UserDetail userDetail,
+            @RequestBody DiaryRequestDto diaryRequestDto) {
+        MakeDiaryResponseDto result = treeService.createDiary(userDetail.getUser(), diaryRequestDto);
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
+    }
+
+    @PostMapping("")
+    public ResponseEntity<MessageResponse> createMyTree(
+            @AuthenticationPrincipal UserDetail userDetail) {
+        boolean result = treeService.createMyTree(userDetail.getUser());
+        String str = result ? responseProperties.getSuccess() : responseProperties.getFail();
+
+        return ResponseEntity.status(HttpStatus.OK).body(MessageResponse.of(HttpStatus.OK, str));
     }
 
 }
