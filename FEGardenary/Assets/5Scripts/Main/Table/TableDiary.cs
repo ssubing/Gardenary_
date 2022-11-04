@@ -74,12 +74,9 @@ public class TableDiary : MonoBehaviour
                     //그 날 작성한 일기가 있을 때
                     else
                     {
-                        Debug.Log(treeDiary.responseDto.Count);
                         //개수만큼 UI를 만들어서 보여준다
                         for (int i = 0; i < treeDiary.responseDto.Count; i++)
                         {
-                            Debug.Log(i);
-                            Debug.Log(treeDiary.responseDto[i].content);
                             //object를 하나 만들어준다
                             GameObject treeDiaryContent = new GameObject("TreeContent" + i);
                             //layer는 UI(5)로 설정
@@ -108,7 +105,6 @@ public class TableDiary : MonoBehaviour
                             treeText.AddComponent<RectTransform>();
                             treeText.AddComponent<TextMeshProUGUI>();
 
-                            //Destroy(treeText.GetComponent<MeshRenderer>());
                             //글씨 크기와 폰트 설정
                             treeText.GetComponent<TextMeshProUGUI>().fontSize = 60;
                             treeText.GetComponent<TextMeshProUGUI>().font
@@ -117,18 +113,7 @@ public class TableDiary : MonoBehaviour
                             //내용 설정
                             treeText.GetComponent<TextMeshProUGUI>().text = treeDiary.responseDto[i].content;
 
-                            //Debug.Log(GameObject.Find("Test").GetComponent<TextMeshProUGUI>().font);
-                            //TMP_FontAsset a = new TMP_FontAsset("DalseoDarling SDF");
-                            //treeText.GetComponent<TextMeshProUGUI>().TM = DalseoDarling SDF
-                            //오브젝트의 위치 설정
-                            //Debug.Log(treeText.GetComponentInChildren<TextMeshPro>().text);
-                            //treeText.GetComponentInChildren<TextMeshPro>().SetText("abcdergef");
-
-                            //treeText.GetComponentInChildren<TextMeshProUGUI>().fontSize = 60;
-                            //treeText.GetComponentInChildren<TextMeshProUGUI>().text = "허리 아파";
                             treeText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-                            //treeText.GetComponent<TextMeshPro>().font = "DalseoDarling SDF";
-                                //treeText.GetComponent<TextMeshPro>().UpdateFontAsset("DalseoDarling SDF");
                         }
                     }
                 }
