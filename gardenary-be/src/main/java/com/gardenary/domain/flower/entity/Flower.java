@@ -16,9 +16,8 @@ import javax.persistence.*;
 public class Flower {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT UNSIGNED")
-    private int id;
+    @Column(name = "id", columnDefinition = "VARCHAR(255)")
+    private String id;
 
     @Column(name = "name", columnDefinition = "VARCHAR(50)")
     private String name;

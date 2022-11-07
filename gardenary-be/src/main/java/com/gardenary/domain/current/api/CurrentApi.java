@@ -27,7 +27,7 @@ public class CurrentApi {
     private final ResponseProperties responseProperties;
 
     @GetMapping("")
-    public ResponseEntity<DtoResponse> getCurrentInfo(@AuthenticationPrincipal UserDetail userDetail) {
+    public ResponseEntity<DtoResponse<GrowingPlantResponseDto>> getCurrentInfo(@AuthenticationPrincipal UserDetail userDetail) {
         GrowingPlantResponseDto result = currentService.getCurrentInfo(userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
