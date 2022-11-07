@@ -5,6 +5,7 @@ import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.exp.entity.Exp;
 import com.gardenary.domain.exp.repository.ExpRepository;
 import com.gardenary.domain.flower.dto.*;
+import com.gardenary.domain.flower.dto.response.*;
 import com.gardenary.domain.flower.entity.Flower;
 import com.gardenary.domain.flower.entity.MyFlower;
 import com.gardenary.domain.flower.entity.QuestionAnswer;
@@ -12,13 +13,15 @@ import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
 import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
-import com.gardenary.domain.flower.response.*;
+import com.gardenary.domain.tree.entity.Tree;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
+import com.gardenary.global.error.exception.TreeApiException;
 import com.gardenary.global.error.model.FlowerErrorCode;
 import com.gardenary.global.error.model.GrowingPlantErrorCode;
+import com.gardenary.global.error.model.TreeErrorCode;
 import com.gardenary.global.properties.ConstProperties;
 import com.gardenary.infra.redis.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -273,10 +276,9 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     public Flower randomFlower() {
-        List<Flower> flowerList = flowerRepository.findAll();
-        Random random = new Random(System.nanoTime());
-        int num = random.nextInt(constProperties.getFlowerSize());
-        return flowerList.get(num);
+        int num = (int)(Math.random()*constProperties.getFlowerSize() + 1);
+        Flower flower = flowerRepository.findById(num).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.FLOWER_NOT_FOUND));
+        return flower;
     }
 
     @Scheduled(cron = "0 0 3 * * *")
