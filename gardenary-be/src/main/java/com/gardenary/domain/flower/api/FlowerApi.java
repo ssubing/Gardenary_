@@ -26,7 +26,7 @@ public class FlowerApi {
 
     //추후 user쪽 추가, 경험치 return으로 변겅
     @PostMapping("/answer")
-    public ResponseEntity<DtoResponse> createAnswer(@RequestBody QuestionAnswerDto questionAnswerDto, @AuthenticationPrincipal UserDetail userDetail) {
+    public ResponseEntity<DtoResponse<AnswerCompleteResponseDto>> createAnswer(@RequestBody QuestionAnswerDto questionAnswerDto, @AuthenticationPrincipal UserDetail userDetail) {
         AnswerCompleteResponseDto result = flowerService.createAnswer(userDetail.getUser(), questionAnswerDto);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
@@ -55,7 +55,7 @@ public class FlowerApi {
     }
 
     @PostMapping("")
-    public ResponseEntity<DtoResponse> createNewFlower(@AuthenticationPrincipal UserDetail userDetail) {
+    public ResponseEntity<DtoResponse<MyFlowerOnlyIdResponseDto>> createNewFlower(@AuthenticationPrincipal UserDetail userDetail) {
         MyFlowerOnlyIdResponseDto result = flowerService.createNewFlower(userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
