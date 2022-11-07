@@ -101,7 +101,8 @@ public class ProfileServiceImpl implements ProfileService {
             throw new ProfileApiException(ProfileErrorCode.PROFILE_NOT_FOUND);
         }
 
-        if (profile.getNickname().equals(profileDto.getNickname())) {
+        Profile checkNicknameProfile = profileRepository.findByNickname(profileDto.getNickname()).orElse(null);
+        if (checkNicknameProfile != null) {
             throw new ProfileApiException(ProfileErrorCode.NICKNAME_ALREADY_EXISTS);
         }
 
