@@ -125,7 +125,7 @@ public class SocialServiceImpl implements SocialService {
 
         if (n >= 1000) {
             do {
-                nickname = RandomStringUtils.randomNumeric(10);
+                nickname = nickname + (int) (Math.random() * 100 + 1);
                 tmp = profileRepository.findByNickname(nickname).orElse(null);
             } while (tmp != null);
         }
