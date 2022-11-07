@@ -74,47 +74,7 @@ public class TableDiary : MonoBehaviour
                     //그 날 작성한 일기가 있을 때
                     else
                     {
-                        //개수만큼 UI를 만들어서 보여준다
-                        for (int i = 0; i < treeDiary.responseDto.Count; i++)
-                        {
-                            //object를 하나 만들어준다
-                            GameObject treeDiaryContent = new GameObject("TreeContent" + i);
-                            //layer는 UI(5)로 설정
-                            treeDiaryContent.layer = 5;
-                            //부모 오브젝트 설정
-                            treeDiaryContent.transform.SetParent(GameObject.Find("AllTreeUI").transform.Find("AllTreeBackground"));
-
-                            //필요한 컴포넌트 추가
-                            treeDiaryContent.AddComponent<CanvasRenderer>();
-                            treeDiaryContent.AddComponent<RectTransform>();
-                            treeDiaryContent.AddComponent<Image>();
-                            //오브젝트의 위치 설정
-                            treeDiaryContent.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -600 * i);
-                            //오브젝트의 크기 설정
-                            treeDiaryContent.GetComponent<RectTransform>().sizeDelta = new Vector2(1200, 400);
-
-                            //테스트를 위해 임시로 색 설정
-                            treeDiaryContent.GetComponent<Image>().color = Color.red;
-
-                            //텍스트 추가
-                            GameObject treeText = new GameObject("treeText" + i);
-                            treeText.layer = 5;
-                            treeText.transform.SetParent(GameObject.Find("AllTreeBackground").transform.Find("TreeContent" + i));
-
-                            treeText.AddComponent<CanvasRenderer>();
-                            treeText.AddComponent<RectTransform>();
-                            treeText.AddComponent<TextMeshProUGUI>();
-
-                            //글씨 크기와 폰트 설정
-                            treeText.GetComponent<TextMeshProUGUI>().fontSize = 60;
-                            treeText.GetComponent<TextMeshProUGUI>().font
-                                = GameObject.Find("AllTreeHeaderText").GetComponent<TextMeshProUGUI>().font;
-
-                            //내용 설정
-                            treeText.GetComponent<TextMeshProUGUI>().text = treeDiary.responseDto[i].content;
-
-                            treeText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-                        }
+                        
                     }
                 }
             }
