@@ -20,4 +20,11 @@ public class KakaoLogin : MonoBehaviour
         _androidJavaObject.Call("KakaoLogin");
     }
 
+    // 朝朝神ID 鋼発
+    public void getKakaoId(string kakaoId)
+    {
+        Debug.Log("kakaoId : " + kakaoId);
+
+    }
+
 }

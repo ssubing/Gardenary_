@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "R3CRA09EM9W",
         "name": "com.DefaultCompany.FEGardenary",
-        "processId": 21645,
+        "processId": 15017,
         "exited": false
     },
     "m_SelectedPriority": 1,
@@ -16,12 +16,6 @@
         },
         {
             "deviceId": "R3CRA09EM9W",
-            "name": "com.unity3d.mobileremote",
-            "processId": 15095,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
             "name": "com.sec.android.app.launcher",
             "processId": 3583,
             "exited": false
@@ -29,73 +23,37 @@
         {
             "deviceId": "R3CRA09EM9W",
             "name": "com.DefaultCompany.FEGardenary",
-            "processId": 9588,
+            "processId": 7800,
             "exited": true
         },
         {
             "deviceId": "R3CRA09EM9W",
             "name": "com.DefaultCompany.FEGardenary",
-            "processId": 15222,
+            "processId": 8674,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CRA09EM9W",
+            "name": "com.DefaultCompany.FEGardenary",
+            "processId": 9025,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CRA09EM9W",
+            "name": "com.DefaultCompany.FEGardenary",
+            "processId": 9531,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CRA09EM9W",
+            "name": "com.DefaultCompany.FEGardenary",
+            "processId": 14220,
             "exited": false
         },
         {
             "deviceId": "R3CRA09EM9W",
             "name": "com.DefaultCompany.FEGardenary",
-            "processId": 15807,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 17721,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 18107,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 18618,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 18932,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 19645,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 20062,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 20650,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 21234,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CRA09EM9W",
-            "name": "com.DefaultCompany.FEGardenary",
-            "processId": 21645,
+            "processId": 15017,
             "exited": false
         }
     ],
@@ -150,7 +108,7 @@
         "Behavior": 0
     },
     "m_FilterOptions": {
-        "m_Filter": "click",
+        "m_Filter": "",
         "m_UseRegularExpressions": false,
         "m_MatchCase": false
     },

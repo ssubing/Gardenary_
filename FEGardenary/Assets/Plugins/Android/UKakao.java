@@ -6,8 +6,9 @@ import android.util.Log;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
 import com.unity3d.player.UnityPlayer;
+import com.unity3d.player.UnityPlayerActivity;
 
-public class UKakao {
+public class UKakao extends UnityPlayerActivity{
     Context context = UnityPlayer.currentActivity;
 
     public void KakaoLogin() {
@@ -21,6 +22,7 @@ public class UKakao {
             accountLogin();
         }
     }
+
     public void login(){
         String TAG = "login()";
         UserApiClient.getInstance().loginWithKakaoTalk(context,(oAuthToken, error) -> {
@@ -34,6 +36,7 @@ public class UKakao {
         });
     }
 
+    String kakaoId = "";
     public void getUserInfo(){
         String TAG = "getUserInfo()";
         UserApiClient.getInstance().me((user, meError) -> {
@@ -47,6 +50,9 @@ public class UKakao {
                             "\n회원번호: "+user.getId() +
                             "\n이메일: "+user.getKakaoAccount().getEmail());
                 }
+                //Log.i(TAG, user.getId().getClass().getName());
+                kakaoId = user.getId().toString();
+                UnityPlayer.UnitySendMessage("Login Button", "getKakaoId", kakaoId); 
                 Account user1 = user.getKakaoAccount();
                 System.out.println("사용자 계정" + user1);
             }
