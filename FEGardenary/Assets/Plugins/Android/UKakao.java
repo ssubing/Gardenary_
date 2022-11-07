@@ -52,7 +52,7 @@ public class UKakao extends UnityPlayerActivity{
                 }
                 //Log.i(TAG, user.getId().getClass().getName());
                 kakaoId = user.getId().toString();
-                UnityPlayer.UnitySendMessage("Login Button", "getKakaoId", kakaoId); 
+                UnityPlayer.UnitySendMessage("Login Button", "getUserInfo", kakaoId); 
                 Account user1 = user.getKakaoAccount();
                 System.out.println("사용자 계정" + user1);
             }
