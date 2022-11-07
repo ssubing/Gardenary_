@@ -95,8 +95,8 @@ public class SocialServiceImpl implements SocialService {
                     .build();
             growingPlantRepository.save(growingPlant);
 
-            redisService.setValue(savedUser.getKakaoId()+"flowerExp", "0");
-            redisService.setValue(savedUser.getKakaoId()+"treeExp", "0");
+            redisService.setValue(savedUser.getKakaoId() + "flowerExp", "0");
+            redisService.setValue(savedUser.getKakaoId() + "treeExp", "0");
             Random random = new Random(System.nanoTime());
             int num = random.nextInt(constProperties.getQuestionSize());
             redisService.setValue(savedUser.getKakaoId(), num + "");
@@ -116,4 +116,5 @@ public class SocialServiceImpl implements SocialService {
         } while (tmp != null);
         return nickname;
     }
+
 }
