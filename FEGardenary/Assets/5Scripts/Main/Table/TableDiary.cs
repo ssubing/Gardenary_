@@ -5,6 +5,7 @@ using System;
 using UnityEngine.UI;
 using TMPro;
 
+
 public class TableDiary : MonoBehaviour
 {
     private CameraMovement cameraMovement;
@@ -13,28 +14,33 @@ public class TableDiary : MonoBehaviour
     //책상에 줌인이 된 상태인가?
     private bool zoomFlag;
 
-    public TreeInfo treeDiary;
+    //public TreeInfo treeDiary;
+
+    public string uri = "https://k7a604.p.ssafy.io/api/";
+
+    public string token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOCIsImlhdCI6MTY2NzU0OTI0NywiZXhwIjoxNjY3NTUxMDQ3fQ.DJahNxpkrHsDDL_-XR7034A_mAmBxx_9seZvjsJEFwc";
+
     // Start is called before the first frame update
     void Start()
     {
-        //url
-        treeDiary = new TreeInfo();
-        treeDiary.status = "OK";
-        treeDiary.message = "success";
+        
+        //treeDiary = new TreeInfo();
+        //treeDiary.status = "OK";
+        //treeDiary.message = "success";
 
-        GetTreeAll treeInfo1 = new GetTreeAll();
-        treeInfo1.content = "오늘 점심은 부산식 간짜장밥";
+        //GetTreeAll treeInfo1 = new GetTreeAll();
+        //treeInfo1.content = "오늘 점심은 부산식 간짜장밥";
         //treeInfo1.diaryDate = DateTimeOffset.Now.LocalDateTime;
 
-        GetTreeAll treeInfo2 = new GetTreeAll();
-        treeInfo2.content = "커피는 왕 큰 커피";
+        //GetTreeAll treeInfo2 = new GetTreeAll();
+        //treeInfo2.content = "커피는 왕 큰 커피";
         //treeInfo2.diaryDate = DateTimeOffset.Now.LocalDateTime;
 
-        List<GetTreeAll> test = new List<GetTreeAll>();
-        test.Add(treeInfo1);
-        test.Add(treeInfo2);
+        //List<GetTreeAll> test = new List<GetTreeAll>();
+        //test.Add(treeInfo1);
+        //test.Add(treeInfo2);
 
-        treeDiary.responseDto = test;
+        //treeDiary.responseDto = test;
     }
 
     // Update is called once per frame
@@ -67,15 +73,15 @@ public class TableDiary : MonoBehaviour
                     GameObject.Find("TableUI").transform.Find("AllTreeUI").gameObject.SetActive(true);
                     //작성된 나무 다이어리 개수에 따라 표시
                     //아무 것도 작성하지 않았을 때
-                    if(treeDiary.responseDto.Count == 0)
-                    {
+                    //if(treeDiary.responseDto.Count == 0)
+                    //{
                         //작성되지 않았다는 UI를 보여준다
-                    }
+                    //}
                     //그 날 작성한 일기가 있을 때
-                    else
+                    /*else
                     {
                         
-                    }
+                    }*/
                 }
             }
         }

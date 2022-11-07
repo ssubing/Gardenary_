@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Net;
+using System.IO;
+using UnityEngine.Networking;
+using System.Net.Http;
+using System;
 
 public class WriteDiary : MonoBehaviour
 {
@@ -14,12 +19,37 @@ public class WriteDiary : MonoBehaviour
     public int flowerNum;
     public int treeNum;
 
+    public string uri = "https://k7a604.p.ssafy.io/api/";
+
     public GameObject targetObject;
+
+    //테스트를 위한 토큰 담을 변수
+    //나중에 카카오 로그인해서 받아오는 변수를 써야 한다
+    public string token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOCIsImlhdCI6MTY2NzU0OTI0NywiZXhwIjoxNjY3NTUxMDQ3fQ.DJahNxpkrHsDDL_-XR7034A_mAmBxx_9seZvjsJEFwc";
 
     // Start is called before the first frame update
     void Start()
     {
-        //텃밭 조회 API 실행
+        //텃밭 조회 API
+        var client = new HttpClient();
+        //Method와 Uri를 설정하고 Header에 토큰을 넣는다
+        var httpRequestMessage = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(uri + "current"),
+            Headers =
+            {
+                {HttpRequestHeader.Authorization.ToString(), "Bearer " + token}
+            }
+        };
+
+        //API 요청을 실행하고 json으로 결과를 받아온다
+        var response = client.SendAsync(httpRequestMessage).Result;
+        var json = response.Content.ReadAsStringAsync().Result;
+        Debug.Log(json);
+        //json으로 받아온 결과를 string으로 바꾼다(?)
+        FarmInfo test = JsonUtility.FromJson<FarmInfo>(json);
+
         flowerExp = 10;
         treeExp = 20;
         flowerFlag = true;
@@ -100,6 +130,11 @@ public class WriteDiary : MonoBehaviour
                 GameObject.Find("TreeUI").transform.Find("TreeWrite").gameObject.SetActive(true);
             }
         }
+    }
+
+    void test()
+    {
+
     }
 
     //클릭한 오브젝트가 어떤 것
