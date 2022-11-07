@@ -203,7 +203,7 @@ public class FlowerServiceImpl implements FlowerService{
     @Override
     public FlowerListResponseDto getFlowerList(User user) {
         //전체 리스트를 하나 만들기(모든 색상 정보가 들어가고 flag가 false인 flowerList)
-        List<Flower> flowers = flowerRepository.findAllByOrderByName();
+        List<Flower> flowers = flowerRepository.findAllByOrderByNameAscIdAsc();
         List<FlowerResponseDto> flowerList = new ArrayList<>();
         Flower firstFlower = flowers.get(0);
         List<FlowerColorResponseDto> list = new ArrayList<>();
@@ -252,6 +252,9 @@ public class FlowerServiceImpl implements FlowerService{
         //그중 현재 MyFlower는 제외하고 하나씩 flag true로 변경하기
         Set<String> set = new HashSet<>();
         for (MyFlower myFlower : myFlowerList) {
+            if(myFlower.getDoneAt() == null) {
+                continue;
+            }
             Flower flower = myFlower.getFlower();
             String str = flower.getId();
             set.add(str);
@@ -264,24 +267,6 @@ public class FlowerServiceImpl implements FlowerService{
             flowerList.get(flowerType).modifyIsGet(true);
             flowerList.get(flowerType).getColorList().get(colorType).modifyFlag(true);
         }
-//        for(MyFlower myFlower : myFlowerList) {
-//            if(myFlower.getDoneAt() == null){
-//                continue;
-//            }
-//            Flower flower = myFlower.getFlower();
-//            for (FlowerResponseDto flowerResponseDto : flowerList) {
-//                if(flower.getName().equals(flowerResponseDto.getName())){
-//                    flowerResponseDto.modifyIsGet(true);
-//                    for (FlowerColorResponseDto flowerColorResponseDto : flowerResponseDto.getColorList()) {
-//                        if(flower.getColor().equals(flowerColorResponseDto.getColor())){
-//                            flowerColorResponseDto.modifyFlag(true);
-//                            break;
-//                        }
-//                    }
-//                    break;
-//                }
-//            }
-//        }
         return FlowerListResponseDto.builder()
                 .flowerList(flowerList)
                 .build();
