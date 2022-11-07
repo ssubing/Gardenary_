@@ -1,10 +1,10 @@
 package com.gardenary.domain.flower.api;
 
 import com.gardenary.domain.flower.dto.*;
-import com.gardenary.domain.flower.response.AnswerCompleteResponseDto;
-import com.gardenary.domain.flower.response.FlowerListResponseDto;
-import com.gardenary.domain.flower.response.MyFlowerOnlyIdResponseDto;
-import com.gardenary.domain.flower.response.QuestionAnswerListResponseDto;
+import com.gardenary.domain.flower.dto.response.AnswerCompleteResponseDto;
+import com.gardenary.domain.flower.dto.response.FlowerListResponseDto;
+import com.gardenary.domain.flower.dto.response.MyFlowerOnlyIdResponseDto;
+import com.gardenary.domain.flower.dto.response.QuestionAnswerListResponseDto;
 import com.gardenary.domain.flower.service.FlowerService;
 import com.gardenary.global.common.response.DtoResponse;
 import com.gardenary.global.config.security.UserDetail;

@@ -1,6 +1,6 @@
 package com.gardenary.domain.current.service;
 
-import com.gardenary.domain.current.Response.GrowingPlantResponseDto;
+import com.gardenary.domain.current.dto.response.GrowingPlantResponseDto;
 import com.gardenary.domain.current.entity.GrowingPlant;
 import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.flower.entity.QuestionAnswer;

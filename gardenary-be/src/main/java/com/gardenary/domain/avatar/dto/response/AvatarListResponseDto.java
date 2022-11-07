@@ -1,4 +1,4 @@
-package com.gardenary.domain.flower.response;
+package com.gardenary.domain.avatar.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionAnswerListResponseDto {
-    private List<QuestionAnswerResponseDto> questionAnswerResponseDtoList;
+public class AvatarListResponseDto {
+
+    private boolean flag;
+    private List<AvatarResponseDto> avatarResponseDtoList;
+
 }

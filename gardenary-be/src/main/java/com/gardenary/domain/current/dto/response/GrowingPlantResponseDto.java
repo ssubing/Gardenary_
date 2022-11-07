@@ -1,19 +1,22 @@
-package com.gardenary.domain.flower.response;
+package com.gardenary.domain.current.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionAnswerResponseDto {
+public class GrowingPlantResponseDto {
+
+    private int flowerExp;
+    private int treeExp;
+    private boolean isWrite;
     private String question;
-    private String content;
-    private LocalDateTime createdAt;
     private int questionNum;
+    private int flowerDays;
+    private int treeDays;
+
 }

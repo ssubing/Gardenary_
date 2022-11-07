@@ -1,4 +1,4 @@
-package com.gardenary.domain.garden.response;
+package com.gardenary.domain.garden.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

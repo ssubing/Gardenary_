@@ -2,7 +2,7 @@ package com.gardenary.domain.garden.api;
 
 import com.gardenary.domain.garden.dto.GardenDto;
 import com.gardenary.domain.garden.dto.GardenUserIdDto;
-import com.gardenary.domain.garden.response.GardenListResponseDto;
+import com.gardenary.domain.garden.dto.response.GardenListResponseDto;
 import com.gardenary.domain.garden.service.GardenService;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.common.response.DtoResponse;
@@ -16,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/garden")
