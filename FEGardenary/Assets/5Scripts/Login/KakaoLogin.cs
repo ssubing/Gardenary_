@@ -31,7 +31,7 @@ public class KakaoLogin : MonoBehaviour
     // 카카오 로그인 API
     public void getUserInfo(string kakaoId)
     {
-        Debug.Log("kakaoId : " + kakaoId);
+        //Debug.Log("kakaoId : " + kakaoId);
 
         var client = new HttpClient();
 
@@ -60,9 +60,14 @@ public class KakaoLogin : MonoBehaviour
         //데이터를 받을 클래스를 하나 만들어야 한다
         ResKakao request = JsonConvert.DeserializeObject<ResKakao>(json);
 
+        //Debug.Log("accessToken: " + request.responseDto.accessToken);
+        //Debug.Log("nickname: " + request.responseDto.nickname);
 
-        Debug.Log("accessToken: " + request.responseDto.accessToken);
-        Debug.Log("nickname: " + request.responseDto.nickname);
+        // 로그인 성공
+        if(request.status == "OK")
+        {
+            GameObject.Find("Login Panel").SetActive(false);
+        }
 
 
     }
