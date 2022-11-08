@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface FlowerRepository extends JpaRepository<Flower, Integer> {
     List<Flower> findAllByOrderByNameAscIdAsc();
+    Flower findById(String flowerIdx);
 }
