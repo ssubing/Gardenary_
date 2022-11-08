@@ -17,7 +17,6 @@ import com.gardenary.domain.user.entity.User;
 import com.gardenary.global.error.exception.ItemApiException;
 import com.gardenary.global.error.model.ItemErrorCode;
 import com.gardenary.global.properties.ConstProperties;
-import com.gardenary.infra.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class ItemServiceImpl implements ItemService {
-
-    private final RedisService redisService;
     private final ConstProperties constProperties;
     private final ItemRepository itemRepository;
     private final MyTreeRepository myTreeRepository;

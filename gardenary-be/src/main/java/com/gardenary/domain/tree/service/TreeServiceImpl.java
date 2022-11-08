@@ -16,10 +16,8 @@ import com.gardenary.domain.tree.repository.DiaryRepository;
 import com.gardenary.domain.tree.repository.MyTreeRepository;
 import com.gardenary.domain.tree.repository.TreeRepository;
 import com.gardenary.domain.user.entity.User;
-import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
 import com.gardenary.global.error.exception.TreeApiException;
-import com.gardenary.global.error.model.FlowerErrorCode;
 import com.gardenary.global.error.model.GrowingPlantErrorCode;
 import com.gardenary.global.error.model.TreeErrorCode;
 import com.gardenary.global.properties.ConstProperties;
@@ -55,7 +53,7 @@ public class TreeServiceImpl implements TreeService {
     public boolean createMyTree(User user) {
         //나무 경험치 체크
         int totalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
-        if(totalExp == 0 || (totalExp % 100) != 0) {
+        if(totalExp == 0 || (totalExp % constProperties.getExpLevelup()) != 0) {
             throw new TreeApiException(TreeErrorCode.NOT_ENOUGH_EXP);
         }
 
@@ -68,8 +66,9 @@ public class TreeServiceImpl implements TreeService {
             throw new GrowingPlantApiException(GrowingPlantErrorCode.GROWING_PLANT_NOT_FOUND);
         }
 
-        //나의 나무 DoneAt 변경
-        growingPlant.getMyTree().modifyDoneAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+        if(growingPlant.getMyTree().getDoneAt() == null) {
+            return false;
+        }
 
         //나의 나무 생성 및 현재 나무 수정
         MyTree myTree = MyTree.builder()
@@ -81,11 +80,6 @@ public class TreeServiceImpl implements TreeService {
         growingPlant.modifyMyTree(myTree);
 
         return true;
-    }
-
-    @Override
-    public boolean updateCurTree(User user) {
-        return false;
     }
 
     @Override
@@ -166,6 +160,11 @@ public class TreeServiceImpl implements TreeService {
         int treeExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
         int totalExp = treeExp + constProperties.getExpTree();
         redisService.setValue(user.getKakaoId()+"treeExp", totalExp+"");
+
+        //1-2. 100이면 DoneAt 변경
+        if(totalExp % constProperties.getExpLevelup() == 0) {
+            growingPlant.getMyTree().modifyDoneAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+        }
 
         //2. 경험치 기록 저장
         Exp exp = Exp.builder()
