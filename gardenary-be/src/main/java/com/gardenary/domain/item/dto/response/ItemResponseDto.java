@@ -1,4 +1,4 @@
-package com.gardenary.domain.flower.dto;
+package com.gardenary.domain.item.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FlowerDto {
-    private int id;
+public class ItemResponseDto {
+    private String itemAssetId;
+    private String itemName;
+    private boolean newItem;
 }

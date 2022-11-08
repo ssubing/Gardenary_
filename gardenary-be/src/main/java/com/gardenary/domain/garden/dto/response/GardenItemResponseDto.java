@@ -1,4 +1,4 @@
-package com.gardenary.domain.garden.response;
+package com.gardenary.domain.garden.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +11,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GardenTreeResponseDto {
+public class GardenItemResponseDto {
 
-    private LocalDateTime start;
-    private LocalDateTime end;
     private double x;
     private double z;
-    private int myTreeId;
+    private int myItemId;
     private String assetId;
 }

@@ -1,4 +1,4 @@
-package com.gardenary.domain.flower.response;
+package com.gardenary.domain.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MyFlowerOnlyIdResponseDto {
-    private int id;
+public class RefreshResponseDto {
+    private String accessToken;
 }

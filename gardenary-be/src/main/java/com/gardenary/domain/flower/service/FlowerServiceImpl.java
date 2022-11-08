@@ -5,6 +5,7 @@ import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.exp.entity.Exp;
 import com.gardenary.domain.exp.repository.ExpRepository;
 import com.gardenary.domain.flower.dto.*;
+import com.gardenary.domain.flower.dto.response.*;
 import com.gardenary.domain.flower.entity.Flower;
 import com.gardenary.domain.flower.entity.MyFlower;
 import com.gardenary.domain.flower.entity.QuestionAnswer;
@@ -12,10 +13,6 @@ import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
 import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
-import com.gardenary.domain.flower.response.AnswerCompleteResponseDto;
-import com.gardenary.domain.flower.response.MyFlowerOnlyIdResponseDto;
-import com.gardenary.domain.flower.response.QuestionAnswerResponseDto;
-import com.gardenary.domain.flower.response.QuestionAnswerListResponseDto;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.FlowerApiException;
@@ -32,9 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +44,8 @@ public class FlowerServiceImpl implements FlowerService{
     private final RedisService redisService;
     private final UserRepository userRepository;
     private final ConstProperties constProperties;
+    private static final String[] flowerIdx = {"0_0", "0_1", "0_2", "1_0", "1_1", "1_2", "2_0", "2_1", "2_2", "3_0", "3_1", "4_0", "5_0", "6_0", "7_0", "8_0", "9_0", "10_0", "10_1", "11_0", "12_0", "13_0", "14_0", "14_1", "14_2", "14_3", "14_4", "15_0", "16_0", "16_1", "17_0", "18_0", "19_0", "19_1", "20_0", "20_1", "20_2", "20_3", "21_0", "21_1", "21_2", "21_3", "21_4", "21_5", "22_0", "23_0", "23_1", "23_2", "24_0", "25_0", "25_1", "25_2", "25_3", "26_0", "26_1", "26_2", "26_3", "26_4", "26_5", "27_0"};
+
     @Override
     @Transactional
     public AnswerCompleteResponseDto createAnswer(User user, QuestionAnswerDto questionAnswerDto) {
@@ -89,7 +86,7 @@ public class FlowerServiceImpl implements FlowerService{
             } else{
                 growingPlant.modifyAnswerDays(1);
             }
-            if(growingPlant.getAnswerDays()%3 == 0) {
+            if(growingPlant.getAnswerDays()%2 == 0) {
                 result.modifyIsItem(true);
             } else{
                 result.modifyIsItem(false);
@@ -141,10 +138,7 @@ public class FlowerServiceImpl implements FlowerService{
     @Override
     public QuestionAnswerListResponseDto getOneFlowerAnswerList(User user, int myFlowerId) {
         //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
-        MyFlower myFlower = myFlowerRepository.findById(myFlowerId);
-        if(myFlower == null){
-            throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
-        }
+        MyFlower myFlower = myFlowerRepository.findById(myFlowerId).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND));
         //엔티티 리스트
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlowerAndMyFlower_UserOrderByCreatedAtDesc(myFlower, user);
 
@@ -190,10 +184,7 @@ public class FlowerServiceImpl implements FlowerService{
         }
         //바꾸기 전의 현재 꽃에 doneAt 추가
         GrowingPlant current = growingPlantRepository.findByUser(user);
-        MyFlower doneFlower = myFlowerRepository.findById(current.getMyFlower().getId());
-        if(doneFlower == null) {
-            throw new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND);
-        }
+        MyFlower doneFlower = myFlowerRepository.findById(current.getMyFlower().getId()).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND));
         doneFlower.modifyDoneAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         myFlowerRepository.save(doneFlower);
         Flower newFlower = randomFlower();
@@ -211,19 +202,92 @@ public class FlowerServiceImpl implements FlowerService{
                 .build();
     }
 
+    @Override
+    public FlowerListResponseDto getFlowerList(User user) {
+        //전체 리스트를 하나 만들기(모든 색상 정보가 들어가고 flag가 false인 flowerList)
+        List<Flower> flowers = flowerRepository.findAllByOrderByNameAscIdAsc();
+        List<FlowerResponseDto> flowerList = new ArrayList<>();
+        Flower firstFlower = flowers.get(0);
+        List<FlowerColorResponseDto> list = new ArrayList<>();
+        list.add(FlowerColorResponseDto.builder()
+                .color(firstFlower.getColor())
+                .flag(false)
+                .build());
+        flowerList.add(FlowerResponseDto.builder()
+                .name(firstFlower.getName())
+                .isGet(false)
+                .meaning(firstFlower.getMeaning())
+                .bloom(firstFlower.getBloom())
+                .content(firstFlower.getContent())
+                .assetId(firstFlower.getAssetId())
+                .colorList(list)
+                .build());
+        for (int i = 1; i < flowers.size(); i++) {
+            Flower flower = flowers.get(i);
+            String name = flower.getName();
+            FlowerColorResponseDto flowerColorResponseDto = FlowerColorResponseDto.builder()
+                    .color(flower.getColor())
+                    .flag(false)
+                    .build();
+            FlowerResponseDto beforeFlowerResponse = flowerList.get(flowerList.size()-1);
+            if(name.equals(beforeFlowerResponse.getName())){
+                List<FlowerColorResponseDto> colorList = beforeFlowerResponse.getColorList();
+                colorList.add(flowerColorResponseDto);
+                beforeFlowerResponse.modifyColorList(colorList);
+            } else {
+                List<FlowerColorResponseDto> colorList = new ArrayList<>();
+                colorList.add(flowerColorResponseDto);
+                FlowerResponseDto flowerResponseDto = FlowerResponseDto.builder()
+                        .name(flower.getName())
+                        .isGet(false)
+                        .meaning(flower.getMeaning())
+                        .bloom(flower.getBloom())
+                        .content(flower.getContent())
+                        .assetId(flower.getAssetId())
+                        .colorList(colorList)
+                        .build();
+                flowerList.add(flowerResponseDto);
+            }
+        }
+        //유저가 가진 MyFlower 다 받아오기 (flowerId 순서대로)
+        List<MyFlower> myFlowerList = myFlowerRepository.findAllByUser(user);
+        //그중 현재 MyFlower는 제외하고 하나씩 flag true로 변경하기
+        Set<String> set = new HashSet<>();
+        for (MyFlower myFlower : myFlowerList) {
+            if(myFlower.getDoneAt() == null) {
+                continue;
+            }
+            Flower flower = myFlower.getFlower();
+            String str = flower.getId();
+            set.add(str);
+        }
+        Iterator<String> iter = set.iterator();
+        for (int i = 0; i < set.size() ; i++) {
+            String flowerId = iter.next();
+            int flowerType = Integer.parseInt(flowerId.split("_")[0]);
+            int colorType = Integer.parseInt(flowerId.split("_")[1]);
+            flowerList.get(flowerType).modifyIsGet(true);
+            flowerList.get(flowerType).getColorList().get(colorType).modifyFlag(true);
+        }
+        return FlowerListResponseDto.builder()
+                .flowerList(flowerList)
+                .build();
+    }
+
     public Flower randomFlower() {
-        List<Flower> flowerList = flowerRepository.findAll();
-        Random random = new Random(System.nanoTime());
-        int num = random.nextInt(constProperties.getFlowerSize());
-        return flowerList.get(num);
+        int num = (int)(Math.random()*constProperties.getFlowerSize() + 1);
+        Flower flower = flowerRepository.findById(flowerIdx[num]);
+        if(flower == null) {
+            throw new FlowerApiException(FlowerErrorCode.FLOWER_NOT_FOUND);
+        }
+        return flower;
     }
 
     @Scheduled(cron = "0 0 3 * * *")
     protected void questionReset(){
         List<User> userList = userRepository.findAll();
         for (User user : userList) {
-            Random random = new Random(System.nanoTime());
-            int num = random.nextInt(constProperties.getQuestionSize());
+            int num = (int)(Math.random()*constProperties.getQuestionSize() + 1);
             redisService.setValue(user.getKakaoId(), num + "");
         }
     }

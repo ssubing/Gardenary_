@@ -1,4 +1,4 @@
-package com.gardenary.domain.flower.dto;
+package com.gardenary.domain.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FlowerListDto {
-    private int id;
+public class LoginRequestDto {
+    private String kakaoId;
 }

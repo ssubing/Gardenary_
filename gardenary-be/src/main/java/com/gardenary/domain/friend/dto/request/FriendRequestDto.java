@@ -1,4 +1,4 @@
-package com.gardenary.domain.flower.dto;
+package com.gardenary.domain.friend.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MyFlowerDto {
-    private int id;
+public class FriendRequestDto {
+    private String enCryptUserId;
 }

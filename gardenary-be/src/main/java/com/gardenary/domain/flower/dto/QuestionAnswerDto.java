@@ -16,7 +16,7 @@ public class QuestionAnswerDto {
     private int id;
     private int questionId;
     private int myFlowerId;
-    private int flowerId;
+    private String flowerId;
     private UUID userId;
     private LocalDateTime createdAt;
     private String content;
