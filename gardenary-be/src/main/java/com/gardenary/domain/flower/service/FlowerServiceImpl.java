@@ -86,7 +86,7 @@ public class FlowerServiceImpl implements FlowerService{
             } else{
                 growingPlant.modifyAnswerDays(1);
             }
-            if(growingPlant.getAnswerDays()%3 == 0) {
+            if(growingPlant.getAnswerDays()%2 == 0) {
                 result.modifyIsItem(true);
             } else{
                 result.modifyIsItem(false);

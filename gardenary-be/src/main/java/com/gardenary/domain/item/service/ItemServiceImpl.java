@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
         boolean newItem = true;
         GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
 
-        if ((growingPlant.getDiaryDays() != 0 && growingPlant.getDiaryDays() % 3 == 0) || (growingPlant.getAnswerDays() != 0 && growingPlant.getAnswerDays() % 3 == 0)) {
+        if ((growingPlant.getDiaryDays() != 0 && growingPlant.getDiaryDays() % 2 == 0) || (growingPlant.getAnswerDays() != 0 && growingPlant.getAnswerDays() % 2 == 0)) {
             int num = (int) (Math.random() * constProperties.getItemSize() + 1);
             List<MyItem> myItems = myItemRepository.findAllByUser(user);
             for (MyItem myItem : myItems) {
