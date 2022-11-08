@@ -1,7 +1,6 @@
 package com.gardenary.domain.avatar.api;
 
 import com.gardenary.domain.avatar.dto.response.AvatarListResponseDto;
-import com.gardenary.domain.avatar.dto.response.AvatarResponseDto;
 import com.gardenary.domain.avatar.service.AvatarService;
 import com.gardenary.global.common.response.DtoResponse;
 import com.gardenary.global.config.security.UserDetail;
@@ -21,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AvatarApi {
 
     private final ResponseProperties responseProperties;
-    private final AvatarService avatarServcie;
+    private final AvatarService avatarService;
 
     @PostMapping("/{type}")
     public ResponseEntity<DtoResponse<AvatarListResponseDto>> getNewAvatar(@AuthenticationPrincipal UserDetail userDetail, @PathVariable int type) {
-        AvatarListResponseDto result = avatarServcie.getNewAvatar(userDetail.getUser(), type);
+        AvatarListResponseDto result = avatarService.getNewAvatar(userDetail.getUser(), type);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{
