@@ -183,7 +183,7 @@ public class TreeServiceImpl implements TreeService {
             growingPlant.modifyDiaryDays(growingPlant.getDiaryDays() + 1);
         }
         boolean isItem = false;
-        if(growingPlant.getDiaryDays()%3 == 0) {
+        if(growingPlant.getDiaryDays()%2 == 0) {
             isItem = true;
         }
 
