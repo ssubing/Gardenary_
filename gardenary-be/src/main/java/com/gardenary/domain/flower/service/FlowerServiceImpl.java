@@ -13,15 +13,12 @@ import com.gardenary.domain.flower.mapper.QuestionAnswerMapper;
 import com.gardenary.domain.flower.repository.FlowerRepository;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
-import com.gardenary.domain.tree.entity.Tree;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.FlowerApiException;
 import com.gardenary.global.error.exception.GrowingPlantApiException;
-import com.gardenary.global.error.exception.TreeApiException;
 import com.gardenary.global.error.model.FlowerErrorCode;
 import com.gardenary.global.error.model.GrowingPlantErrorCode;
-import com.gardenary.global.error.model.TreeErrorCode;
 import com.gardenary.global.properties.ConstProperties;
 import com.gardenary.infra.redis.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +44,8 @@ public class FlowerServiceImpl implements FlowerService{
     private final RedisService redisService;
     private final UserRepository userRepository;
     private final ConstProperties constProperties;
+    private static final String[] flowerIdx = {"0_0", "0_1", "0_2", "1_0", "1_1", "1_2", "2_0", "2_1", "2_2", "3_0", "3_1", "4_0", "5_0", "6_0", "7_0", "8_0", "9_0", "10_0", "10_1", "11_0", "12_0", "13_0", "14_0", "14_1", "14_2", "14_3", "14_4", "15_0", "16_0", "16_1", "17_0", "18_0", "19_0", "19_1", "20_0", "20_1", "20_2", "20_3", "21_0", "21_1", "21_2", "21_3", "21_4", "21_5", "22_0", "23_0", "23_1", "23_2", "24_0", "25_0", "25_1", "25_2", "25_3", "26_0", "26_1", "26_2", "26_3", "26_4", "26_5", "27_0"};
+
     @Override
     @Transactional
     public AnswerCompleteResponseDto createAnswer(User user, QuestionAnswerDto questionAnswerDto) {
@@ -277,7 +276,10 @@ public class FlowerServiceImpl implements FlowerService{
 
     public Flower randomFlower() {
         int num = (int)(Math.random()*constProperties.getFlowerSize() + 1);
-        Flower flower = flowerRepository.findById(num).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.FLOWER_NOT_FOUND));
+        Flower flower = flowerRepository.findById(flowerIdx[num]);
+        if(flower == null) {
+            throw new FlowerApiException(FlowerErrorCode.FLOWER_NOT_FOUND);
+        }
         return flower;
     }
 
@@ -285,8 +287,7 @@ public class FlowerServiceImpl implements FlowerService{
     protected void questionReset(){
         List<User> userList = userRepository.findAll();
         for (User user : userList) {
-            Random random = new Random(System.nanoTime());
-            int num = random.nextInt(constProperties.getQuestionSize());
+            int num = (int)(Math.random()*constProperties.getQuestionSize() + 1);
             redisService.setValue(user.getKakaoId(), num + "");
         }
     }
