@@ -14,33 +14,15 @@ public class TableDiary : MonoBehaviour
     //책상에 줌인이 된 상태인가?
     private bool zoomFlag;
 
-    //public TreeInfo treeDiary;
 
+    //URI와 토큰
     public string uri = "https://k7a604.p.ssafy.io/api/";
-
     public string token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOCIsImlhdCI6MTY2NzU0OTI0NywiZXhwIjoxNjY3NTUxMDQ3fQ.DJahNxpkrHsDDL_-XR7034A_mAmBxx_9seZvjsJEFwc";
 
     // Start is called before the first frame update
     void Start()
     {
         
-        //treeDiary = new TreeInfo();
-        //treeDiary.status = "OK";
-        //treeDiary.message = "success";
-
-        //GetTreeAll treeInfo1 = new GetTreeAll();
-        //treeInfo1.content = "오늘 점심은 부산식 간짜장밥";
-        //treeInfo1.diaryDate = DateTimeOffset.Now.LocalDateTime;
-
-        //GetTreeAll treeInfo2 = new GetTreeAll();
-        //treeInfo2.content = "커피는 왕 큰 커피";
-        //treeInfo2.diaryDate = DateTimeOffset.Now.LocalDateTime;
-
-        //List<GetTreeAll> test = new List<GetTreeAll>();
-        //test.Add(treeInfo1);
-        //test.Add(treeInfo2);
-
-        //treeDiary.responseDto = test;
     }
 
     // Update is called once per frame
