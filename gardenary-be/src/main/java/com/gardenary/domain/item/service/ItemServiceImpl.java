@@ -1,5 +1,7 @@
 package com.gardenary.domain.item.service;
 
+import com.gardenary.domain.current.entity.GrowingPlant;
+import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.flower.entity.MyFlower;
 import com.gardenary.domain.flower.repository.MyFlowerRepository;
 import com.gardenary.domain.garden.entity.Garden;
@@ -36,6 +38,7 @@ public class ItemServiceImpl implements ItemService {
     private final MyTreeRepository myTreeRepository;
     private final MyFlowerRepository myFlowerRepository;
     private final GardenRepository gardenRepository;
+    private final GrowingPlantRepository growingPlantRepository;
     private final MyItemRepository myItemRepository;
 
     @Override
@@ -44,13 +47,11 @@ public class ItemServiceImpl implements ItemService {
             return null;
         }
 
-        int flowerExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId() + "flowerExp"));
-        int treeExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId() + "treeExp"));
         Item item = new Item();
         boolean newItem = true;
+        GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
 
-        if (flowerExp != 0 && flowerExp % 100 == 0 || treeExp != 0 && treeExp % 100 == 0) {
-            // TODO : 아이템 데이터 넣고서 yml 아이템 사이즈 조절
+        if ((growingPlant.getDiaryDays() != 0 && growingPlant.getDiaryDays() % 3 == 0) || (growingPlant.getAnswerDays() != 0 && growingPlant.getAnswerDays() % 3 == 0)) {
             int num = (int) (Math.random() * constProperties.getItemSize() + 1);
             List<MyItem> myItems = myItemRepository.findAllByUser(user);
             for (MyItem myItem : myItems) {
