@@ -15,7 +15,7 @@ public class TreeDiary : MonoBehaviour
 
     //우리 서비스 uri와 사용할 토큰(임의로 만든 토큰)
     private string uri = "https://k7a604.p.ssafy.io/api/";
-    private string token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTMiLCJpYXQiOjE2Njc4NzQxMjEsImV4cCI6MTY2Nzg5MjEyMX0.GPATAoMzVD5tTTe5NXYcnpddxMHsEPE3nqVm9Dp68V4";
+    private string token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNzA3IiwiaWF0IjoxNjY3ODc5MDIwLCJleHAiOjE2Njc4OTcwMjB9.u0iqTN94P6l7W8loEMEOuxcIWxaiW8EMg8yyqRdvFjs";
     
     //api 요청 후 response 결과를 받을 클래스
     public ResTreeDiary TreeDiaryList;
@@ -75,7 +75,9 @@ public class TreeDiary : MonoBehaviour
             treeContentPrefab = Resources.Load("TreeContentPrefab") as GameObject;
             treeContentPrefab.transform.Find("TreeContentText").GetComponentInChildren<TextMeshProUGUI>().text
                 = TreeDiaryList.responseDto[i].content;
-            treeContentPrefab.transform.SetParent(GameObject.Find("TreeViewport").transform.Find("TreeContent"));
+            //treeContentPrefab.transform.SetParent(GameObject.Find("TreeViewport").transform.Find("TreeContent"));
+            Instantiate(Resources.Load<GameObject>("TreeContentPrefab"),
+                GameObject.Find("TreeViewport").transform.Find("TreeContent"));
         }
     }
 }
