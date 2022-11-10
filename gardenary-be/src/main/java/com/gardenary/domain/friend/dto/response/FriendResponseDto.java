@@ -14,4 +14,5 @@ public class FriendResponseDto {
     private String assetId;
     private String nickname;
     private Integer friendId;
+    private boolean following;
 }

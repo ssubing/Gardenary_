@@ -99,6 +99,7 @@ public class FriendServiceImpl implements FriendService {
         return FriendResponseDto.builder()
                 .enCryptUserId(encryptUserId)
                 .friendId(friend==null?null:friend.getId())
+                .following(friend==null?false:true)
                 .assetId(myAvatar.getAvatar().getAssetId())
                 .nickname(nickname)
                 .build();
@@ -129,6 +130,7 @@ public class FriendServiceImpl implements FriendService {
                     .assetId(profile.getMyAvatar().getAvatar().getAssetId())
                     .enCryptUserId(encryptUserId)
                     .nickname(profile.getNickname())
+                    .following(true)
                     .build());
         }
 
@@ -149,6 +151,12 @@ public class FriendServiceImpl implements FriendService {
 
         List<Friend> friendList = friendRepository.findAllByFollowing(user);
         List<FriendResponseDto> result = new ArrayList<>();
+        List<Friend> followingList = friendRepository.findAllByFollower(user);
+        List<String> followingKakaoIdList = new ArrayList<>();
+        for(Friend friend : followingList) {
+            followingKakaoIdList.add(friend.getFollowing().getKakaoId());
+        }
+
         for(Friend friend : friendList) {
             Profile profile = profileRepository.findByUser(friend.getFollower());
             if(profile == null) {
@@ -167,6 +175,7 @@ public class FriendServiceImpl implements FriendService {
                     .assetId(profile.getMyAvatar().getAvatar().getAssetId())
                     .enCryptUserId(encryptUserId)
                     .nickname(profile.getNickname())
+                    .following(followingKakaoIdList.contains(profile.getUser().getKakaoId()))
                     .build());
         }
 
