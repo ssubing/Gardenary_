@@ -5,10 +5,7 @@ import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
 import com.gardenary.domain.exp.entity.Exp;
 import com.gardenary.domain.exp.repository.ExpRepository;
 import com.gardenary.domain.tree.dto.request.DiaryRequestDto;
-import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
-import com.gardenary.domain.tree.dto.response.DiaryResponseDto;
-import com.gardenary.domain.tree.dto.response.MakeDiaryResponseDto;
-import com.gardenary.domain.tree.dto.response.TreeResponseDto;
+import com.gardenary.domain.tree.dto.response.*;
 import com.gardenary.domain.tree.entity.Diary;
 import com.gardenary.domain.tree.entity.MyTree;
 import com.gardenary.domain.tree.entity.Tree;
@@ -50,7 +47,7 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     @Transactional
-    public boolean createMyTree(User user) {
+    public CompleteTreeInfoResponseDto createMyTree(User user) {
         //나무 경험치 체크
         int totalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
         if(totalExp == 0 || (totalExp % constProperties.getExpLevelup()) != 0) {
@@ -60,15 +57,17 @@ public class TreeServiceImpl implements TreeService {
         //현재 식물 가져오기
         GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
         if(growingPlant == null) {
-            return false;
+            return null;
         }
         if(growingPlant.getId() == 0) {
             throw new GrowingPlantApiException(GrowingPlantErrorCode.GROWING_PLANT_NOT_FOUND);
         }
 
         if(growingPlant.getMyTree().getDoneAt() == null) {
-            return false;
+            return null;
         }
+        String name = growingPlant.getMyTree().getTree().getName();
+        String assetId = growingPlant.getMyTree().getTree().getAssetId();
 
         //나의 나무 생성 및 현재 나무 수정
         MyTree myTree = MyTree.builder()
@@ -79,7 +78,10 @@ public class TreeServiceImpl implements TreeService {
         myTree = myTreeRepository.save(myTree);
         growingPlant.modifyMyTree(myTree);
 
-        return true;
+        return CompleteTreeInfoResponseDto.builder()
+                .assetId(assetId)
+                .name(name)
+                .build();
     }
 
     @Override
