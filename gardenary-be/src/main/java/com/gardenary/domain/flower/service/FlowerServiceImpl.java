@@ -175,7 +175,7 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     @Override
-    public MyFlowerOnlyIdResponseDto createNewFlower(User user) {
+    public CompleteFlowerInfoResponseDto createNewFlower(User user) {
         //꽃의 총 경험치를 가져오기
         String total = redisService.getStringValue(user.getKakaoId()+"flowerExp");
         int totalExp = Integer.parseInt(total);
@@ -197,8 +197,10 @@ public class FlowerServiceImpl implements FlowerService{
         //Current 새로운 꽃으로 바꿔주기
         current.modifyMyFlower(myFlower);
         growingPlantRepository.save(current);
-        return MyFlowerOnlyIdResponseDto.builder()
-                .id(current.getMyFlower().getId())
+        return CompleteFlowerInfoResponseDto.builder()
+                .assetId(doneFlower.getFlower().getAssetId())
+                .color(doneFlower.getFlower().getColor())
+                .name(doneFlower.getFlower().getName())
                 .build();
     }
 
