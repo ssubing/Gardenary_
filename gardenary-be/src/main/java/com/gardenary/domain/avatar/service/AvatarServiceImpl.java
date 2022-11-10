@@ -36,7 +36,6 @@ public class AvatarServiceImpl implements AvatarService {
     private final MyFlowerRepository myFlowerRepository;
     private final FlowerRepository flowerRepository;
     private final ConstProperties constProperties;
-    private static final String[] flowerIdx = {"0_0", "0_1", "0_2", "1_0", "1_1", "1_2", "2_0", "2_1", "2_2", "3_0", "3_1", "4_0", "5_0", "6_0", "7_0", "8_0", "9_0", "10_0", "10_1", "11_0", "12_0", "13_0", "14_0", "14_1", "14_2", "14_3", "14_4", "15_0", "16_0", "16_1", "17_0", "18_0", "19_0", "19_1", "20_0", "20_1", "20_2", "20_3", "21_0", "21_1", "21_2", "21_3", "21_4", "21_5", "22_0", "23_0", "23_1", "23_2", "24_0", "25_0", "25_1", "25_2", "25_3", "26_0", "26_1", "26_2", "26_3", "26_4", "26_5", "27_0"};
 
     @Override
     public AvatarListResponseDto getNewAvatar(User user, int type) {

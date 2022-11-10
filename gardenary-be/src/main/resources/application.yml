@@ -31,7 +31,7 @@ response:
   fail: fail
 const:
   tree-size: 15
-  flower-size: 60
+  flower-size: 59
   question-size: 100
   exp-levelup: 100
   exp-tree: 25
