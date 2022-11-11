@@ -110,35 +110,35 @@ public class TreeServiceImpl implements TreeService {
         }
         endTime = startTime.plusDays(1).minusSeconds(1);
 
-        if(diary != null) {
-            lastTime = diary.getCreatedAt();
-
-            //오늘치 이미 작성했으면 다이어리 저장하고 경험치 리턴
-            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
-                GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
-                if(growingPlant == null) {
-                    return null;
-                }
-
-                LocalDateTime date = diaryRequestDto.getCreatedAt()
-                        .withHour(0).withMinute(0).withSecond(0).withNano(0);
-
-                Diary savedDiary = diaryRepository.save(Diary.builder()
-                        .diaryDate(date)
-                        .myTree(growingPlant.getMyTree())
-                        .content(diaryRequestDto.getContent())
-                        .build());
-                if(savedDiary.getId() == 0) {
-                    return null;
-                }
-
-                int treeExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
-                return MakeDiaryResponseDto.builder()
-                        .isItem(false)
-                        .totalExp(treeExp)
-                        .build();
-            }
-        }
+//        if(diary != null) {
+//            lastTime = diary.getCreatedAt();
+//
+//            //오늘치 이미 작성했으면 다이어리 저장하고 경험치 리턴
+//            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
+//                GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
+//                if(growingPlant == null) {
+//                    return null;
+//                }
+//
+//                LocalDateTime date = diaryRequestDto.getCreatedAt()
+//                        .withHour(0).withMinute(0).withSecond(0).withNano(0);
+//
+//                Diary savedDiary = diaryRepository.save(Diary.builder()
+//                        .diaryDate(date)
+//                        .myTree(growingPlant.getMyTree())
+//                        .content(diaryRequestDto.getContent())
+//                        .build());
+//                if(savedDiary.getId() == 0) {
+//                    return null;
+//                }
+//
+//                int treeExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
+//                return MakeDiaryResponseDto.builder()
+//                        .isItem(false)
+//                        .totalExp(treeExp)
+//                        .build();
+//            }
+//        }
         //다이어리 생성
         GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
         if(growingPlant == null) {
@@ -178,11 +178,12 @@ public class TreeServiceImpl implements TreeService {
         expRepository.save(exp);
 
         //3. 연속 작성일 수 증가
-        if(lastTime.isBefore(startTime.minusDays(1))) {
-            growingPlant.modifyDiaryDays(1);
-        } else {
-            growingPlant.modifyDiaryDays(growingPlant.getDiaryDays() + 1);
-        }
+//        if(lastTime.isBefore(startTime.minusDays(1))) {
+//            growingPlant.modifyDiaryDays(1);
+//        } else {
+//            growingPlant.modifyDiaryDays(growingPlant.getDiaryDays() + 1);
+//        }
+        growingPlant.modifyDiaryDays(growingPlant.getDiaryDays() + 1); //테스트
         boolean isItem = false;
         if(growingPlant.getDiaryDays()%2 == 0) {
             isItem = true;
