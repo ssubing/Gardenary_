@@ -77,15 +77,16 @@ public class FlowerServiceImpl implements FlowerService{
         if(list.size() != 0){
             QuestionAnswer lastQA = list.get(0);
             LocalDateTime lastTime = lastQA.getCreatedAt();
-            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
-                throw new FlowerApiException(FlowerErrorCode.TODAY_ALREADY_WRITE);
-            }
+//            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
+//                throw new FlowerApiException(FlowerErrorCode.TODAY_ALREADY_WRITE);
+//            }
             //연속 작성 확인
-            if(lastTime.isAfter(startTime.minusDays(1)) && lastTime.isBefore(endTime.minusDays(1))){
-                growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
-            } else{
-                growingPlant.modifyAnswerDays(1);
-            }
+//            if(lastTime.isAfter(startTime.minusDays(1)) && lastTime.isBefore(endTime.minusDays(1))){
+//                growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
+//            } else{
+//                growingPlant.modifyAnswerDays(1);
+//            }
+            growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
             if(growingPlant.getAnswerDays()%2 == 0) {
                 result.modifyIsItem(true);
             } else{
