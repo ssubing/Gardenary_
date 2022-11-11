@@ -26,16 +26,12 @@ public class SecurityConfig {
     private final WebAccessDeniedHandler webAccessDeniedHandler;
     private final AuthenticationEntryPointHandler authenticationEntryPointHandler;
 
-    private static final String[] GET_PUBLIC_URI = {
+    private static final String[] POST_PUBLIC_URI = {
+            "/auth/refresh",
             "/user/login/**",
     };
 
-    private static final String[] POST_PUBLIC_URI = {
-            "/auth/refresh",
-    };
 
-    private static final String[] PATCH_PUBLIC_URI = {
-    };
 
     @Bean
     @Order(0)
@@ -46,7 +42,7 @@ public class SecurityConfig {
                 .csrf().disable();
 
         http
-                .requestMatchers((matchers) -> matchers.antMatchers(HttpMethod.GET, GET_PUBLIC_URI).antMatchers(HttpMethod.POST, POST_PUBLIC_URI).antMatchers(HttpMethod.PATCH, PATCH_PUBLIC_URI))
+                .requestMatchers((matchers) -> matchers.antMatchers(HttpMethod.POST, POST_PUBLIC_URI))
                 .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
                 .requestCache().disable()
                 .securityContext().disable()
@@ -62,9 +58,11 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable();
 
+        http.authorizeHttpRequests()
+                .anyRequest().authenticated();
+
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
 
         http
                 .exceptionHandling()
