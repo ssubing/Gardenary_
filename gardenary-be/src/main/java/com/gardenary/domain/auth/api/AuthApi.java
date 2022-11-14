@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,7 +31,16 @@ public class AuthApi {
 
     @PostMapping("/refresh")
     public ResponseEntity<DtoResponse<RefreshResponseDto>> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("지금 쿠키 개수 : " + request.getCookies().length);
+
+        for(Cookie cookie : request.getCookies()){
+            System.out.println("지금 쿠키들 : " + cookie.getName() + " 지금 쿠키 값 : " + cookie.getValue());
+        }
         String refreshToken = CookieUtil.searchCookie(request, "refreshToken");
+        System.out.println("지금 리프레시로 된 거 : " + refreshToken);
+
+
         if (refreshToken != null && !refreshToken.equals("")) {
             RefreshResponseDto refreshResponseDto = authService.refresh(refreshToken);
 
