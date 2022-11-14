@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 @RestController
 @Slf4j
@@ -32,13 +33,20 @@ public class AuthApi {
     @PostMapping("/refresh")
     public ResponseEntity<DtoResponse<RefreshResponseDto>> refreshToken(HttpServletRequest request, HttpServletResponse response) {
 
-        System.out.println("지금 쿠키 개수 : " + request.getCookies().length);
-
-        for(Cookie cookie : request.getCookies()){
-            System.out.println("지금 쿠키들 : " + cookie.getName() + " 지금 쿠키 값 : " + cookie.getValue());
+        Enumeration headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String name = (String)headerNames.nextElement();
+            String value = request.getHeader(name);
+            System.out.println(name + " : " + value);
         }
+
+//        System.out.println("지금 쿠키 개수 : " + request.getCookies().length);
+//
+//        for(Cookie cookie : request.getCookies()){
+//            System.out.println("지금 쿠키들 : " + cookie.getName() + " 지금 쿠키 값 : " + cookie.getValue());
+//        }
         String refreshToken = CookieUtil.searchCookie(request, "refreshToken");
-        System.out.println("지금 리프레시로 된 거 : " + refreshToken);
+//        System.out.println("지금 리프레시로 된 거 : " + refreshToken);
 
 
         if (refreshToken != null && !refreshToken.equals("")) {
