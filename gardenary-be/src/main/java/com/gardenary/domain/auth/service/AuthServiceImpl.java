@@ -23,11 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthServiceImpl implements AuthService {
 
     private final ProfileRepository profileRepository;
-
     private final UserRepository userRepository;
-
     private final JwtProvider jwtProvider;
-
     private final RedisService redisService;
 
     @Override
@@ -38,11 +35,12 @@ public class AuthServiceImpl implements AuthService {
             throw new UserApiException(ProfileErrorCode.PROFILE_NOT_FOUND);
         }
 
-        String nickname = profile.getNickname();
-        String accessToken = jwtProvider.generateAccessToken(user.getKakaoId());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getKakaoId());
-
-        return new AuthResponseDto(accessToken, refreshToken, nickname);
+        return AuthResponseDto.builder()
+                .assetId(profile.getMyAvatar().getAvatar().getAssetId())
+                .nickname(profile.getNickname())
+                .accessToken(jwtProvider.generateAccessToken(user.getKakaoId()))
+                .refreshToken(jwtProvider.generateRefreshToken(user.getKakaoId()))
+                .build();
     }
 
     @Override
