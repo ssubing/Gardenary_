@@ -58,12 +58,8 @@ public class AvatarServiceImpl implements AvatarService {
             if(!haveAvatar.contains(5) && get5Avatar(myFlowerList)) {
                 listAddAndSave(4, avatarResponseDtoList, avatarList, user);
             }
-            if(!haveAvatar.contains(6)) {
-                List<MyTree> myTreeList = myTreeRepository.findAllByUser(user);
-                myTreeList.remove(myTreeList.size() - 1);
-                if(get6Avatar(myFlowerList, myTreeList)){
-                    listAddAndSave(5, avatarResponseDtoList, avatarList, user);
-                }
+            if(!haveAvatar.contains(6) && get6Avatar(myFlowerList)) {
+                listAddAndSave(5, avatarResponseDtoList, avatarList, user);
             }
             if(!haveAvatar.contains(7) && get7Avatar(myFlowerList)) {
                 listAddAndSave(6, avatarResponseDtoList, avatarList, user);
@@ -82,13 +78,6 @@ public class AvatarServiceImpl implements AvatarService {
             }
             if(!haveAvatar.contains(4) && get4Avatar(myTreeList)) {
                 listAddAndSave(3, avatarResponseDtoList, avatarList, user);
-            }
-            if(!haveAvatar.contains(6)) {
-                List<MyFlower> myFlowerList = myFlowerRepository.findAllByUser(user);
-                myFlowerList.remove(myFlowerList.size()-1);
-                if(get6Avatar(myFlowerList, myTreeList)){
-                    listAddAndSave(5, avatarResponseDtoList, avatarList, user);
-                }
             }
             if(!haveAvatar.contains(9) && get9Avatar(myTreeList)) {
                 listAddAndSave(8, avatarResponseDtoList, avatarList, user);
@@ -155,9 +144,16 @@ public class AvatarServiceImpl implements AvatarService {
         return myFlowerList.size() == 1;
     }
 
-    //모든 꽃과 나무
-    public boolean get6Avatar(List<MyFlower> myFlowerList, List<MyTree> myTreeList) {
-        return get2Avatar(myFlowerList) && get10Avatar(myTreeList);
+    //꽃 30 종류 성장
+    public boolean get6Avatar(List<MyFlower> myFlowerList) {
+        HashSet<String> myFlowerSet = new HashSet<>();
+        for (MyFlower myFlower : myFlowerList) {
+            myFlowerSet.add(myFlower.getFlower().getId());
+        }
+        if(myFlowerSet.size() == 30) {
+            return true;
+        }
+        return false;
     }
 
     //서로 다른 꽃 5개 수집
