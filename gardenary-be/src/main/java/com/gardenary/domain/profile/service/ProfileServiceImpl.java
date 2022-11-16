@@ -52,6 +52,7 @@ public class ProfileServiceImpl implements ProfileService {
         return ProfileResponseDto.builder()
                 .assetId(profile.getMyAvatar().getAvatar().getAssetId())
                 .nickname(profile.getNickname())
+                .requirement(profile.getMyAvatar().getAvatar().getRequirement())
                 .build();
     }
 

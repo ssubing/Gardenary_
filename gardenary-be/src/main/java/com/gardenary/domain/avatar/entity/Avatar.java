@@ -25,4 +25,7 @@ public class Avatar {
 
     @Column(name = "asset_id", columnDefinition = "VARCHAR(255)")
     private String assetId;
+
+    @Column(name = "requirement", columnDefinition = "VARCHAR(100)")
+    private String requirement;
 }
