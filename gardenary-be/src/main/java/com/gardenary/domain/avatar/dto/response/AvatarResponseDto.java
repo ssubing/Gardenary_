@@ -11,5 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AvatarResponseDto {
     private String assetId;
+
     private boolean isAcquired;
+
+    private String requirement;
 }
