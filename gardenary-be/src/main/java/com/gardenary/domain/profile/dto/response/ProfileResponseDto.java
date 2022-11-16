@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ProfileResponseDto {
     private String nickname;
     private String assetId;
+    private String requirement;
 }
