@@ -21,6 +21,4 @@ public class ProfileDto {
 
     private String nickname;
 
-    private String requirement;
-
 }
