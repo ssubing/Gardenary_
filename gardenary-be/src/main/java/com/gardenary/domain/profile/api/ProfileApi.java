@@ -49,7 +49,7 @@ public class ProfileApi {
         return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
     }
 
-    @PatchMapping("/nickname")
+    @PostMapping("/nickname")
     public ResponseEntity<MessageResponse> modifyNickname(@AuthenticationPrincipal UserDetail userDetail, @RequestBody ProfileDto profileDto) {
 
         boolean result = profileService.modifyNickname(userDetail.getUser(), profileDto);
@@ -60,7 +60,7 @@ public class ProfileApi {
         return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess()));
     }
 
-    @PatchMapping("/avatar")
+    @PostMapping("/avatar")
     public ResponseEntity<MessageResponse> modifyAvatar(@AuthenticationPrincipal UserDetail userDetail, @RequestBody AvatarDto avatarDto) {
 
         boolean result = profileService.modifyAvatar(userDetail.getUser(), avatarDto);
