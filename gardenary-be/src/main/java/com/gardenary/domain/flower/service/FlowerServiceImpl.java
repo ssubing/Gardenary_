@@ -140,6 +140,11 @@ public class FlowerServiceImpl implements FlowerService{
     public QuestionAnswerListResponseDto getOneFlowerAnswerList(User user, int myFlowerId) {
         //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
         MyFlower myFlower = myFlowerRepository.findById(myFlowerId).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND));
+        //해당 유저가 조회하는 것이 아닌 경우
+        if(!myFlower.getUser().getKakaoId().equals(user.getKakaoId())) {
+            return null;
+        }
+
         //엔티티 리스트
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlowerAndMyFlower_UserOrderByCreatedAtDesc(myFlower, user);
 
