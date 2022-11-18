@@ -48,17 +48,22 @@ public class GardenServiceImpl implements GardenService{
     @Override
     public GardenListResponseDto getGardenInfo(User user, GardenUserIdDto gardenUserIdDto) {
         String encryptUserId = gardenUserIdDto.getUserId();
+        User GardenUser = null;
+        String decryptUserId = null;
         if(encryptUserId == null) {
             return null;
+        }else if(encryptUserId.equals("mine")){
+            GardenUser = user;
+        }else{
+            try {
+                decryptUserId = Encrypt.decryptAES256(encryptProperties.getEncryptKey(), encryptProperties.getEncryptIv(), encryptUserId);
+            } catch (Exception e) {
+                return null;
+            }
+            //유저 찾기, 오류 체크까지
+            GardenUser = userRepository.findById(UUID.fromString(decryptUserId)).orElseThrow(() -> new UserApiException(UserErrorCode.USER_NOT_FOUND));
+
         }
-        String decryptUserId = null;
-        try {
-            decryptUserId = Encrypt.decryptAES256(encryptProperties.getEncryptKey(), encryptProperties.getEncryptIv(), encryptUserId);
-        } catch (Exception e) {
-            return null;
-        }
-        //유저 찾기, 오류 체크까지
-        User GardenUser = userRepository.findById(UUID.fromString(decryptUserId)).orElseThrow(() -> new UserApiException(UserErrorCode.USER_NOT_FOUND));
         //해당 유저의 정원 정보 리스트 조회, 3종류의 리스트 생성
         List<Garden> gardenList = gardenRepository.findAllByUser(GardenUser);
         List<GardenFlowerResponseDto> flowerDtoList = new ArrayList<>();
