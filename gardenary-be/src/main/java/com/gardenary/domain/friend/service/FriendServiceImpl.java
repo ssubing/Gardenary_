@@ -10,8 +10,10 @@ import com.gardenary.domain.profile.repository.ProfileRepository;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.AvatarApiException;
+import com.gardenary.global.error.exception.FriendApiException;
 import com.gardenary.global.error.exception.UserApiException;
 import com.gardenary.global.error.model.AvatarErrorCode;
+import com.gardenary.global.error.model.FriendErrorCode;
 import com.gardenary.global.error.model.UserErrorCode;
 import com.gardenary.global.properties.EncryptProperties;
 import com.gardenary.global.util.Encrypt;
@@ -46,8 +48,15 @@ public class FriendServiceImpl implements FriendService {
         } catch (Exception e) {
             return false;
         }
-        User following = userRepository.findById(UUID.fromString(decryptUserId))
+        UUID other = UUID.fromString(decryptUserId);
+        if(other.equals(user.getId())) {
+            return false;
+        }
+        User following = userRepository.findById(other)
                 .orElseThrow(() -> new UserApiException(UserErrorCode.USER_NOT_FOUND));
+        if(friendRepository.findByFollowingAndFollower(following, user).orElse(null) != null) {
+            return false;
+        }
         Friend friend = friendRepository.save(Friend.builder().following(following).follower(user).build());
         if(friend.getId() == 0) {
             return false;
