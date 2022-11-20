@@ -25,7 +25,7 @@ public class GardenApi {
     private final GardenService gardenService;
     private final ResponseProperties responseProperties;
 
-    @GetMapping("")
+    @PostMapping("/info")
     public ResponseEntity<DtoResponse<GardenListResponseDto>> getGardenInfo(@AuthenticationPrincipal UserDetail userDetail, @RequestBody GardenUserIdDto gardenUserIdDto) {
         User user = userDetail.getUser();
         GardenListResponseDto result = gardenService.getGardenInfo(user, gardenUserIdDto);
