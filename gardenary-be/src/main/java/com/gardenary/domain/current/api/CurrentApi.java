@@ -30,4 +30,10 @@ public class CurrentApi {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
         }
     }
+    @GetMapping("/test")
+    public void test(@AuthenticationPrincipal UserDetail userDetail) {
+        currentService.test(userDetail.getUser());
+        return;
+
+    }
 }

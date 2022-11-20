@@ -43,14 +43,14 @@ public class CurrentServiceImpl implements CurrentService{
             endTime = startTime.plusDays(1).minusSeconds(1);
         }
         //오늘 작성했는지 확인
-        List<QuestionAnswer> list = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
-        if(list.size() != 0){
-            QuestionAnswer lastQA = list.get(0);
-            LocalDateTime lastTime = lastQA.getCreatedAt();
-            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)){
-                flowerCheck = true;
-            }
-        }
+//        List<QuestionAnswer> list = questionAnswerRepository.findAllByMyFlower_UserOrderByCreatedAtDesc(user);
+//        if(list.size() != 0){
+//            QuestionAnswer lastQA = list.get(0);
+//            LocalDateTime lastTime = lastQA.getCreatedAt();
+//            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)){
+//                flowerCheck = true;
+//            }
+//        }
         //꽃 경험치, 나무 경험치 캐시에서 가져오기
         int flowerTotalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"flowerExp"));
         int treeTotalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
@@ -70,4 +70,14 @@ public class CurrentServiceImpl implements CurrentService{
                 .treeDays(growingPlant.getDiaryDays())
                 .build();
     }
+
+    @Override
+    public void test(User user) {
+        redisService.setValue(user.getKakaoId()+"flowerExp", String.valueOf(0));
+        redisService.setValue(user.getKakaoId()+"treeExp", String.valueOf(175));
+        GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
+        growingPlant.modifyAnswerCnt(0);
+    }
+
+
 }
