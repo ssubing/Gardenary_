@@ -37,6 +37,7 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final MyAvatarRepository myAvatarRepository;
     private final EncryptProperties encryptProperties;
+
     @Override
     public boolean createFriend(User user, String encryptUserId) {
         if(user == null || encryptUserId == null) {
@@ -96,8 +97,6 @@ public class FriendServiceImpl implements FriendService {
                 .orElseThrow(() -> new UserApiException(UserErrorCode.USER_NOT_FOUND));
         Friend friend = friendRepository.findByFollowingAndFollower(following, user)
                 .orElse(null);
-        MyAvatar myAvatar = myAvatarRepository.findByUser(following)
-                .orElseThrow(() -> new AvatarApiException(AvatarErrorCode.MYAVATAR_NOT_FOUND));
 
         String encryptUserId = null;
         try {
@@ -109,7 +108,7 @@ public class FriendServiceImpl implements FriendService {
                 .enCryptUserId(encryptUserId)
                 .friendId(friend==null?null:friend.getId())
                 .following(friend==null?false:true)
-                .assetId(myAvatar.getAvatar().getAssetId())
+                .assetId(profile.getMyAvatar().getAvatar().getAssetId())
                 .nickname(nickname)
                 .build();
     }
