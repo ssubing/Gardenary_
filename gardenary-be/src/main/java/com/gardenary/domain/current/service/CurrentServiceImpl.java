@@ -77,6 +77,8 @@ public class CurrentServiceImpl implements CurrentService{
         redisService.setValue(user.getKakaoId()+"treeExp", String.valueOf(175));
         GrowingPlant growingPlant = growingPlantRepository.findByUser(user);
         growingPlant.modifyAnswerCnt(0);
+        growingPlant.modifyAnswerDays(growingPlant.getAnswerDays() -1);
+        growingPlant.modifyDiaryDays(growingPlant.getDiaryDays() -1);
     }
 
 
