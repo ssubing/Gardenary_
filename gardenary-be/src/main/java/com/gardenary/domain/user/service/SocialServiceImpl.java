@@ -101,8 +101,7 @@ public class SocialServiceImpl implements SocialService {
 
             redisService.setValue(savedUser.getKakaoId() + "flowerExp", "0");
             redisService.setValue(savedUser.getKakaoId() + "treeExp", "0");
-            Random random = new Random(System.nanoTime());
-            int num = random.nextInt(constProperties.getQuestionSize());
+            int num = (int)(Math.random()*constProperties.getQuestionSize() + 1);
             redisService.setValue(savedUser.getKakaoId(), num + "");
 
             return savedUser;

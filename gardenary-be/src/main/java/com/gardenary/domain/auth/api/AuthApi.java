@@ -40,14 +40,7 @@ public class AuthApi {
             System.out.println(name + " : " + value);
         }
 
-//        System.out.println("지금 쿠키 개수 : " + request.getCookies().length);
-//
-//        for(Cookie cookie : request.getCookies()){
-//            System.out.println("지금 쿠키들 : " + cookie.getName() + " 지금 쿠키 값 : " + cookie.getValue());
-//        }
         String refreshToken = CookieUtil.searchCookie(request, "refreshToken");
-//        System.out.println("지금 리프레시로 된 거 : " + refreshToken);
-
 
         if (refreshToken != null && !refreshToken.equals("")) {
             RefreshResponseDto refreshResponseDto = authService.refresh(refreshToken);
