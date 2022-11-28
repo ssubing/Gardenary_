@@ -1,4 +1,4 @@
-# 🌼GARDENERY🌼
+# 🌼GARDENARY🌼
 
 ## 1. 서비스 소개
 
