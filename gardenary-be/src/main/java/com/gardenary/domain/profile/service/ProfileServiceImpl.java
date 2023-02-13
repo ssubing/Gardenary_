@@ -75,6 +75,7 @@ public class ProfileServiceImpl implements ProfileService {
             avatarResponseDtos.add(AvatarResponseDto.builder()
                     .assetId(avatar.getAssetId())
                     .isAcquired(isAcquired)
+                    .requirement(avatar.getRequirement())
                     .build());
         }
 

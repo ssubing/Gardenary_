@@ -15,4 +15,5 @@ public class AvatarDto {
 
     private String assetId;
 
+    private String requirement;
 }

@@ -3,6 +3,7 @@ package com.gardenary.domain.current.service;
 import com.gardenary.domain.current.dto.response.GrowingPlantResponseDto;
 import com.gardenary.domain.current.entity.GrowingPlant;
 import com.gardenary.domain.current.repostiory.GrowingPlantRepository;
+import com.gardenary.domain.flower.entity.Question;
 import com.gardenary.domain.flower.entity.QuestionAnswer;
 import com.gardenary.domain.flower.repository.QuestionAnswerRepository;
 import com.gardenary.domain.flower.repository.QuestionRepository;
@@ -56,7 +57,7 @@ public class CurrentServiceImpl implements CurrentService{
         int treeTotalExp = Integer.parseInt(redisService.getStringValue(user.getKakaoId()+"treeExp"));
         //질문아이디 캐시에서 가져오고 해당 아이디로 질문 조회
         int questionId = Integer.parseInt(redisService.getStringValue(user.getKakaoId()));
-        String question = questionRepository.findById(questionId).getContent();
+        Question question = questionRepository.findById(questionId);
         if(question == null){
             throw new GrowingPlantApiException(GrowingPlantErrorCode.QUESTION_NOT_FOUND);
         }
@@ -64,7 +65,7 @@ public class CurrentServiceImpl implements CurrentService{
                 .flowerExp(flowerTotalExp)
                 .treeExp(treeTotalExp)
                 .isWrite(flowerCheck)
-                .question(question)
+                .question(question.getContent())
                 .questionNum(growingPlant.getAnswerCnt()+1)
                 .flowerDays(growingPlant.getAnswerDays())
                 .treeDays(growingPlant.getDiaryDays())

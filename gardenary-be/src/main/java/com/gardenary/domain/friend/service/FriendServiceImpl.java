@@ -10,8 +10,10 @@ import com.gardenary.domain.profile.repository.ProfileRepository;
 import com.gardenary.domain.user.entity.User;
 import com.gardenary.domain.user.repository.UserRepository;
 import com.gardenary.global.error.exception.AvatarApiException;
+import com.gardenary.global.error.exception.FriendApiException;
 import com.gardenary.global.error.exception.UserApiException;
 import com.gardenary.global.error.model.AvatarErrorCode;
+import com.gardenary.global.error.model.FriendErrorCode;
 import com.gardenary.global.error.model.UserErrorCode;
 import com.gardenary.global.properties.EncryptProperties;
 import com.gardenary.global.util.Encrypt;
@@ -35,6 +37,7 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final MyAvatarRepository myAvatarRepository;
     private final EncryptProperties encryptProperties;
+
     @Override
     public boolean createFriend(User user, String encryptUserId) {
         if(user == null || encryptUserId == null) {
@@ -46,8 +49,15 @@ public class FriendServiceImpl implements FriendService {
         } catch (Exception e) {
             return false;
         }
-        User following = userRepository.findById(UUID.fromString(decryptUserId))
+        UUID other = UUID.fromString(decryptUserId);
+        if(other.equals(user.getId())) {
+            return false;
+        }
+        User following = userRepository.findById(other)
                 .orElseThrow(() -> new UserApiException(UserErrorCode.USER_NOT_FOUND));
+        if(friendRepository.findByFollowingAndFollower(following, user).orElse(null) != null) {
+            return false;
+        }
         Friend friend = friendRepository.save(Friend.builder().following(following).follower(user).build());
         if(friend.getId() == 0) {
             return false;
@@ -87,8 +97,6 @@ public class FriendServiceImpl implements FriendService {
                 .orElseThrow(() -> new UserApiException(UserErrorCode.USER_NOT_FOUND));
         Friend friend = friendRepository.findByFollowingAndFollower(following, user)
                 .orElse(null);
-        MyAvatar myAvatar = myAvatarRepository.findByUser(following)
-                .orElseThrow(() -> new AvatarApiException(AvatarErrorCode.MYAVATAR_NOT_FOUND));
 
         String encryptUserId = null;
         try {
@@ -99,7 +107,8 @@ public class FriendServiceImpl implements FriendService {
         return FriendResponseDto.builder()
                 .enCryptUserId(encryptUserId)
                 .friendId(friend==null?null:friend.getId())
-                .assetId(myAvatar.getAvatar().getAssetId())
+                .following(friend==null?false:true)
+                .assetId(profile.getMyAvatar().getAvatar().getAssetId())
                 .nickname(nickname)
                 .build();
     }
@@ -129,6 +138,7 @@ public class FriendServiceImpl implements FriendService {
                     .assetId(profile.getMyAvatar().getAvatar().getAssetId())
                     .enCryptUserId(encryptUserId)
                     .nickname(profile.getNickname())
+                    .following(true)
                     .build());
         }
 
@@ -149,6 +159,12 @@ public class FriendServiceImpl implements FriendService {
 
         List<Friend> friendList = friendRepository.findAllByFollowing(user);
         List<FriendResponseDto> result = new ArrayList<>();
+        List<Friend> followingList = friendRepository.findAllByFollower(user);
+        List<String> followingKakaoIdList = new ArrayList<>();
+        for(Friend friend : followingList) {
+            followingKakaoIdList.add(friend.getFollowing().getKakaoId());
+        }
+
         for(Friend friend : friendList) {
             Profile profile = profileRepository.findByUser(friend.getFollower());
             if(profile == null) {
@@ -167,6 +183,7 @@ public class FriendServiceImpl implements FriendService {
                     .assetId(profile.getMyAvatar().getAvatar().getAssetId())
                     .enCryptUserId(encryptUserId)
                     .nickname(profile.getNickname())
+                    .following(followingKakaoIdList.contains(profile.getUser().getKakaoId()))
                     .build());
         }
 

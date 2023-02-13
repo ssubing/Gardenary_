@@ -36,7 +36,6 @@ public class AvatarServiceImpl implements AvatarService {
     private final MyFlowerRepository myFlowerRepository;
     private final FlowerRepository flowerRepository;
     private final ConstProperties constProperties;
-    private static final String[] flowerIdx = {"0_0", "0_1", "0_2", "1_0", "1_1", "1_2", "2_0", "2_1", "2_2", "3_0", "3_1", "4_0", "5_0", "6_0", "7_0", "8_0", "9_0", "10_0", "10_1", "11_0", "12_0", "13_0", "14_0", "14_1", "14_2", "14_3", "14_4", "15_0", "16_0", "16_1", "17_0", "18_0", "19_0", "19_1", "20_0", "20_1", "20_2", "20_3", "21_0", "21_1", "21_2", "21_3", "21_4", "21_5", "22_0", "23_0", "23_1", "23_2", "24_0", "25_0", "25_1", "25_2", "25_3", "26_0", "26_1", "26_2", "26_3", "26_4", "26_5", "27_0"};
 
     @Override
     public AvatarListResponseDto getNewAvatar(User user, int type) {
@@ -59,12 +58,8 @@ public class AvatarServiceImpl implements AvatarService {
             if(!haveAvatar.contains(5) && get5Avatar(myFlowerList)) {
                 listAddAndSave(4, avatarResponseDtoList, avatarList, user);
             }
-            if(!haveAvatar.contains(6)) {
-                List<MyTree> myTreeList = myTreeRepository.findAllByUser(user);
-                myTreeList.remove(myTreeList.size() - 1);
-                if(get6Avatar(myFlowerList, myTreeList)){
-                    listAddAndSave(5, avatarResponseDtoList, avatarList, user);
-                }
+            if(!haveAvatar.contains(6) && get6Avatar(myFlowerList)) {
+                listAddAndSave(5, avatarResponseDtoList, avatarList, user);
             }
             if(!haveAvatar.contains(7) && get7Avatar(myFlowerList)) {
                 listAddAndSave(6, avatarResponseDtoList, avatarList, user);
@@ -83,13 +78,6 @@ public class AvatarServiceImpl implements AvatarService {
             }
             if(!haveAvatar.contains(4) && get4Avatar(myTreeList)) {
                 listAddAndSave(3, avatarResponseDtoList, avatarList, user);
-            }
-            if(!haveAvatar.contains(6)) {
-                List<MyFlower> myFlowerList = myFlowerRepository.findAllByUser(user);
-                myFlowerList.remove(myFlowerList.size()-1);
-                if(get6Avatar(myFlowerList, myTreeList)){
-                    listAddAndSave(5, avatarResponseDtoList, avatarList, user);
-                }
             }
             if(!haveAvatar.contains(9) && get9Avatar(myTreeList)) {
                 listAddAndSave(8, avatarResponseDtoList, avatarList, user);
@@ -155,10 +143,17 @@ public class AvatarServiceImpl implements AvatarService {
     public boolean get5Avatar(List<MyFlower> myFlowerList) {
         return myFlowerList.size() == 1;
     }
-
-    //모든 꽃과 나무
-    public boolean get6Avatar(List<MyFlower> myFlowerList, List<MyTree> myTreeList) {
-        return get2Avatar(myFlowerList) && get10Avatar(myTreeList);
+    
+    //꽃 30 종류 성장
+    public boolean get6Avatar(List<MyFlower> myFlowerList) {
+        HashSet<String> myFlowerSet = new HashSet<>();
+        for (MyFlower myFlower : myFlowerList) {
+            myFlowerSet.add(myFlower.getFlower().getId());
+        }
+        if(myFlowerSet.size() == 30) {
+            return true;
+        }
+        return false;
     }
 
     //서로 다른 꽃 5개 수집

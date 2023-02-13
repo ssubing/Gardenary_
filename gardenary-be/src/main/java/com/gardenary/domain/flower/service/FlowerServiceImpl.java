@@ -44,7 +44,7 @@ public class FlowerServiceImpl implements FlowerService{
     private final RedisService redisService;
     private final UserRepository userRepository;
     private final ConstProperties constProperties;
-    private static final String[] flowerIdx = {"0_0", "0_1", "0_2", "1_0", "1_1", "1_2", "2_0", "2_1", "2_2", "3_0", "3_1", "4_0", "5_0", "6_0", "7_0", "8_0", "9_0", "10_0", "10_1", "11_0", "12_0", "13_0", "14_0", "14_1", "14_2", "14_3", "14_4", "15_0", "16_0", "16_1", "17_0", "18_0", "19_0", "19_1", "20_0", "20_1", "20_2", "20_3", "21_0", "21_1", "21_2", "21_3", "21_4", "21_5", "22_0", "23_0", "23_1", "23_2", "24_0", "25_0", "25_1", "25_2", "25_3", "26_0", "26_1", "26_2", "26_3", "26_4", "26_5", "27_0"};
+    private static final String[] flowerIdx = {"0_0", "0_1", "0_2", "1_0", "1_1", "2_0", "2_1", "2_2", "3_0", "3_1", "4_0", "5_0", "6_0", "7_0", "8_0", "9_0", "10_0", "10_1", "11_0", "12_0", "13_0", "14_0", "14_1", "14_2", "14_3", "14_4", "15_0", "16_0", "16_1", "17_0", "18_0", "19_0", "19_1", "20_0", "20_1", "20_2", "20_3", "21_0", "21_1", "21_2", "21_3", "21_4", "21_5", "22_0", "23_0", "23_1", "23_2", "24_0", "25_0", "25_1", "25_2", "25_3", "26_0", "26_1", "26_2", "26_3", "26_4", "26_5", "27_0"};
 
     @Override
     @Transactional
@@ -77,16 +77,17 @@ public class FlowerServiceImpl implements FlowerService{
         if(list.size() != 0){
             QuestionAnswer lastQA = list.get(0);
             LocalDateTime lastTime = lastQA.getCreatedAt();
-            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
-                throw new FlowerApiException(FlowerErrorCode.TODAY_ALREADY_WRITE);
-            }
+//            if(lastTime.isAfter(startTime) && lastTime.isBefore(endTime)) {
+//                throw new FlowerApiException(FlowerErrorCode.TODAY_ALREADY_WRITE);
+//            }
             //연속 작성 확인
-            if(lastTime.isAfter(startTime.minusDays(1)) && lastTime.isBefore(endTime.minusDays(1))){
-                growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
-            } else{
-                growingPlant.modifyAnswerDays(1);
-            }
-            if(growingPlant.getAnswerDays()%3 == 0) {
+//            if(lastTime.isAfter(startTime.minusDays(1)) && lastTime.isBefore(endTime.minusDays(1))){
+//                growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
+//            } else{
+//                growingPlant.modifyAnswerDays(1);
+//            }
+            growingPlant.modifyAnswerDays(growingPlant.getAnswerDays()+1);
+            if(growingPlant.getAnswerDays()%2 == 0) {
                 result.modifyIsItem(true);
             } else{
                 result.modifyIsItem(false);
@@ -139,6 +140,11 @@ public class FlowerServiceImpl implements FlowerService{
     public QuestionAnswerListResponseDto getOneFlowerAnswerList(User user, int myFlowerId) {
         //해당 유저와 내 꽃 아이디에 대해 조회 (에러까지 확인)
         MyFlower myFlower = myFlowerRepository.findById(myFlowerId).orElseThrow(()-> new FlowerApiException(FlowerErrorCode.MY_FLOWER_NOT_FOUND));
+        //해당 유저가 조회하는 것이 아닌 경우
+        if(!myFlower.getUser().getKakaoId().equals(user.getKakaoId())) {
+            return null;
+        }
+
         //엔티티 리스트
         List<QuestionAnswer> questionAnswerList = questionAnswerRepository.findAllByMyFlowerAndMyFlower_UserOrderByCreatedAtDesc(myFlower, user);
 
@@ -175,7 +181,7 @@ public class FlowerServiceImpl implements FlowerService{
     }
 
     @Override
-    public MyFlowerOnlyIdResponseDto createNewFlower(User user) {
+    public CompleteFlowerInfoResponseDto createNewFlower(User user) {
         //꽃의 총 경험치를 가져오기
         String total = redisService.getStringValue(user.getKakaoId()+"flowerExp");
         int totalExp = Integer.parseInt(total);
@@ -197,8 +203,10 @@ public class FlowerServiceImpl implements FlowerService{
         //Current 새로운 꽃으로 바꿔주기
         current.modifyMyFlower(myFlower);
         growingPlantRepository.save(current);
-        return MyFlowerOnlyIdResponseDto.builder()
-                .id(current.getMyFlower().getId())
+        return CompleteFlowerInfoResponseDto.builder()
+                .assetId(doneFlower.getFlower().getAssetId())
+                .color(doneFlower.getFlower().getColor())
+                .name(doneFlower.getFlower().getName())
                 .build();
     }
 

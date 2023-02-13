@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MyFlowerOnlyIdResponseDto {
-    private int id;
+public class CompleteFlowerInfoResponseDto {
+    private String name;
+    private String assetId;
+    private String color;
 }

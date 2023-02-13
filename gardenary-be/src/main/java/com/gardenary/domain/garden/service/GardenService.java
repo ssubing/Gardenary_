@@ -8,6 +8,6 @@ import com.gardenary.domain.user.entity.User;
 import java.util.List;
 
 public interface GardenService {
-    GardenListResponseDto getGardenInfo(GardenUserIdDto gardenUserIdDto);
+    GardenListResponseDto getGardenInfo(User user, GardenUserIdDto gardenUserIdDto);
     boolean modifyGarden(User user, List<GardenDto> gardenDtoList);
 }

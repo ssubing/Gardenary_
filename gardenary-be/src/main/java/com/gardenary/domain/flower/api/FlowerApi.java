@@ -3,7 +3,7 @@ package com.gardenary.domain.flower.api;
 import com.gardenary.domain.flower.dto.*;
 import com.gardenary.domain.flower.dto.response.AnswerCompleteResponseDto;
 import com.gardenary.domain.flower.dto.response.FlowerListResponseDto;
-import com.gardenary.domain.flower.dto.response.MyFlowerOnlyIdResponseDto;
+import com.gardenary.domain.flower.dto.response.CompleteFlowerInfoResponseDto;
 import com.gardenary.domain.flower.dto.response.QuestionAnswerListResponseDto;
 import com.gardenary.domain.flower.service.FlowerService;
 import com.gardenary.global.common.response.DtoResponse;
@@ -55,8 +55,8 @@ public class FlowerApi {
     }
 
     @PostMapping("")
-    public ResponseEntity<DtoResponse<MyFlowerOnlyIdResponseDto>> createNewFlower(@AuthenticationPrincipal UserDetail userDetail) {
-        MyFlowerOnlyIdResponseDto result = flowerService.createNewFlower(userDetail.getUser());
+    public ResponseEntity<DtoResponse<CompleteFlowerInfoResponseDto>> createNewFlower(@AuthenticationPrincipal UserDetail userDetail) {
+        CompleteFlowerInfoResponseDto result = flowerService.createNewFlower(userDetail.getUser());
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{

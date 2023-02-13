@@ -2,10 +2,7 @@ package com.gardenary.domain.tree.api;
 
 import com.gardenary.domain.tree.dto.request.DiaryRequestDto;
 import com.gardenary.domain.tree.dto.request.LocalDateTimeDto;
-import com.gardenary.domain.tree.dto.response.DiaryListResponseDto;
-import com.gardenary.domain.tree.dto.response.DiaryResponseDto;
-import com.gardenary.domain.tree.dto.response.MakeDiaryResponseDto;
-import com.gardenary.domain.tree.dto.response.TreeResponseDto;
+import com.gardenary.domain.tree.dto.response.*;
 import com.gardenary.domain.tree.service.TreeService;
 import com.gardenary.global.common.response.DtoResponse;
 import com.gardenary.global.common.response.MessageResponse;
@@ -73,12 +70,13 @@ public class TreeApi {
     }
 
     @PostMapping("")
-    public ResponseEntity<MessageResponse> createMyTree(
+    public ResponseEntity<DtoResponse<CompleteTreeInfoResponseDto>> createMyTree(
             @AuthenticationPrincipal UserDetail userDetail) {
-        boolean result = treeService.createMyTree(userDetail.getUser());
-        String str = result ? responseProperties.getSuccess() : responseProperties.getFail();
-
-        return ResponseEntity.status(HttpStatus.OK).body(MessageResponse.of(HttpStatus.OK, str));
+        CompleteTreeInfoResponseDto result = treeService.createMyTree(userDetail.getUser());
+        if(result == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), result));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getSuccess(), result));
     }
 
 }

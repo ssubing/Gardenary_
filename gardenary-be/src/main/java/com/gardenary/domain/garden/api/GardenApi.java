@@ -25,9 +25,10 @@ public class GardenApi {
     private final GardenService gardenService;
     private final ResponseProperties responseProperties;
 
-    @GetMapping("")
-    public ResponseEntity<DtoResponse<GardenListResponseDto>> getGardenInfo(@RequestBody GardenUserIdDto gardenUserIdDto) {
-        GardenListResponseDto result = gardenService.getGardenInfo(gardenUserIdDto);
+    @PostMapping("/info")
+    public ResponseEntity<DtoResponse<GardenListResponseDto>> getGardenInfo(@AuthenticationPrincipal UserDetail userDetail, @RequestBody GardenUserIdDto gardenUserIdDto) {
+        User user = userDetail.getUser();
+        GardenListResponseDto result = gardenService.getGardenInfo(user, gardenUserIdDto);
         if(result == null) {
             return ResponseEntity.status(HttpStatus.OK).body(DtoResponse.of(HttpStatus.OK, responseProperties.getFail(), null));
         } else{

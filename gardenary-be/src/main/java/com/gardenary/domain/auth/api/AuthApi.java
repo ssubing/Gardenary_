@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 @RestController
 @Slf4j
@@ -30,7 +32,16 @@ public class AuthApi {
 
     @PostMapping("/refresh")
     public ResponseEntity<DtoResponse<RefreshResponseDto>> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+
+        Enumeration headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String name = (String)headerNames.nextElement();
+            String value = request.getHeader(name);
+            System.out.println(name + " : " + value);
+        }
+
         String refreshToken = CookieUtil.searchCookie(request, "refreshToken");
+
         if (refreshToken != null && !refreshToken.equals("")) {
             RefreshResponseDto refreshResponseDto = authService.refresh(refreshToken);
 
