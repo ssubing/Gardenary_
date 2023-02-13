@@ -143,7 +143,7 @@ public class AvatarServiceImpl implements AvatarService {
     public boolean get5Avatar(List<MyFlower> myFlowerList) {
         return myFlowerList.size() == 1;
     }
-
+    
     //꽃 30 종류 성장
     public boolean get6Avatar(List<MyFlower> myFlowerList) {
         HashSet<String> myFlowerSet = new HashSet<>();
