@@ -14,7 +14,7 @@ public class CameraMovement : MonoBehaviour
     public Transform target;    // 줌 타겟
     public float zoom;  // 줌 수치
     // public float zoomSpeed;
-    bool zoomFlag;
+    public bool zoomFlag;
 
     Vector3 cameraPosition;
 
@@ -74,7 +74,7 @@ public class CameraMovement : MonoBehaviour
     }
 
     // 클릭한 오브젝트
-    GameObject GetClickedObject()
+    public GameObject GetClickedObject()
     {
 
         RaycastHit hit; // 충돌이 감지된 영역

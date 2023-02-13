@@ -19,7 +19,7 @@ public class WriteDiary : MonoBehaviour
     public int flowerNum;
     public int treeNum;
 
-    public string uri = "http://k7a604.p.ssafy.io:8080/api/";
+    public string uri = "https://k7a604.p.ssafy.io/api/";
 
     public GameObject targetObject;
 
