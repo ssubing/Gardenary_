@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Garden
   - Farm
+  - Login Button
   layers:
   - Default
   - TransparentFX
