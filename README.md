@@ -1,6 +1,6 @@
 # 🌷 Gardenary 가드너리
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=JoKdpcUe23Y">
+  <a href="https://youtu.be/HNP2oe3QtzQ">
     <img src="https://user-images.githubusercontent.com/63358647/206158105-b7eed58a-eaec-4982-bc24-9c7fb6303d61.png" width="60%"/>
   </a>
 </div>
@@ -64,7 +64,7 @@
 <img src="https://user-images.githubusercontent.com/63358647/206184974-a366ca3d-bee4-4a18-b2df-a6be0be090c2.png" width="60%"/>
 
 ## 6. 시연 영상
-[바로가기](https://www.youtube.com/watch?v=JoKdpcUe23Y)
+[바로가기](https://youtu.be/HNP2oe3QtzQ)
 
 ## 7. 회고
 ### 보안성을 고려하며
